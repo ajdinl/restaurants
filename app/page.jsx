@@ -1,3 +1,5 @@
+import AuthForm from '@/app/components/AuthForm'
+
 export default function Home() {
   return (
     <main className='flex items-center justify-center bg-white min-h-screen'>
@@ -8,6 +10,7 @@ export default function Home() {
         <p className='mb-6 text-lg text-gray-600 text-center'>
           Sign in to edit your restaurant menu or orders
         </p>
+        <AuthForm />
       </div>
     </main>
   )
