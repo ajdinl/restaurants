@@ -19,7 +19,17 @@ export default function AuthForm() {
     if (error) {
       alert(error.message)
     } else {
-      router.push('/dashboard')
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      const fullName = user.user_metadata.full_name
+
+      if (fullName !== 'Admin') {
+        router.push('/dashboard')
+      } else {
+        router.push('/admin-dashboard')
+      }
     }
   }
 
