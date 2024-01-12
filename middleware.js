@@ -1,6 +1,16 @@
 import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 
+const handleCookies = (req, response, name, value, options = {}) => {
+  req.cookies.set({ name, value, ...options })
+
+  response.cookies.set({ name, value, ...options })
+
+  return NextResponse.next({
+    request: { headers: req.headers },
+  })
+}
+
 export async function middleware(req) {
   const res = NextResponse.next()
 
@@ -13,38 +23,10 @@ export async function middleware(req) {
           return req.cookies.get(name)?.value
         },
         set(name, value, options) {
-          req.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          const response = NextResponse.next({
-            request: {
-              headers: req.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
+          return handleCookies(req, res, name, value, options)
         },
         remove(name, options) {
-          req.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          const response = NextResponse.next({
-            request: {
-              headers: req.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
+          return handleCookies(req, res, name, '', options)
         },
       },
     }
@@ -53,6 +35,16 @@ export async function middleware(req) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
+  const isAdmin = user?.user_metadata?.is_admin
+
+  if (isAdmin && req.nextUrl.pathname === '/') {
+    return NextResponse.redirect(new URL('/admin-dashboard', req.url))
+  }
+
+  if (!isAdmin && req.nextUrl.pathname === '/admin-dashboard') {
+    return NextResponse.redirect(new URL('/dashboard', req.url))
+  }
 
   if (user && req.nextUrl.pathname === '/') {
     return NextResponse.redirect(new URL('/dashboard', req.url))
@@ -65,5 +57,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/', '/dashboard'],
+  matcher: ['/', '/dashboard', '/admin-dashboard'],
 }
