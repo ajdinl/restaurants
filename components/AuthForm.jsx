@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/utils/supabaseClient'
+import { getUser, signInWithPassword } from '@/utils/supabaseClient'
 import { useRouter } from 'next/navigation'
 
 export default function AuthForm() {
@@ -11,17 +11,14 @@ export default function AuthForm() {
 
   async function handleLogin(e) {
     e.preventDefault()
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const { error } = await signInWithPassword(email, password)
 
     if (error) {
       alert(error.message)
     } else {
       const {
         data: { user },
-      } = await supabase.auth.getUser()
+      } = await getUser()
 
       const isAdmin = user.user_metadata.is_admin
 
