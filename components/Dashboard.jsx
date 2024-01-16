@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { getUser, fetchRestaurants } from '@/utils/supabaseClient'
-import Link from 'next/link'
-import { MenuIcon } from './Icons'
 import {
   Card,
   CardHeader,
@@ -136,46 +134,7 @@ export default function DashboardComponent() {
     //     </div>
     //   </div>
     // </div>
-    <div className='flex flex-col w-full min-h-screen'>
-      <header className='flex items-center justify-between h-16 px-4 border-b shrink-0 md:px-6'>
-        <nav className='flex-col hidden gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 lg:gap-6'>
-          <Link
-            className='flex items-center gap-2 text-lg font-semibold md:text-base'
-            href='#'
-          >
-            <MenuIcon className='w-6 h-6' />
-            <span className='sr-only'>Restaurant Dashboard</span>
-          </Link>
-          <Link className='font-bold' href='#'>
-            Menu
-          </Link>
-          <Link className='text-gray-500 dark:text-gray-400' href='#'>
-            Orders
-          </Link>
-          <Link className='text-gray-500 dark:text-gray-400' href='#'>
-            Tables
-          </Link>
-          {isAdmin && (
-            <Link className='text-gray-500 dark:text-gray-400' href='#'>
-              Restaurants
-            </Link>
-          )}
-          {/* <Link className='text-gray-500 dark:text-gray-400' href='#'>
-            Reservations
-          </Link>
-          <Link className='text-gray-500 dark:text-gray-400' href='#'>
-            Reports
-          </Link> */}
-        </nav>
-        <form action='/auth/signout' method='post'>
-          <button
-            type='submit'
-            className='bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-500 font-bold py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700'
-          >
-            Sign Out
-          </button>
-        </form>
-      </header>
+    <div>
       <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
         <Card>
           <CardHeader>
