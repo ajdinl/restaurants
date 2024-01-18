@@ -9,19 +9,19 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from './Cards'
+} from '@/components/Cards'
 import { Button } from '@/components/Button'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)
   const [data, setData] = useState([])
+  const searchParams = useSearchParams()
+  const view = searchParams.get('view')
   const isAdmin = user?.user?.user_metadata.is_admin
   const userId = user?.user?.id
   const restaurantMenu = data?.restaurant_menu
   const restaurantTables = data?.restaurant_tables
   const restaurantOrders = data?.restaurant_orders
-  const searchParams = useSearchParams()
-  const view = searchParams.get('view')
 
   const fetchUserData = async () => {
     try {
@@ -62,132 +62,143 @@ export default function DashboardComponent() {
   }, [user])
 
   return (
-    // <div className='flex flex-col items-end bg-white'>
-    //   <div className='flex flex-col items-center justify-center bg-white min-h-screen w-full'>
-    //     <h1>Dashboard</h1>
-    //     <div className='flex flex-row bg-gray-200 rounded-lg shadow-lg p-6 w-full max-w-lg text-center space-x-10'>
-    //       {isAdmin &&
-    //         data.map((restaurant) => (
-    //           <div key={restaurant.id} className='space-y-4'>
-    //             <p className='text-3xl'>{restaurant.name}</p>
-    //             <ul>
-    //               <p className='text-xl'>Menu</p>
-    //               {restaurant.restaurant_menu.map((menu) => (
-    //                 <li key={menu.id}>
-    //                   {menu.items.map((item) => (
-    //                     <ul key={item}>
-    //                       <li>{item}</li>
-    //                     </ul>
-    //                   ))}
-    //                 </li>
-    //               ))}
-    //             </ul>
-    //             <ul>
-    //               <p className='text-xl'>Tables</p>
-    //               {restaurant.restaurant_tables.map((table) => (
-    //                 <li key={table.id}>{table.number}</li>
-    //               ))}
-    //             </ul>
-    //             <ul>
-    //               <p className='text-xl'>Orders</p>
-    //               {restaurant.restaurant_orders.map((order) => (
-    //                 <li key={order.id}>
-    //                   <ul className='mb-2'>
-    //                     {order.order_items.map((item) => (
-    //                       <li key={item}>{item}</li>
-    //                     ))}
-    //                   </ul>
-    //                 </li>
-    //               ))}
-    //             </ul>
-    //           </div>
-    //         ))}
-    //       <div className='flex flex-col mx-auto'>
-    //         {data &&
-    //           restaurantMenu?.map((menu) => (
-    //             <div key={menu.id} className='my-4'>
-    //               <h1 className='text-3xl mb-2'>{data.name}</h1>
-    //               <ul>
-    //                 {menu.items.map((item, index) => (
-    //                   <li key={index}>{item}</li>
-    //                 ))}
-    //               </ul>
-    //             </div>
-    //           ))}
-    //         {data &&
-    //           restaurantTables?.map((table) => (
-    //             <div key={table.id}>
-    //               <p>{table.number}</p>
-    //             </div>
-    //           ))}
-    //         {data &&
-    //           restaurantOrders?.map((order) => (
-    //             <div key={order}>
-    //               <p>{order.order_items}</p>
-    //             </div>
-    //           ))}
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
     <div>
       <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
-        <Card>
-          <CardHeader>
-            <CardTitle>Menu</CardTitle>
-            <CardDescription>
-              List of available dishes and beverages.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className='space-y-2'>
-              <li>Pasta Primavera</li>
-              <li>Chicken Caesar Salad</li>
-              <li>Beef Wellington</li>
-              <li>Grilled Salmon</li>
-              <li>Chocolate Lava Cake</li>
-            </ul>
-            <Button className='mt-4 bg-green-500 hover:bg-green-600 text-white'>
-              Add New Dish
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Orders</CardTitle>
-            <CardDescription>List of current orders.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className='space-y-2'>
-              <li>Order #123: Pasta Primavera</li>
-              <li>Order #124: Chicken Caesar Salad</li>
-              <li>Order #125: Beef Wellington</li>
-              <li>Order #126: Grilled Salmon</li>
-              <li>Order #127: Chocolate Lava Cake</li>
-            </ul>
-            <Button className='mt-4 bg-blue-500 hover:bg-blue-600 text-white'>
-              Add New Order
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Tables</CardTitle>
-            <CardDescription>List of table reservations.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className='space-y-2'>
-              <li>Table #1: Reserved</li>
-              <li>Table #2: Available</li>
-              <li>Table #3: Reserved</li>
-              <li>Table #4: Available</li>
-              <li>Table #5: Reserved</li>
-            </ul>
-            <Button className='mt-4 bg-red-500 hover:bg-red-600 text-white'>
-              Reserve a Table
-            </Button>
-          </CardContent>
-        </Card>
+        {(!view || view === 'menu') && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Menu</CardTitle>
+              <CardDescription>
+                List of available dishes and beverages.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className='space-y-2'>
+                {data &&
+                  restaurantMenu?.map((menu) => (
+                    <li key={menu.id} className='flex flex-col space-y-2'>
+                      {!view
+                        ? menu.items
+                            ?.slice(0, 5)
+                            ?.map((item) => <div key={item}>{item}</div>)
+                        : menu.items?.map((item) => (
+                            <div key={item}>{item}</div>
+                          ))}
+                    </li>
+                  ))}
+              </ul>
+              <Button className='mt-4 bg-green-500 hover:bg-green-600 text-white'>
+                Add New Dish
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+        {(!view || view === 'orders') && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Orders</CardTitle>
+              <CardDescription>List of current orders.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className='space-y-2'>
+                {data && !view
+                  ? restaurantOrders?.slice(0, 5)?.map((order) => (
+                      <li key={order.id}>
+                        Order #{order.order_number}:
+                        {order.order_items?.join(', ')}
+                      </li>
+                    ))
+                  : restaurantOrders?.map((order) => (
+                      <li key={order.id}>
+                        Order #{order.order_number}:
+                        {order.order_items?.join(', ')}
+                      </li>
+                    ))}
+              </ul>
+              <Button className='mt-4 bg-blue-500 hover:bg-blue-600 text-white'>
+                Add New Order
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+        {(!view || view === 'tables') && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Tables</CardTitle>
+              <CardDescription>List of table reservations.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className='space-y-2'>
+                {data && !view
+                  ? restaurantTables?.slice(0, 5)?.map((table) => (
+                      <li key={table.id}>
+                        Table #{table.number}: {table.status}
+                      </li>
+                    ))
+                  : restaurantTables?.map((table) => (
+                      <li key={table.id}>
+                        Table #{table.number}: {table.status}
+                      </li>
+                    ))}
+              </ul>
+              <Button className='mt-4 bg-red-500 hover:bg-red-600 text-white'>
+                Reserve a Table
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+        {(!view || view === 'restaurants') && isAdmin && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Restaurants</CardTitle>
+              <CardDescription>List of all restaurants.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isAdmin &&
+                data.map((restaurant) => (
+                  <div
+                    key={restaurant.id}
+                    className='flex flex-row space-x-10 space-y-10'
+                  >
+                    <p className='text-4xl'>{restaurant.name}</p>
+                    <ul>
+                      <p className='text-2xl'>Menu</p>
+                      {restaurant.restaurant_menu.map((menu) => (
+                        <li key={menu.id}>
+                          {menu.items.map((item, index) => (
+                            <ul key={index}>
+                              <li>{item}</li>
+                            </ul>
+                          ))}
+                        </li>
+                      ))}
+                    </ul>
+                    <ul>
+                      <p className='text-2xl'>Tables</p>
+                      {restaurant.restaurant_tables.map((table) => (
+                        <li key={table.id}>
+                          Table #{table.number} - {table.status}
+                        </li>
+                      ))}
+                    </ul>
+                    <ul>
+                      <p className='text-2xl'>Orders</p>
+                      {restaurant.restaurant_orders.map((order) => (
+                        <li key={order.id}>
+                          Order #{order.order_number}:
+                          <ul className='mb-2'>
+                            {order.order_items.map((item, index) => (
+                              <li key={index}>{item}</li>
+                            ))}
+                          </ul>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+            </CardContent>
+          </Card>
+        )}
       </main>
     </div>
   )
