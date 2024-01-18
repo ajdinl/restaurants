@@ -77,9 +77,13 @@ export default function DashboardComponent() {
                 {data &&
                   restaurantMenu?.map((menu) => (
                     <li key={menu.id} className='flex flex-col space-y-2'>
-                      {menu.items?.map((item) => (
-                        <div key={item}>{item}</div>
-                      ))}
+                      {!view
+                        ? menu.items
+                            ?.slice(0, 5)
+                            ?.map((item) => <div key={item}>{item}</div>)
+                        : menu.items?.map((item) => (
+                            <div key={item}>{item}</div>
+                          ))}
                     </li>
                   ))}
               </ul>
@@ -97,13 +101,19 @@ export default function DashboardComponent() {
             </CardHeader>
             <CardContent>
               <ul className='space-y-2'>
-                {data &&
-                  restaurantOrders?.map((order) => (
-                    <li key={order.id}>
-                      Order #{order.order_number}:
-                      {order.order_items?.join(', ')}
-                    </li>
-                  ))}
+                {data && !view
+                  ? restaurantOrders?.slice(0, 5)?.map((order) => (
+                      <li key={order.id}>
+                        Order #{order.order_number}:
+                        {order.order_items?.join(', ')}
+                      </li>
+                    ))
+                  : restaurantOrders?.map((order) => (
+                      <li key={order.id}>
+                        Order #{order.order_number}:
+                        {order.order_items?.join(', ')}
+                      </li>
+                    ))}
               </ul>
               <Button className='mt-4 bg-blue-500 hover:bg-blue-600 text-white'>
                 Add New Order
@@ -119,12 +129,17 @@ export default function DashboardComponent() {
             </CardHeader>
             <CardContent>
               <ul className='space-y-2'>
-                {data &&
-                  restaurantTables?.map((table) => (
-                    <li key={table.id}>
-                      Table #{table.number}: {table.status}
-                    </li>
-                  ))}
+                {data && !view
+                  ? restaurantTables?.slice(0, 5)?.map((table) => (
+                      <li key={table.id}>
+                        Table #{table.number}: {table.status}
+                      </li>
+                    ))
+                  : restaurantTables?.map((table) => (
+                      <li key={table.id}>
+                        Table #{table.number}: {table.status}
+                      </li>
+                    ))}
               </ul>
               <Button className='mt-4 bg-red-500 hover:bg-red-600 text-white'>
                 Reserve a Table
