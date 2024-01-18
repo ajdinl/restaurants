@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { getUser, fetchRestaurants } from '@/utils/supabaseClient'
+import { useSearchParams } from 'next/navigation'
 import {
   Card,
   CardHeader,
@@ -9,6 +10,7 @@ import {
   CardDescription,
   CardContent,
 } from './Cards'
+import { Button } from '@/components/Button'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)
@@ -18,6 +20,8 @@ export default function DashboardComponent() {
   const restaurantMenu = data?.restaurant_menu
   const restaurantTables = data?.restaurant_tables
   const restaurantOrders = data?.restaurant_orders
+  const searchParams = useSearchParams()
+  const view = searchParams.get('view')
 
   const fetchUserData = async () => {
     try {
@@ -59,14 +63,6 @@ export default function DashboardComponent() {
 
   return (
     // <div className='flex flex-col items-end bg-white'>
-    //   <form action='/auth/signout' method='post'>
-    //     <button
-    //       type='submit'
-    //       className='bg-gray-700 text-white font-bold py-2 px-4 rounded hover:bg-gray-500 m-4'
-    //     >
-    //       Sign Out
-    //     </button>
-    //   </form>
     //   <div className='flex flex-col items-center justify-center bg-white min-h-screen w-full'>
     //     <h1>Dashboard</h1>
     //     <div className='flex flex-row bg-gray-200 rounded-lg shadow-lg p-6 w-full max-w-lg text-center space-x-10'>
@@ -151,6 +147,9 @@ export default function DashboardComponent() {
               <li>Grilled Salmon</li>
               <li>Chocolate Lava Cake</li>
             </ul>
+            <Button className='mt-4 bg-green-500 hover:bg-green-600 text-white'>
+              Add New Dish
+            </Button>
           </CardContent>
         </Card>
         <Card>
@@ -166,6 +165,9 @@ export default function DashboardComponent() {
               <li>Order #126: Grilled Salmon</li>
               <li>Order #127: Chocolate Lava Cake</li>
             </ul>
+            <Button className='mt-4 bg-blue-500 hover:bg-blue-600 text-white'>
+              Add New Order
+            </Button>
           </CardContent>
         </Card>
         <Card>
@@ -181,6 +183,9 @@ export default function DashboardComponent() {
               <li>Table #4: Available</li>
               <li>Table #5: Reserved</li>
             </ul>
+            <Button className='mt-4 bg-red-500 hover:bg-red-600 text-white'>
+              Reserve a Table
+            </Button>
           </CardContent>
         </Card>
       </main>
