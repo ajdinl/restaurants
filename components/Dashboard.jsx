@@ -105,13 +105,13 @@ export default function DashboardComponent() {
                 {data && !view
                   ? restaurantOrders?.slice(0, 5)?.map((order) => (
                       <li key={order.id}>
-                        Order #{order.order_number}:
+                        Order #{order.order_number}:{' '}
                         {order.order_items?.join(', ')}
                       </li>
                     ))
                   : restaurantOrders?.map((order) => (
                       <li key={order.id}>
-                        Order #{order.order_number}:
+                        Order #{order.order_number}:{' '}
                         {order.order_items?.join(', ')}
                       </li>
                     ))}
