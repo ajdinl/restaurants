@@ -1,18 +1,34 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/Button'
+import { createUser } from '@/utils/supabaseClient'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/Button'
 
 export default function NewUserForm() {
   const [newUser, setNewUser] = useState({})
   const router = useRouter()
-  function handleSubmit(e) {
+
+  async function handleSubmit(e) {
     e.preventDefault()
 
-    setNewUser({})
-    e.target.reset()
-    router.push('/admin-dashboard?view=users')
+    const email = newUser.email
+    const password = newUser.password
+    const user_metadata = newUser.metadata
+
+    try {
+      const { data, error } = await createUser(email, password, user_metadata)
+
+      if (error) {
+        alert(error.message)
+      } else {
+        setNewUser({})
+        e.target.reset()
+        router.push('/admin-dashboard?view=users')
+      }
+    } catch (error) {
+      console.error('Error creating user:', error)
+    }
   }
 
   return (
@@ -52,8 +68,8 @@ export default function NewUserForm() {
           onChange={(e) =>
             setNewUser({
               ...newUser,
-              options: {
-                ...newUser.options,
+              metadata: {
+                ...newUser.metadata,
                 full_name: e.target.value,
               },
             })
@@ -69,8 +85,8 @@ export default function NewUserForm() {
           onChange={(e) =>
             setNewUser({
               ...newUser,
-              options: {
-                ...newUser.options,
+              metadata: {
+                ...newUser.metadata,
                 is_admin: e.target.checked,
               },
             })
