@@ -51,16 +51,28 @@ export default function Navbar({ isAdmin }) {
             Tables
           </Link>
           {isAdmin && (
-            <Link
-              className={
-                view === 'restaurants'
-                  ? 'font-bold'
-                  : 'text-gray-500 dark:text-gray-400'
-              }
-              href='?view=restaurants'
-            >
-              Restaurants
-            </Link>
+            <>
+              <Link
+                className={
+                  view === 'restaurants'
+                    ? 'font-bold'
+                    : 'text-gray-500 dark:text-gray-400'
+                }
+                href='?view=restaurants'
+              >
+                Restaurants
+              </Link>
+              <Link
+                className={
+                  view === 'users'
+                    ? 'font-bold'
+                    : 'text-gray-500 dark:text-gray-400'
+                }
+                href='?view=users'
+              >
+                Users
+              </Link>
+            </>
           )}
           {/* <Link className='text-gray-500 dark:text-gray-400' href='#'>
           Reservations

@@ -10,6 +10,7 @@ import {
   CardDescription,
   CardContent,
 } from '@/components/Cards'
+import NewUserForm from '@/components/NewUserForm'
 import { Button } from '@/components/Button'
 
 export default function DashboardComponent() {
@@ -65,7 +66,7 @@ export default function DashboardComponent() {
     <div>
       <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
         {(!view || view === 'menu') && (
-          <Card>
+          <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
               <CardTitle>Menu</CardTitle>
               <CardDescription>
@@ -94,7 +95,7 @@ export default function DashboardComponent() {
           </Card>
         )}
         {(!view || view === 'orders') && (
-          <Card>
+          <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
               <CardTitle>Orders</CardTitle>
               <CardDescription>List of current orders.</CardDescription>
@@ -122,7 +123,7 @@ export default function DashboardComponent() {
           </Card>
         )}
         {(!view || view === 'tables') && (
-          <Card>
+          <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
               <CardTitle>Tables</CardTitle>
               <CardDescription>List of table reservations.</CardDescription>
@@ -147,7 +148,7 @@ export default function DashboardComponent() {
             </CardContent>
           </Card>
         )}
-        {(!view || view === 'restaurants') && isAdmin && (
+        {view === 'restaurants' && isAdmin && (
           <Card>
             <CardHeader>
               <CardTitle>Restaurants</CardTitle>
@@ -196,6 +197,17 @@ export default function DashboardComponent() {
                     </ul>
                   </div>
                 ))}
+            </CardContent>
+          </Card>
+        )}
+        {view === 'users' && isAdmin && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Users</CardTitle>
+              <CardDescription>Add a new user.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <NewUserForm />
             </CardContent>
           </Card>
         )}
