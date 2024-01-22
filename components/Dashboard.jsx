@@ -166,21 +166,33 @@ export default function DashboardComponent() {
                       {restaurant.restaurant_menu.map((menu) => (
                         <li key={menu.id}>
                           <p className='mb-2'>Menu #{menu.number}</p>
-                          {menu.items.map((item, index) => (
-                            <ul key={index}>
-                              <li>{item}</li>
-                            </ul>
-                          ))}
+                          <ul>
+                            {menu.items.map((item, index) => (
+                              <li
+                                key={index}
+                                className='flex flex-row justify-between border-b border-gray-600'
+                              >
+                                {item}
+                                <p className='ml-2 cursor-pointer text-red-500'>
+                                  X
+                                </p>
+                              </li>
+                            ))}
+                          </ul>
                         </li>
                       ))}
                     </ul>
                     <ul className='border-l-2 border-gray-600 p-4 w-1/12'>
                       <p className='text-2xl'>Tables</p>
                       {restaurant.restaurant_tables.map((table) => (
-                        <li key={table.id}>
+                        <li
+                          key={table.id}
+                          className='flex flex-row justify-between border-b border-gray-600'
+                        >
                           <p>
                             Table #{table.number} - {table.status}
                           </p>
+                          <p className='ml-2 cursor-pointer text-red-500'>X</p>
                         </li>
                       ))}
                     </ul>
@@ -191,7 +203,15 @@ export default function DashboardComponent() {
                           <p className='ml-2'>Order #{order.number}:</p>
                           <ul className='mr-2 p-2'>
                             {order.items.map((item, index) => (
-                              <li key={index}>{item}</li>
+                              <li
+                                key={index}
+                                className='flex flex-row justify-between border-b border-gray-600'
+                              >
+                                {item}
+                                <p className='ml-2 cursor-pointer text-red-500'>
+                                  X
+                                </p>
+                              </li>
                             ))}
                           </ul>
                         </li>
