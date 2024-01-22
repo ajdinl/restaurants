@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getUser, fetchRestaurants } from '@/utils/supabaseMethods'
+import { getUser, fetchRestaurants, deleteItem } from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
   Card,
@@ -21,9 +21,9 @@ export default function DashboardComponent() {
   const view = searchParams.get('view')
   const isAdmin = user?.user?.user_metadata.is_admin
   const userId = user?.user?.id
-  const restaurantMenu = data?.restaurant_menu
-  const restaurantTables = data?.restaurant_tables
-  const restaurantOrders = data?.restaurant_orders
+  const restaurantMenu = data?.menu
+  const restaurantTables = data?.tables
+  const restaurantOrders = data?.orders
 
   const fetchUserData = async () => {
     try {
@@ -163,7 +163,7 @@ export default function DashboardComponent() {
                     <p className='text-4xl w-1/12'>{restaurant.name}</p>
                     <ul className='border-l-2 border-gray-600 p-4 w-1/12'>
                       <p className='text-2xl'>Menu</p>
-                      {restaurant.restaurant_menu.map((menu) => (
+                      {restaurant.menu.map((menu) => (
                         <li key={menu.id}>
                           <p className='mb-2'>Menu #{menu.number}</p>
                           <ul>
@@ -184,7 +184,7 @@ export default function DashboardComponent() {
                     </ul>
                     <ul className='border-l-2 border-gray-600 p-4 w-1/12'>
                       <p className='text-2xl'>Tables</p>
-                      {restaurant.restaurant_tables.map((table) => (
+                      {restaurant.tables.map((table) => (
                         <li
                           key={table.id}
                           className='flex flex-row justify-between border-b border-gray-600'
@@ -198,7 +198,7 @@ export default function DashboardComponent() {
                     </ul>
                     <ul className='flex flex-1 border-l-2 border-gray-600 p-4'>
                       <p className='text-2xl mr-2'>Orders</p>
-                      {restaurant.restaurant_orders.map((order) => (
+                      {restaurant.orders.map((order) => (
                         <li key={order.id}>
                           <p className='ml-2'>Order #{order.number}:</p>
                           <ul className='mr-2 p-2'>

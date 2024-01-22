@@ -30,7 +30,7 @@ const signInWithPassword = async (email, password) => {
 const fetchRestaurants = async (isAdmin, userId) => {
   let query = supabase
     .from('restaurants')
-    .select('*, restaurant_menu(*), restaurant_orders(*), restaurant_tables(*)')
+    .select('*, menu(*), orders(*), tables(*)')
 
   if (!isAdmin) {
     query = query.eq('user_id', userId).single()
@@ -48,10 +48,16 @@ const createRestaurant = async (name, address, phone) => {
   return { data, error }
 }
 
+const deleteItem = async (category, id) => {
+  const { data, error } = await supabase.from(category).delete().eq('id', id)
+  return { data, error }
+}
+
 export {
   createUser,
   getUser,
   signInWithPassword,
   fetchRestaurants,
   createRestaurant,
+  deleteItem,
 }
