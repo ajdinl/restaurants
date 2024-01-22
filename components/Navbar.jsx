@@ -70,7 +70,7 @@ export default function Navbar({ isAdmin }) {
                 }
                 href='?view=users'
               >
-                Users
+                Create
               </Link>
             </>
           )}

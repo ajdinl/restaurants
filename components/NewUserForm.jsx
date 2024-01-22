@@ -41,6 +41,7 @@ export default function NewUserForm() {
           name='email'
           id='email'
           required
+          min={5}
           onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
         />
       </label>
@@ -63,7 +64,7 @@ export default function NewUserForm() {
           type='text'
           name='full_name'
           id='full_name'
-          min={8}
+          min={5}
           required
           onChange={(e) =>
             setNewUser({

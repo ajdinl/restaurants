@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getUser, fetchRestaurants } from '@/utils/supabaseClient'
+import { getUser, fetchRestaurants } from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
   Card,
@@ -11,6 +11,7 @@ import {
   CardContent,
 } from '@/components/Cards'
 import NewUserForm from '@/components/NewUserForm'
+import NewRestaurantForm from '@/components/NewRestaurantForm'
 import { Button } from '@/components/Button'
 
 export default function DashboardComponent() {
@@ -105,14 +106,12 @@ export default function DashboardComponent() {
                 {data && !view
                   ? restaurantOrders?.slice(0, 5)?.map((order) => (
                       <li key={order.id}>
-                        Order #{order.order_number}:{' '}
-                        {order.order_items?.join(', ')}
+                        Order #{order.number}: {order.items?.join(', ')}
                       </li>
                     ))
                   : restaurantOrders?.map((order) => (
                       <li key={order.id}>
-                        Order #{order.order_number}:{' '}
-                        {order.order_items?.join(', ')}
+                        Order #{order.number}: {order.items?.join(', ')}
                       </li>
                     ))}
               </ul>
@@ -159,13 +158,14 @@ export default function DashboardComponent() {
                 data.map((restaurant) => (
                   <div
                     key={restaurant.id}
-                    className='flex flex-row space-x-10 space-y-10'
+                    className='flex flex-row justify-between space-x-20 border-b-2 border-gray-600'
                   >
-                    <p className='text-4xl'>{restaurant.name}</p>
-                    <ul>
+                    <p className='text-4xl w-1/12'>{restaurant.name}</p>
+                    <ul className='border-l-2 border-gray-600 p-4 w-1/12'>
                       <p className='text-2xl'>Menu</p>
                       {restaurant.restaurant_menu.map((menu) => (
                         <li key={menu.id}>
+                          <p className='mb-2'>Menu #{menu.number}</p>
                           {menu.items.map((item, index) => (
                             <ul key={index}>
                               <li>{item}</li>
@@ -174,21 +174,23 @@ export default function DashboardComponent() {
                         </li>
                       ))}
                     </ul>
-                    <ul>
+                    <ul className='border-l-2 border-gray-600 p-4 w-1/12'>
                       <p className='text-2xl'>Tables</p>
                       {restaurant.restaurant_tables.map((table) => (
                         <li key={table.id}>
-                          Table #{table.number} - {table.status}
+                          <p>
+                            Table #{table.number} - {table.status}
+                          </p>
                         </li>
                       ))}
                     </ul>
-                    <ul>
-                      <p className='text-2xl'>Orders</p>
+                    <ul className='flex flex-1 border-l-2 border-gray-600 p-4'>
+                      <p className='text-2xl mr-2'>Orders</p>
                       {restaurant.restaurant_orders.map((order) => (
                         <li key={order.id}>
-                          Order #{order.order_number}:
-                          <ul className='mb-2'>
-                            {order.order_items.map((item, index) => (
+                          <p className='ml-2'>Order #{order.number}:</p>
+                          <ul className='mr-2 p-2'>
+                            {order.items.map((item, index) => (
                               <li key={index}>{item}</li>
                             ))}
                           </ul>
@@ -201,15 +203,26 @@ export default function DashboardComponent() {
           </Card>
         )}
         {view === 'users' && isAdmin && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Users</CardTitle>
-              <CardDescription>Add a new user.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <NewUserForm />
-            </CardContent>
-          </Card>
+          <>
+            <Card>
+              <CardHeader>
+                <CardTitle>Users</CardTitle>
+                <CardDescription>Add a new user.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <NewUserForm />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Restaurant</CardTitle>
+                <CardDescription>Add a new restaurant.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <NewRestaurantForm />
+              </CardContent>
+            </Card>
+          </>
         )}
       </main>
     </div>
