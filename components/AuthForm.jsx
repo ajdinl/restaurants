@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { getUser, signInWithPassword } from '@/utils/supabaseClient'
+import { getUser, signInWithPassword } from '@/utils/supabaseMethods'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/Button'
 
