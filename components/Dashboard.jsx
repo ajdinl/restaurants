@@ -61,9 +61,9 @@ export default function DashboardComponent() {
   const handleDeleteItem = async (category, selected, index) => {
     let selectedArray = selected.items
     let displayError
+    const text = `Are you sure you want to delete this item?`
 
     if (index) {
-      const text = `Are you sure you want to delete ?`
       if (confirm(text) === true) {
         selectedArray = selectedArray.filter((_, i) => i !== index)
       } else {
@@ -79,8 +79,12 @@ export default function DashboardComponent() {
     }
 
     if (!index) {
-      const { data, error } = await deleteItem(category, selected.id)
-      displayError = error
+      if (confirm(text) === true) {
+        const { data, error } = await deleteItem(category, selected.id)
+        displayError = error
+      } else {
+        return
+      }
     }
 
     if (displayError) {
@@ -201,74 +205,80 @@ export default function DashboardComponent() {
                     <p className='text-4xl w-44'>{restaurant.name}</p>
                     <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <p className='text-2xl'>Menu</p>
-                      {restaurant.menu.map((menu) => (
-                        <li key={menu.id}>
-                          <p className='mb-2'>Menu #{menu.number}</p>
-                          <ul>
-                            {menu.items.map((item, index) => (
-                              <li
-                                key={index}
-                                className='flex flex-row justify-between border-b border-gray-600'
-                              >
-                                {item}
-                                <p
-                                  className='ml-2 cursor-pointer text-red-500'
-                                  onClick={() =>
-                                    handleDeleteItem('menu', menu, index)
-                                  }
+                      {restaurant.menu
+                        .sort((a, b) => a.number - b.number)
+                        .map((menu) => (
+                          <li key={menu.id}>
+                            <p className='mb-2'>Menu #{menu.number}</p>
+                            <ul>
+                              {menu.items.map((item, index) => (
+                                <li
+                                  key={index}
+                                  className='flex flex-row justify-between border-b border-gray-600'
                                 >
-                                  X
-                                </p>
-                              </li>
-                            ))}
-                          </ul>
-                        </li>
-                      ))}
+                                  {item}
+                                  <p
+                                    className='ml-2 cursor-pointer text-red-500'
+                                    onClick={() =>
+                                      handleDeleteItem('menu', menu, index)
+                                    }
+                                  >
+                                    X
+                                  </p>
+                                </li>
+                              ))}
+                            </ul>
+                          </li>
+                        ))}
                     </ul>
                     <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <p className='text-2xl'>Tables</p>
-                      {restaurant.tables.map((table) => (
-                        <li
-                          key={table.id}
-                          className='flex flex-row justify-between border-b border-gray-600'
-                        >
-                          <p>
-                            Table #{table.number} - {table.status}
-                          </p>
-                          <p
-                            className='ml-2 cursor-pointer text-red-500'
-                            onClick={() => handleDeleteItem('tables', table)}
+                      {restaurant.tables
+                        .sort((a, b) => a.number - b.number)
+                        .map((table) => (
+                          <li
+                            key={table.id}
+                            className='flex flex-row justify-between border-b border-gray-600'
                           >
-                            X
-                          </p>
-                        </li>
-                      ))}
+                            <p>
+                              Table #{table.number} - {table.status}
+                            </p>
+                            <p
+                              className='ml-2 cursor-pointer text-red-500'
+                              onClick={() => handleDeleteItem('tables', table)}
+                            >
+                              X
+                            </p>
+                          </li>
+                        ))}
                     </ul>
                     <ul className='flex flex-1 border-l-2 border-gray-600 p-4'>
                       <p className='text-2xl mr-2'>Orders</p>
-                      {restaurant.orders.map((order) => (
-                        <li key={order.id}>
-                          <p className='ml-2'>Order #{order.number}:</p>
-                          <ul className='mr-2 p-2'>
-                            {order.items.map((item, index) => (
-                              <li
-                                key={index}
-                                className='flex flex-row justify-between border-b border-gray-600'
-                              >
-                                {item}
-                                <p
-                                  className='ml-2 cursor-pointer text-red-500'
-                                  onClick={() =>
-                                    handleDeleteItem('orders', order, index)
-                                  }
+                      {restaurant.orders
+                        .sort((a, b) => a.number - b.number)
+                        .map((order) => (
+                          <li key={order.id}>
+                            <p className='ml-2'>Order #{order.number}:</p>
+                            <ul className='mr-2 p-2'>
+                              {order.items.map((item, index) => (
+                                <li
+                                  key={index}
+                                  className='flex flex-row justify-between border-b border-gray-600'
                                 >
-                                  X
-                                </p>
-                              </li>
-                            ))}
-                          </ul>
-                        </li>
-                      ))}
+                                  {item}
+                                  <p
+                                    className='ml-2 cursor-pointer text-red-500'
+                                    onClick={() =>
+                                      handleDeleteItem('orders', order, index)
+                                    }
+                                  >
+                                    X
+                                  </p>
+                                </li>
+                              ))}
+                            </ul>
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 ))}
