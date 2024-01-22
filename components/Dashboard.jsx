@@ -1,7 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getUser, fetchRestaurants, deleteItem } from '@/utils/supabaseMethods'
+import {
+  getUser,
+  fetchRestaurants,
+  deleteArrayItem,
+  deleteItem,
+} from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
   Card,
@@ -50,6 +55,39 @@ export default function DashboardComponent() {
       setData(data)
     } catch (error) {
       console.error('Error fetching restaurant:', error)
+    }
+  }
+
+  const handleDeleteItem = async (category, selected, index) => {
+    let selectedArray = selected.items
+    let displayError
+
+    if (index) {
+      const text = `Are you sure you want to delete ?`
+      if (confirm(text) === true) {
+        selectedArray = selectedArray.filter((_, i) => i !== index)
+      } else {
+        return
+      }
+
+      const { data, error } = await deleteArrayItem(
+        category,
+        selected.id,
+        selectedArray
+      )
+      displayError = error
+    }
+
+    if (!index) {
+      const { data, error } = await deleteItem(category, selected.id)
+      displayError = error
+    }
+
+    if (displayError) {
+      console.error('Error deleting item:', displayError)
+      return
+    } else {
+      fetchRestaurantsData()
     }
   }
 
@@ -160,8 +198,8 @@ export default function DashboardComponent() {
                     key={restaurant.id}
                     className='flex flex-row justify-between space-x-20 border-b-2 border-gray-600'
                   >
-                    <p className='text-4xl w-1/12'>{restaurant.name}</p>
-                    <ul className='border-l-2 border-gray-600 p-4 w-1/12'>
+                    <p className='text-4xl w-44'>{restaurant.name}</p>
+                    <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <p className='text-2xl'>Menu</p>
                       {restaurant.menu.map((menu) => (
                         <li key={menu.id}>
@@ -173,7 +211,12 @@ export default function DashboardComponent() {
                                 className='flex flex-row justify-between border-b border-gray-600'
                               >
                                 {item}
-                                <p className='ml-2 cursor-pointer text-red-500'>
+                                <p
+                                  className='ml-2 cursor-pointer text-red-500'
+                                  onClick={() =>
+                                    handleDeleteItem('menu', menu, index)
+                                  }
+                                >
                                   X
                                 </p>
                               </li>
@@ -182,7 +225,7 @@ export default function DashboardComponent() {
                         </li>
                       ))}
                     </ul>
-                    <ul className='border-l-2 border-gray-600 p-4 w-1/12'>
+                    <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <p className='text-2xl'>Tables</p>
                       {restaurant.tables.map((table) => (
                         <li
@@ -192,7 +235,12 @@ export default function DashboardComponent() {
                           <p>
                             Table #{table.number} - {table.status}
                           </p>
-                          <p className='ml-2 cursor-pointer text-red-500'>X</p>
+                          <p
+                            className='ml-2 cursor-pointer text-red-500'
+                            onClick={() => handleDeleteItem('tables', table)}
+                          >
+                            X
+                          </p>
                         </li>
                       ))}
                     </ul>
@@ -208,7 +256,12 @@ export default function DashboardComponent() {
                                 className='flex flex-row justify-between border-b border-gray-600'
                               >
                                 {item}
-                                <p className='ml-2 cursor-pointer text-red-500'>
+                                <p
+                                  className='ml-2 cursor-pointer text-red-500'
+                                  onClick={() =>
+                                    handleDeleteItem('orders', order, index)
+                                  }
+                                >
                                   X
                                 </p>
                               </li>

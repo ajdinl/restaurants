@@ -48,6 +48,15 @@ const createRestaurant = async (name, address, phone) => {
   return { data, error }
 }
 
+const deleteArrayItem = async (category, id, array) => {
+  const { data, error } = await supabase
+    .from(category)
+    .update({ items: array })
+    .eq('id', id)
+
+  return { data, error }
+}
+
 const deleteItem = async (category, id) => {
   const { data, error } = await supabase.from(category).delete().eq('id', id)
   return { data, error }
@@ -59,5 +68,6 @@ export {
   signInWithPassword,
   fetchRestaurants,
   createRestaurant,
+  deleteArrayItem,
   deleteItem,
 }
