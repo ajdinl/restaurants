@@ -18,6 +18,7 @@ import {
 import NewUserForm from '@/components/NewUserForm'
 import NewRestaurantForm from '@/components/NewRestaurantForm'
 import { Button } from '@/components/Button'
+import { PencilIcon } from '@/components/Icons'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)
@@ -214,17 +215,22 @@ export default function DashboardComponent() {
                               {menu.items.map((item, index) => (
                                 <li
                                   key={index}
-                                  className='flex flex-row justify-between border-b border-gray-600'
+                                  className='flex flex-row justify-between border-b border-gray-600 w-60'
                                 >
-                                  {item}
-                                  <p
-                                    className='ml-2 cursor-pointer text-red-500'
-                                    onClick={() =>
-                                      handleDeleteItem('menu', menu, index)
-                                    }
-                                  >
-                                    X
-                                  </p>
+                                  <p>{item}</p>
+                                  <div className='flex flex-row items-center'>
+                                    <PencilIcon className='h-4 w-4 text-gray-600'>
+                                      Edit
+                                    </PencilIcon>
+                                    <button
+                                      className='ml-2 cursor-pointer text-red-500'
+                                      onClick={() =>
+                                        handleDeleteItem('menu', menu, index)
+                                      }
+                                    >
+                                      X
+                                    </button>
+                                  </div>
                                 </li>
                               ))}
                             </ul>
@@ -238,17 +244,24 @@ export default function DashboardComponent() {
                         .map((table) => (
                           <li
                             key={table.id}
-                            className='flex flex-row justify-between border-b border-gray-600'
+                            className='flex flex-row justify-between border-b border-gray-600 w-60'
                           >
                             <p>
                               Table #{table.number} - {table.status}
                             </p>
-                            <p
-                              className='ml-2 cursor-pointer text-red-500'
-                              onClick={() => handleDeleteItem('tables', table)}
-                            >
-                              X
-                            </p>
+                            <div className='flex flex-row items-center'>
+                              <PencilIcon className='h-4 w-4 text-gray-600'>
+                                Edit
+                              </PencilIcon>
+                              <button
+                                className='ml-2 cursor-pointer text-red-500'
+                                onClick={() =>
+                                  handleDeleteItem('tables', table)
+                                }
+                              >
+                                X
+                              </button>
+                            </div>
                           </li>
                         ))}
                     </ul>
@@ -263,17 +276,22 @@ export default function DashboardComponent() {
                               {order.items.map((item, index) => (
                                 <li
                                   key={index}
-                                  className='flex flex-row justify-between border-b border-gray-600'
+                                  className='flex flex-row justify-between border-b border-gray-600 w-60'
                                 >
-                                  {item}
-                                  <p
-                                    className='ml-2 cursor-pointer text-red-500'
-                                    onClick={() =>
-                                      handleDeleteItem('orders', order, index)
-                                    }
-                                  >
-                                    X
-                                  </p>
+                                  <p>{item}</p>
+                                  <div className='flex flex-row items-center'>
+                                    <PencilIcon className='h-4 w-4 text-gray-600'>
+                                      Edit
+                                    </PencilIcon>
+                                    <button
+                                      className='ml-2 cursor-pointer text-red-500'
+                                      onClick={() =>
+                                        handleDeleteItem('orders', order, index)
+                                      }
+                                    >
+                                      X
+                                    </button>
+                                  </div>
                                 </li>
                               ))}
                             </ul>
