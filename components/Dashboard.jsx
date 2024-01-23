@@ -6,6 +6,7 @@ import {
   fetchRestaurants,
   deleteArrayItem,
   deleteItem,
+  updateTableStatus,
 } from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
@@ -19,10 +20,13 @@ import NewUserForm from '@/components/NewUserForm'
 import NewRestaurantForm from '@/components/NewRestaurantForm'
 import { Button } from '@/components/Button'
 import { PencilIcon } from '@/components/Icons'
+import { EditModal } from '@/components/Modals'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)
   const [data, setData] = useState([])
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [selected, setSelected] = useState(null)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
   const isAdmin = user?.user?.user_metadata.is_admin
@@ -94,6 +98,25 @@ export default function DashboardComponent() {
     } else {
       fetchRestaurantsData()
     }
+  }
+
+  const handleUpdateTableStatus = async (category, selected, data) => {
+    const { data: item, error } = await updateTableStatus(
+      category,
+      selected.id,
+      data
+    )
+    if (error) {
+      console.error('Error updating item:', error)
+      return
+    } else {
+      fetchRestaurantsData()
+    }
+  }
+
+  const setEditSelectedItem = (item) => {
+    setSelected(item)
+    setShowEditModal(true)
   }
 
   useEffect(() => {
@@ -197,6 +220,13 @@ export default function DashboardComponent() {
               <CardDescription>List of all restaurants.</CardDescription>
             </CardHeader>
             <CardContent>
+              {showEditModal && (
+                <EditModal
+                  setShowEditModal={setShowEditModal}
+                  selected={selected}
+                  handleUpdateTableStatus={handleUpdateTableStatus}
+                />
+              )}
               {isAdmin &&
                 data.map((restaurant) => (
                   <div
@@ -250,7 +280,15 @@ export default function DashboardComponent() {
                               Table #{table.number} - {table.status}
                             </p>
                             <div className='flex flex-row items-center'>
-                              <PencilIcon className='h-4 w-4 text-gray-600'>
+                              <PencilIcon
+                                className='h-4 w-4 text-gray-600'
+                                onClick={() =>
+                                  setEditSelectedItem({
+                                    ...table,
+                                    category: 'tables',
+                                  })
+                                }
+                              >
                                 Edit
                               </PencilIcon>
                               <button
