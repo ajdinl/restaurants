@@ -1,19 +1,37 @@
 'use client'
 
 import { useState } from 'react'
+import { updateTableStatus } from '@/utils/supabaseMethods'
 import { Button } from '@/components/Button'
 
 export function EditModal({
   setShowEditModal,
   selected,
-  handleUpdateTableStatus,
+  fetchRestaurantsData,
 }) {
   const [status, setStatus] = useState(selected.status)
   const [openDropdown, setOpenDropdown] = useState(false)
 
+  const handleUpdateTableStatus = async (category, selected, data) => {
+    const { data: item, error } = await updateTableStatus(
+      category,
+      selected.id,
+      data
+    )
+    if (error) {
+      console.error('Error updating item:', error)
+      return
+    } else {
+      fetchRestaurantsData()
+    }
+  }
+
   const handleSave = () => {
-    handleUpdateTableStatus(selected.category, selected, status)
     setShowEditModal(false)
+    if (status === selected.status) {
+      return
+    }
+    handleUpdateTableStatus(selected.category, selected, status)
   }
 
   const handleOpen = () => {

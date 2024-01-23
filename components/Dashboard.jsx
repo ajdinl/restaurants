@@ -6,7 +6,6 @@ import {
   fetchRestaurants,
   deleteArrayItem,
   deleteItem,
-  updateTableStatus,
 } from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
@@ -94,20 +93,6 @@ export default function DashboardComponent() {
 
     if (displayError) {
       console.error('Error deleting item:', displayError)
-      return
-    } else {
-      fetchRestaurantsData()
-    }
-  }
-
-  const handleUpdateTableStatus = async (category, selected, data) => {
-    const { data: item, error } = await updateTableStatus(
-      category,
-      selected.id,
-      data
-    )
-    if (error) {
-      console.error('Error updating item:', error)
       return
     } else {
       fetchRestaurantsData()
@@ -224,7 +209,7 @@ export default function DashboardComponent() {
                 <EditModal
                   setShowEditModal={setShowEditModal}
                   selected={selected}
-                  handleUpdateTableStatus={handleUpdateTableStatus}
+                  fetchRestaurantsData={fetchRestaurantsData}
                 />
               )}
               {isAdmin &&
