@@ -14,12 +14,12 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from '@/components/Cards'
-import NewUserForm from '@/components/NewUserForm'
-import NewRestaurantForm from '@/components/NewRestaurantForm'
-import { Button } from '@/components/Button'
-import { PencilIcon } from '@/components/Icons'
-import { EditModal } from '@/components/Modals'
+  NewUserForm,
+  NewRestaurantForm,
+  Button,
+  PencilIcon,
+  EditModal,
+} from '@/components'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)

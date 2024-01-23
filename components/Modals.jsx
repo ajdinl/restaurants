@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { updateTableStatus } from '@/utils/supabaseMethods'
-import { Button } from '@/components/Button'
+import { Button } from '@/components'
 
 export function EditModal({
   setShowEditModal,

@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { MenuIcon } from '@/components/Icons'
-import { Button } from '@/components/Button'
+import { MenuIcon, Button } from '@/components'
 import { useSearchParams } from 'next/navigation'
 
 export default function Navbar({ isAdmin }) {
