@@ -1,7 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getUser, fetchRestaurants } from '@/utils/supabaseMethods'
+import {
+  getUser,
+  fetchRestaurants,
+  deleteArrayItem,
+  deleteItem,
+} from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
   Card,
@@ -9,21 +14,25 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from '@/components/Cards'
-import NewUserForm from '@/components/NewUserForm'
-import NewRestaurantForm from '@/components/NewRestaurantForm'
-import { Button } from '@/components/Button'
+  NewUserForm,
+  NewRestaurantForm,
+  Button,
+  PencilIcon,
+  EditModal,
+} from '@/components'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)
   const [data, setData] = useState([])
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [selected, setSelected] = useState(null)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
   const isAdmin = user?.user?.user_metadata.is_admin
   const userId = user?.user?.id
-  const restaurantMenu = data?.restaurant_menu
-  const restaurantTables = data?.restaurant_tables
-  const restaurantOrders = data?.restaurant_orders
+  const restaurantMenu = data?.menu
+  const restaurantTables = data?.tables
+  const restaurantOrders = data?.orders
 
   const fetchUserData = async () => {
     try {
@@ -53,6 +62,48 @@ export default function DashboardComponent() {
     }
   }
 
+  const handleDeleteItem = async (category, selected, index) => {
+    let selectedArray = selected.items
+    let displayError
+    const text = `Are you sure you want to delete this item?`
+
+    if (index) {
+      if (confirm(text) === true) {
+        selectedArray = selectedArray.filter((_, i) => i !== index)
+      } else {
+        return
+      }
+
+      const { data, error } = await deleteArrayItem(
+        category,
+        selected.id,
+        selectedArray
+      )
+      displayError = error
+    }
+
+    if (!index) {
+      if (confirm(text) === true) {
+        const { data, error } = await deleteItem(category, selected.id)
+        displayError = error
+      } else {
+        return
+      }
+    }
+
+    if (displayError) {
+      console.error('Error deleting item:', displayError)
+      return
+    } else {
+      fetchRestaurantsData()
+    }
+  }
+
+  const setEditSelectedItem = (item) => {
+    setSelected(item)
+    setShowEditModal(true)
+  }
+
   useEffect(() => {
     fetchUserData()
   }, [])
@@ -66,7 +117,7 @@ export default function DashboardComponent() {
   return (
     <div>
       <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
-        {(!view || view === 'menu') && (
+        {(!view || view === 'menu') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
               <CardTitle>Menu</CardTitle>
@@ -95,7 +146,7 @@ export default function DashboardComponent() {
             </CardContent>
           </Card>
         )}
-        {(!view || view === 'orders') && (
+        {(!view || view === 'orders') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
               <CardTitle>Orders</CardTitle>
@@ -121,7 +172,7 @@ export default function DashboardComponent() {
             </CardContent>
           </Card>
         )}
-        {(!view || view === 'tables') && (
+        {(!view || view === 'tables') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
               <CardTitle>Tables</CardTitle>
@@ -154,48 +205,141 @@ export default function DashboardComponent() {
               <CardDescription>List of all restaurants.</CardDescription>
             </CardHeader>
             <CardContent>
+              {showEditModal && (
+                <EditModal
+                  setShowEditModal={setShowEditModal}
+                  selected={selected}
+                  fetchRestaurantsData={fetchRestaurantsData}
+                />
+              )}
               {isAdmin &&
                 data.map((restaurant) => (
                   <div
                     key={restaurant.id}
                     className='flex flex-row justify-between space-x-20 border-b-2 border-gray-600'
                   >
-                    <p className='text-4xl w-1/12'>{restaurant.name}</p>
-                    <ul className='border-l-2 border-gray-600 p-4 w-1/12'>
+                    <p className='text-4xl w-44'>{restaurant.name}</p>
+                    <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <p className='text-2xl'>Menu</p>
-                      {restaurant.restaurant_menu.map((menu) => (
-                        <li key={menu.id}>
-                          <p className='mb-2'>Menu #{menu.number}</p>
-                          {menu.items.map((item, index) => (
-                            <ul key={index}>
-                              <li>{item}</li>
+                      {restaurant.menu
+                        .sort((a, b) => a.number - b.number)
+                        .map((menu) => (
+                          <li key={menu.id}>
+                            <p className='mb-2'>Menu #{menu.number}</p>
+                            <ul>
+                              {menu.items.map((item, index) => (
+                                <li
+                                  key={index}
+                                  className='flex flex-row justify-between border-b border-gray-600 w-60'
+                                >
+                                  <p>{item}</p>
+                                  <div className='flex flex-row items-center'>
+                                    <PencilIcon
+                                      className='h-4 w-4 text-gray-600 cursor-pointer'
+                                      onClick={() =>
+                                        setEditSelectedItem({
+                                          ...menu,
+                                          category: 'menu',
+                                          item,
+                                          index,
+                                        })
+                                      }
+                                    >
+                                      Edit
+                                    </PencilIcon>
+                                    <button
+                                      className='ml-2 cursor-pointer text-red-500'
+                                      onClick={() =>
+                                        handleDeleteItem('menu', menu, index)
+                                      }
+                                    >
+                                      X
+                                    </button>
+                                  </div>
+                                </li>
+                              ))}
                             </ul>
-                          ))}
-                        </li>
-                      ))}
+                          </li>
+                        ))}
                     </ul>
-                    <ul className='border-l-2 border-gray-600 p-4 w-1/12'>
+                    <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <p className='text-2xl'>Tables</p>
-                      {restaurant.restaurant_tables.map((table) => (
-                        <li key={table.id}>
-                          <p>
-                            Table #{table.number} - {table.status}
-                          </p>
-                        </li>
-                      ))}
+                      {restaurant.tables
+                        .sort((a, b) => a.number - b.number)
+                        .map((table) => (
+                          <li
+                            key={table.id}
+                            className='flex flex-row justify-between border-b border-gray-600 w-60'
+                          >
+                            <p>
+                              Table #{table.number} - {table.status}
+                            </p>
+                            <div className='flex flex-row items-center'>
+                              <PencilIcon
+                                className='h-4 w-4 text-gray-600 cursor-pointer'
+                                onClick={() =>
+                                  setEditSelectedItem({
+                                    ...table,
+                                    category: 'tables',
+                                  })
+                                }
+                              >
+                                Edit
+                              </PencilIcon>
+                              <button
+                                className='ml-2 cursor-pointer text-red-500'
+                                onClick={() =>
+                                  handleDeleteItem('tables', table)
+                                }
+                              >
+                                X
+                              </button>
+                            </div>
+                          </li>
+                        ))}
                     </ul>
                     <ul className='flex flex-1 border-l-2 border-gray-600 p-4'>
                       <p className='text-2xl mr-2'>Orders</p>
-                      {restaurant.restaurant_orders.map((order) => (
-                        <li key={order.id}>
-                          <p className='ml-2'>Order #{order.number}:</p>
-                          <ul className='mr-2 p-2'>
-                            {order.items.map((item, index) => (
-                              <li key={index}>{item}</li>
-                            ))}
-                          </ul>
-                        </li>
-                      ))}
+                      {restaurant.orders
+                        .sort((a, b) => a.number - b.number)
+                        .map((order) => (
+                          <li key={order.id}>
+                            <p className='ml-2'>Order #{order.number}:</p>
+                            <ul className='mr-2 p-2'>
+                              {order.items.map((item, index) => (
+                                <li
+                                  key={index}
+                                  className='flex flex-row justify-between border-b border-gray-600 w-60'
+                                >
+                                  <p>{item}</p>
+                                  <div className='flex flex-row items-center'>
+                                    <PencilIcon
+                                      className='h-4 w-4 text-gray-600 cursor-pointer'
+                                      onClick={() =>
+                                        setEditSelectedItem({
+                                          ...order,
+                                          category: 'orders',
+                                          item,
+                                          index,
+                                        })
+                                      }
+                                    >
+                                      Edit
+                                    </PencilIcon>
+                                    <button
+                                      className='ml-2 cursor-pointer text-red-500'
+                                      onClick={() =>
+                                        handleDeleteItem('orders', order, index)
+                                      }
+                                    >
+                                      X
+                                    </button>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 ))}

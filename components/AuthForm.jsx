@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { getUser, signInWithPassword } from '@/utils/supabaseMethods'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/Button'
+import { Button } from '@/components'
 
 export default function AuthForm() {
   const [email, setEmail] = useState('')

@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { MenuIcon } from '@/components/Icons'
-import { Button } from '@/components/Button'
+import { MenuIcon, Button } from '@/components'
 import { useSearchParams } from 'next/navigation'
 
 export default function Navbar({ isAdmin }) {
@@ -22,34 +21,40 @@ export default function Navbar({ isAdmin }) {
             />
             <span className='sr-only'>Restaurant Dashboard</span>
           </Link>
-          <Link
-            className={
-              view === 'menu' ? 'font-bold' : 'text-gray-500 dark:text-gray-400'
-            }
-            href='?view=menu'
-          >
-            Menu
-          </Link>
-          <Link
-            className={
-              view === 'orders'
-                ? 'font-bold'
-                : 'text-gray-500 dark:text-gray-400'
-            }
-            href='?view=orders'
-          >
-            Orders
-          </Link>
-          <Link
-            className={
-              view === 'tables'
-                ? 'font-bold'
-                : 'text-gray-500 dark:text-gray-400'
-            }
-            href='?view=tables'
-          >
-            Tables
-          </Link>
+          {!isAdmin && (
+            <>
+              <Link
+                className={
+                  view === 'menu'
+                    ? 'font-bold'
+                    : 'text-gray-500 dark:text-gray-400'
+                }
+                href='?view=menu'
+              >
+                Menu
+              </Link>
+              <Link
+                className={
+                  view === 'orders'
+                    ? 'font-bold'
+                    : 'text-gray-500 dark:text-gray-400'
+                }
+                href='?view=orders'
+              >
+                Orders
+              </Link>
+              <Link
+                className={
+                  view === 'tables'
+                    ? 'font-bold'
+                    : 'text-gray-500 dark:text-gray-400'
+                }
+                href='?view=tables'
+              >
+                Tables
+              </Link>
+            </>
+          )}
           {isAdmin && (
             <>
               <Link

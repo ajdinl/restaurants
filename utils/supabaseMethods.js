@@ -30,7 +30,7 @@ const signInWithPassword = async (email, password) => {
 const fetchRestaurants = async (isAdmin, userId) => {
   let query = supabase
     .from('restaurants')
-    .select('*, restaurant_menu(*), restaurant_orders(*), restaurant_tables(*)')
+    .select('*, menu(*), orders(*), tables(*)')
 
   if (!isAdmin) {
     query = query.eq('user_id', userId).single()
@@ -48,10 +48,44 @@ const createRestaurant = async (name, address, phone) => {
   return { data, error }
 }
 
+const deleteArrayItem = async (category, id, array) => {
+  const { data, error } = await supabase
+    .from(category)
+    .update({ items: array })
+    .eq('id', id)
+
+  return { data, error }
+}
+
+const deleteItem = async (category, id) => {
+  const { data, error } = await supabase.from(category).delete().eq('id', id)
+  return { data, error }
+}
+
+const updateArrayItem = async (category, id, array) => {
+  const { data, error } = await supabase
+    .from(category)
+    .update({ items: array })
+    .eq('id', id)
+  return { data, error }
+}
+
+const updateTableStatus = async (category, id, data) => {
+  const { data: item, error } = await supabase
+    .from(category)
+    .update({ status: data })
+    .eq('id', id)
+  return { item, error }
+}
+
 export {
   createUser,
   getUser,
   signInWithPassword,
   fetchRestaurants,
   createRestaurant,
+  deleteArrayItem,
+  deleteItem,
+  updateTableStatus,
+  updateArrayItem,
 }
