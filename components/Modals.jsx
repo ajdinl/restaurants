@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { updateTableStatus } from '@/utils/supabaseMethods'
+import { updateTableStatus, updateArrayItem } from '@/utils/supabaseMethods'
 import { Button } from '@/components'
 
 export function EditModal({
@@ -10,6 +10,7 @@ export function EditModal({
   fetchRestaurantsData,
 }) {
   const [status, setStatus] = useState(selected.status)
+  const [selectedItem, setSelectedItem] = useState(selected.item)
   const [openDropdown, setOpenDropdown] = useState(false)
 
   const handleUpdateTableStatus = async (category, selected, data) => {
@@ -26,12 +27,41 @@ export function EditModal({
     }
   }
 
+  const handleUpdateArrayItem = async (category, selected, selectedItem) => {
+    let selectedArray = [...selected.items]
+
+    if (selected.index) {
+      if (selectedArray[selected.index] === selectedItem) {
+        return
+      }
+      selectedArray[selected.index] = selectedItem
+    }
+
+    const { data: item, error } = await updateArrayItem(
+      category,
+      selected.id,
+      selectedArray
+    )
+    if (error) {
+      console.error('Error updating item:', error)
+      return
+    } else {
+      fetchRestaurantsData()
+    }
+  }
+
   const handleSave = () => {
     setShowEditModal(false)
-    if (status === selected.status) {
+    if (!selectedItem && !status) {
       return
     }
-    handleUpdateTableStatus(selected.category, selected, status)
+    if (selectedItem) {
+      handleUpdateArrayItem(selected.category, selected, selectedItem)
+      return
+    }
+    if (status) {
+      handleUpdateTableStatus(selected.category, selected, status)
+    }
   }
 
   const handleOpen = () => {
@@ -59,44 +89,59 @@ export function EditModal({
                 </span>
               </button>
             </div>
-            <div className='relative p-6 flex-auto'>
-              <div className='dropdown'>
-                <Button
-                  className={
-                    status === 'Available'
-                      ? 'bg-green-500 hover:bg-green-600 text-white'
-                      : 'bg-red-500 hover:bg-red-600 text-white'
-                  }
-                  onClick={handleOpen}
-                >
-                  {status}
-                </Button>
-                {openDropdown && (
-                  <ul className='menu'>
-                    {status === 'Available' && (
-                      <li
-                        className='menu-item'
-                        onClick={() => setStatusValue('Reserved')}
-                      >
-                        <Button className='mt-4 bg-red-500 hover:bg-red-600 text-white'>
-                          Reserved
-                        </Button>
-                      </li>
-                    )}
-                    {status === 'Reserved' && (
-                      <li
-                        className='menu-item'
-                        onClick={() => setStatusValue('Available')}
-                      >
-                        <Button className='mt-4 bg-green-500 hover:bg-green-600 text-white'>
-                          Available
-                        </Button>
-                      </li>
-                    )}
-                  </ul>
-                )}
+            {status && (
+              <div className='relative p-6 flex-auto'>
+                <div className='dropdown'>
+                  <Button
+                    className={
+                      status === 'Available'
+                        ? 'bg-green-500 hover:bg-green-600 text-white'
+                        : 'bg-red-500 hover:bg-red-600 text-white'
+                    }
+                    onClick={handleOpen}
+                  >
+                    {status}
+                  </Button>
+                  {openDropdown && (
+                    <ul className='menu'>
+                      {status === 'Available' && (
+                        <li
+                          className='menu-item'
+                          onClick={() => setStatusValue('Reserved')}
+                        >
+                          <Button className='mt-4 bg-red-500 hover:bg-red-600 text-white'>
+                            Reserved
+                          </Button>
+                        </li>
+                      )}
+                      {status === 'Reserved' && (
+                        <li
+                          className='menu-item'
+                          onClick={() => setStatusValue('Available')}
+                        >
+                          <Button className='mt-4 bg-green-500 hover:bg-green-600 text-white'>
+                            Available
+                          </Button>
+                        </li>
+                      )}
+                    </ul>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
+            {selectedItem && (
+              <div className='relative p-6 flex-auto'>
+                <form className='w-full'>
+                  <input
+                    type='text'
+                    value={selectedItem}
+                    onChange={(e) => setSelectedItem(e.target.value)}
+                    placeholder='Item'
+                    className='w-full p-2 border border-gray-300 rounded'
+                  />
+                </form>
+              </div>
+            )}
             <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>
               <button
                 className='text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
