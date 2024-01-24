@@ -313,7 +313,17 @@ export default function DashboardComponent() {
                                 >
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
-                                    <PencilIcon className='h-4 w-4 text-gray-600'>
+                                    <PencilIcon
+                                      className='h-4 w-4 text-gray-600 cursor-pointer'
+                                      onClick={() =>
+                                        setEditSelectedItem({
+                                          ...order,
+                                          category: 'orders',
+                                          item,
+                                          index,
+                                        })
+                                      }
+                                    >
                                       Edit
                                     </PencilIcon>
                                     <button

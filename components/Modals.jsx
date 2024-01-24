@@ -30,7 +30,7 @@ export function EditModal({
   const handleUpdateArrayItem = async (category, selected, selectedItem) => {
     let selectedArray = [...selected.items]
 
-    if (selected.index) {
+    if (selectedItem) {
       if (selectedArray[selected.index] === selectedItem) {
         return
       }
