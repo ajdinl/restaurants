@@ -117,7 +117,7 @@ export default function DashboardComponent() {
   return (
     <div>
       <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
-        {(!view || view === 'menu') && (
+        {(!view || view === 'menu') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
               <CardTitle>Menu</CardTitle>
@@ -146,7 +146,7 @@ export default function DashboardComponent() {
             </CardContent>
           </Card>
         )}
-        {(!view || view === 'orders') && (
+        {(!view || view === 'orders') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
               <CardTitle>Orders</CardTitle>
@@ -172,7 +172,7 @@ export default function DashboardComponent() {
             </CardContent>
           </Card>
         )}
-        {(!view || view === 'tables') && (
+        {(!view || view === 'tables') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
               <CardTitle>Tables</CardTitle>
