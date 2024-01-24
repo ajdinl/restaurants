@@ -62,6 +62,14 @@ const deleteItem = async (category, id) => {
   return { data, error }
 }
 
+const updateArrayItem = async (category, id, array) => {
+  const { data, error } = await supabase
+    .from(category)
+    .update({ items: array })
+    .eq('id', id)
+  return { data, error }
+}
+
 const updateTableStatus = async (category, id, data) => {
   const { data: item, error } = await supabase
     .from(category)
@@ -79,4 +87,5 @@ export {
   deleteArrayItem,
   deleteItem,
   updateTableStatus,
+  updateArrayItem,
 }
