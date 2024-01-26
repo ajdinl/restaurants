@@ -120,22 +120,55 @@ export default function DashboardComponent() {
         {(!view || view === 'menu') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
-              <CardTitle>Menu</CardTitle>
-              <CardDescription>
+              <CardTitle view={view}>Menu</CardTitle>
+              <CardDescription view={view}>
                 List of available dishes and beverages.
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <ul className='space-y-2'>
+            <CardContent view={view}>
+              <ul className='space-y-6'>
                 {data &&
                   restaurantMenu?.map((menu) => (
-                    <li key={menu.id} className='flex flex-col space-y-2'>
+                    <li
+                      key={menu.id}
+                      className={`flex flex-col ${
+                        view ? 'space-y-4' : 'space-y-2'
+                      }`}
+                    >
                       {!view
                         ? menu.items
                             ?.slice(0, 5)
                             ?.map((item) => <div key={item}>{item}</div>)
-                        : menu.items?.map((item) => (
-                            <div key={item}>{item}</div>
+                        : menu.items?.map((item, index) => (
+                            <div
+                              key={item}
+                              className='flex flex-row w-1/5 items-center justify-between'
+                            >
+                              <p>{item}</p>
+                              <div className='flex flex-row items-center '>
+                                <PencilIcon
+                                  className='h-6 w-6 text-gray-600 cursor-pointer mr-6'
+                                  onClick={() =>
+                                    setEditSelectedItem({
+                                      ...menu,
+                                      category: 'menu',
+                                      item,
+                                      index,
+                                    })
+                                  }
+                                >
+                                  Edit
+                                </PencilIcon>
+                                <button
+                                  className='text-2xl cursor-pointer text-red-500'
+                                  onClick={() =>
+                                    handleDeleteItem('menu', menu, index)
+                                  }
+                                >
+                                  X
+                                </button>
+                              </div>
+                            </div>
                           ))}
                     </li>
                   ))}
@@ -149,11 +182,13 @@ export default function DashboardComponent() {
         {(!view || view === 'orders') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
-              <CardTitle>Orders</CardTitle>
-              <CardDescription>List of current orders.</CardDescription>
+              <CardTitle view={view}>Orders</CardTitle>
+              <CardDescription view={view}>
+                List of current orders.
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <ul className='space-y-2'>
+            <CardContent view={view}>
+              <ul className={`${view ? 'space-y-4' : 'space-y-2'}`}>
                 {data && !view
                   ? restaurantOrders?.slice(0, 5)?.map((order) => (
                       <li key={order.id}>
@@ -161,8 +196,40 @@ export default function DashboardComponent() {
                       </li>
                     ))
                   : restaurantOrders?.map((order) => (
-                      <li key={order.id}>
-                        Order #{order.number}: {order.items?.join(', ')}
+                      <li key={order.id} className='flex flex-row'>
+                        Order #{order.number}:
+                        <ul className='flex flex-row'>
+                          {order.items.map((item, index) => (
+                            <>
+                              <p key={item} className='ml-4'>
+                                {item}
+                              </p>
+                              <div className='flex flex-row items-center'>
+                                <PencilIcon
+                                  className='h-6 w-6 text-gray-600 cursor-pointer mr-6 ml-4'
+                                  onClick={() =>
+                                    setEditSelectedItem({
+                                      ...order,
+                                      category: 'orders',
+                                      item,
+                                      index,
+                                    })
+                                  }
+                                >
+                                  Edit
+                                </PencilIcon>
+                                <button
+                                  className='text-2xl cursor-pointer text-red-500'
+                                  onClick={() =>
+                                    handleDeleteItem('orders', order, index)
+                                  }
+                                >
+                                  X
+                                </button>
+                              </div>
+                            </>
+                          ))}
+                        </ul>
                       </li>
                     ))}
               </ul>
@@ -175,10 +242,12 @@ export default function DashboardComponent() {
         {(!view || view === 'tables') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
-              <CardTitle>Tables</CardTitle>
-              <CardDescription>List of table reservations.</CardDescription>
+              <CardTitle view={view}>Tables</CardTitle>
+              <CardDescription view={view}>
+                List of table reservations.
+              </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent view={view}>
               <ul className='space-y-2'>
                 {data && !view
                   ? restaurantTables?.slice(0, 5)?.map((table) => (
@@ -187,8 +256,27 @@ export default function DashboardComponent() {
                       </li>
                     ))
                   : restaurantTables?.map((table) => (
-                      <li key={table.id}>
+                      <li key={table.id} className='flex flex-row'>
                         Table #{table.number}: {table.status}
+                        <div className='flex flex-row items-center'>
+                          <PencilIcon
+                            className='h-6 w-6 text-gray-600 cursor-pointer mr-4 ml-6'
+                            onClick={() =>
+                              setEditSelectedItem({
+                                ...table,
+                                category: 'tables',
+                              })
+                            }
+                          >
+                            Edit
+                          </PencilIcon>
+                          <button
+                            className='text-2xl cursor-pointer text-red-500'
+                            onClick={() => handleDeleteItem('tables', table)}
+                          >
+                            X
+                          </button>
+                        </div>
                       </li>
                     ))}
               </ul>
@@ -205,13 +293,6 @@ export default function DashboardComponent() {
               <CardDescription>List of all restaurants.</CardDescription>
             </CardHeader>
             <CardContent>
-              {showEditModal && (
-                <EditModal
-                  setShowEditModal={setShowEditModal}
-                  selected={selected}
-                  fetchRestaurantsData={fetchRestaurantsData}
-                />
-              )}
               {isAdmin &&
                 data.map((restaurant) => (
                   <div
@@ -369,6 +450,13 @@ export default function DashboardComponent() {
           </>
         )}
       </main>
+      {showEditModal && (
+        <EditModal
+          setShowEditModal={setShowEditModal}
+          selected={selected}
+          fetchRestaurantsData={fetchRestaurantsData}
+        />
+      )}
     </div>
   )
 }
