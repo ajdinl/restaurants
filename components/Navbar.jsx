@@ -35,16 +35,6 @@ export default function Navbar({ isAdmin }) {
               </Link>
               <Link
                 className={
-                  view === 'orders'
-                    ? 'font-bold'
-                    : 'text-gray-500 dark:text-gray-400'
-                }
-                href='?view=orders'
-              >
-                Orders
-              </Link>
-              <Link
-                className={
                   view === 'tables'
                     ? 'font-bold'
                     : 'text-gray-500 dark:text-gray-400'
@@ -52,6 +42,16 @@ export default function Navbar({ isAdmin }) {
                 href='?view=tables'
               >
                 Tables
+              </Link>
+              <Link
+                className={
+                  view === 'orders'
+                    ? 'font-bold'
+                    : 'text-gray-500 dark:text-gray-400'
+                }
+                href='?view=orders'
+              >
+                Orders
               </Link>
             </>
           )}
