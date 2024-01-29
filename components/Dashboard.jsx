@@ -19,6 +19,7 @@ import {
   Button,
   PencilIcon,
   EditModal,
+  NewModal,
 } from '@/components'
 
 export default function DashboardComponent() {
@@ -26,6 +27,7 @@ export default function DashboardComponent() {
   const [data, setData] = useState([])
   const [showEditModal, setShowEditModal] = useState(false)
   const [selected, setSelected] = useState(null)
+  const [showNewModal, setShowNewModal] = useState(false)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
   const isAdmin = user?.user?.user_metadata.is_admin
@@ -104,6 +106,11 @@ export default function DashboardComponent() {
     setShowEditModal(true)
   }
 
+  const openNewTableModal = (category) => {
+    setShowNewModal(true)
+    setSelected(category)
+  }
+
   useEffect(() => {
     fetchUserData()
   }, [])
@@ -123,7 +130,10 @@ export default function DashboardComponent() {
               <div className='flex flex-row items-center justify-between'>
                 <CardTitle view={view}>Menu</CardTitle>
                 {view && (
-                  <Button className='bg-green-500 hover:bg-green-600 text-white'>
+                  <Button
+                    className='bg-green-500 hover:bg-green-600 text-white'
+                    onClick={() => openNewTableModal('Dish')}
+                  >
                     Add New Dish
                   </Button>
                 )}
@@ -189,7 +199,10 @@ export default function DashboardComponent() {
               <div className='flex flex-row items-center justify-between'>
                 <CardTitle view={view}>Tables</CardTitle>
                 {view && (
-                  <Button className='bg-red-500 hover:bg-red-600 text-white'>
+                  <Button
+                    className='bg-red-500 hover:bg-red-600 text-white'
+                    onClick={() => openNewTableModal('Reservation')}
+                  >
                     Reserve a Table
                   </Button>
                 )}
@@ -240,7 +253,10 @@ export default function DashboardComponent() {
               <div className='flex flex-row items-center justify-between'>
                 <CardTitle view={view}>Orders</CardTitle>
                 {view && (
-                  <Button className='bg-blue-500 hover:bg-blue-600 text-white'>
+                  <Button
+                    className='bg-blue-500 hover:bg-blue-600 text-white'
+                    onClick={() => openNewTableModal('Order')}
+                  >
                     Add New Order
                   </Button>
                 )}
@@ -468,6 +484,13 @@ export default function DashboardComponent() {
           </>
         )}
       </main>
+      {showNewModal && (
+        <NewModal
+          setShowNewModal={setShowNewModal}
+          selected={selected}
+          isAdmin={isAdmin}
+        />
+      )}
       {showEditModal && (
         <EditModal
           setShowEditModal={setShowEditModal}
