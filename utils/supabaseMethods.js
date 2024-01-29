@@ -78,6 +78,14 @@ const updateTableStatus = async (category, id, data) => {
   return { item, error }
 }
 
+const addNewItem = async (category, id, item) => {
+  const { data, error } = await supabase
+    .from(category)
+    .insert({ items: [item] })
+    .eq('id', id)
+  return { data, error }
+}
+
 export {
   createUser,
   getUser,
@@ -88,4 +96,5 @@ export {
   deleteItem,
   updateTableStatus,
   updateArrayItem,
+  addNewItem,
 }
