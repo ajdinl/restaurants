@@ -120,7 +120,14 @@ export default function DashboardComponent() {
         {(!view || view === 'menu') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
-              <CardTitle view={view}>Menu</CardTitle>
+              <div className='flex flex-row items-center justify-between'>
+                <CardTitle view={view}>Menu</CardTitle>
+                {view && (
+                  <Button className='bg-green-500 hover:bg-green-600 text-white'>
+                    Add New Dish
+                  </Button>
+                )}
+              </div>
               <CardDescription view={view}>
                 List of available dishes and beverages.
               </CardDescription>
@@ -173,16 +180,71 @@ export default function DashboardComponent() {
                     </li>
                   ))}
               </ul>
-              <Button className='mt-4 bg-green-500 hover:bg-green-600 text-white'>
-                Add New Dish
-              </Button>
+            </CardContent>
+          </Card>
+        )}
+        {(!view || view === 'tables') && !isAdmin && (
+          <Card className={`${!view ? 'cursor-pointer' : ''}`}>
+            <CardHeader>
+              <div className='flex flex-row items-center justify-between'>
+                <CardTitle view={view}>Tables</CardTitle>
+                {view && (
+                  <Button className='bg-red-500 hover:bg-red-600 text-white'>
+                    Reserve a Table
+                  </Button>
+                )}
+              </div>
+              <CardDescription view={view}>
+                List of table reservations.
+              </CardDescription>
+            </CardHeader>
+            <CardContent view={view}>
+              <ul className='space-y-2'>
+                {data && !view
+                  ? restaurantTables?.slice(0, 5)?.map((table) => (
+                      <li key={table.id}>
+                        Table #{table.number}: {table.status}
+                      </li>
+                    ))
+                  : restaurantTables?.map((table) => (
+                      <li key={table.id} className='flex flex-row'>
+                        Table #{table.number}: {table.status}
+                        <div className='flex flex-row items-center'>
+                          <PencilIcon
+                            className='h-6 w-6 text-gray-600 cursor-pointer mr-4 ml-6'
+                            onClick={() =>
+                              setEditSelectedItem({
+                                ...table,
+                                category: 'tables',
+                              })
+                            }
+                          >
+                            Edit
+                          </PencilIcon>
+                          <button
+                            className='text-2xl cursor-pointer text-red-500'
+                            onClick={() => handleDeleteItem('tables', table)}
+                          >
+                            X
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+              </ul>
             </CardContent>
           </Card>
         )}
         {(!view || view === 'orders') && !isAdmin && (
           <Card className={`${!view ? 'cursor-pointer' : ''}`}>
             <CardHeader>
-              <CardTitle view={view}>Orders</CardTitle>
+              <div className='flex flex-row items-center justify-between'>
+                <CardTitle view={view}>Orders</CardTitle>
+                {view && (
+                  <Button className='bg-blue-500 hover:bg-blue-600 text-white'>
+                    Add New Order
+                  </Button>
+                )}
+              </div>
               <CardDescription view={view}>
                 List of current orders.
               </CardDescription>
@@ -233,56 +295,6 @@ export default function DashboardComponent() {
                       </li>
                     ))}
               </ul>
-              <Button className='mt-4 bg-blue-500 hover:bg-blue-600 text-white'>
-                Add New Order
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-        {(!view || view === 'tables') && !isAdmin && (
-          <Card className={`${!view ? 'cursor-pointer' : ''}`}>
-            <CardHeader>
-              <CardTitle view={view}>Tables</CardTitle>
-              <CardDescription view={view}>
-                List of table reservations.
-              </CardDescription>
-            </CardHeader>
-            <CardContent view={view}>
-              <ul className='space-y-2'>
-                {data && !view
-                  ? restaurantTables?.slice(0, 5)?.map((table) => (
-                      <li key={table.id}>
-                        Table #{table.number}: {table.status}
-                      </li>
-                    ))
-                  : restaurantTables?.map((table) => (
-                      <li key={table.id} className='flex flex-row'>
-                        Table #{table.number}: {table.status}
-                        <div className='flex flex-row items-center'>
-                          <PencilIcon
-                            className='h-6 w-6 text-gray-600 cursor-pointer mr-4 ml-6'
-                            onClick={() =>
-                              setEditSelectedItem({
-                                ...table,
-                                category: 'tables',
-                              })
-                            }
-                          >
-                            Edit
-                          </PencilIcon>
-                          <button
-                            className='text-2xl cursor-pointer text-red-500'
-                            onClick={() => handleDeleteItem('tables', table)}
-                          >
-                            X
-                          </button>
-                        </div>
-                      </li>
-                    ))}
-              </ul>
-              <Button className='mt-4 bg-red-500 hover:bg-red-600 text-white'>
-                Reserve a Table
-              </Button>
             </CardContent>
           </Card>
         )}
