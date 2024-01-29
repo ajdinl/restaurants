@@ -221,7 +221,8 @@ export default function DashboardComponent() {
                     ))
                   : restaurantTables?.map((table) => (
                       <li key={table.id} className='flex flex-row'>
-                        Table #{table.number}: {table.status}
+                        Table #{table.number}: {table.status} - Number of
+                        guests: {table.capacity}
                         <div className='flex flex-row items-center'>
                           <PencilIcon
                             className='h-6 w-6 text-gray-600 cursor-pointer mr-4 ml-6'

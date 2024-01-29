@@ -1,7 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { updateTableStatus, updateArrayItem } from '@/utils/supabaseMethods'
+import {
+  addNewReservation,
+  updateTableStatus,
+  updateArrayItem,
+} from '@/utils/supabaseMethods'
 import {
   Card,
   CardHeader,
@@ -12,6 +16,20 @@ import {
 } from '@/components'
 
 export function NewModal({ setShowNewModal, selected, isAdmin }) {
+  const [table, setTable] = useState({
+    number: 1,
+    capacity: 2,
+    status: 'Reserved',
+  })
+
+  const handleSave = () => {
+    setShowNewModal(false)
+    if (!table) {
+      return
+    }
+    addNewReservation(table)
+  }
+  console.log(table)
   return (
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
@@ -20,12 +38,10 @@ export function NewModal({ setShowNewModal, selected, isAdmin }) {
             <div className='flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t'>
               <h3 className='text-3xl font-semibold'>New Modal</h3>
               <button
-                className='p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
+                className='p-1 ml-auto bg-transparent border-0 text-red-500 opacity-80 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
                 onClick={() => setShowNewModal(false)}
               >
-                <span className='bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none'>
-                  ×
-                </span>
+                X
               </button>
             </div>
             <div className='relative p-6 flex-auto'>
@@ -48,7 +64,33 @@ export function NewModal({ setShowNewModal, selected, isAdmin }) {
                     )}
                     <label className='block'>
                       <span className='text-gray-700'>Table Number</span>
-                      <select className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
+                      <select
+                        defaultValue='1'
+                        onChange={(e) =>
+                          setTable({ ...table, number: e.target.value })
+                        }
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                      >
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                      </select>
+                    </label>
+                    <label className='block'>
+                      <span className='text-gray-700'>Number of Guests</span>
+                      <select
+                        onChange={(e) =>
+                          setTable({ ...table, capacity: e.target.value })
+                        }
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                      >
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -63,32 +105,34 @@ export function NewModal({ setShowNewModal, selected, isAdmin }) {
                     </label>
                     <label className='block'>
                       <span className='text-gray-700'>Status</span>
-                      <select className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
+                      <select
+                        onChange={(e) =>
+                          setTable({ ...table, status: e.target.value })
+                        }
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                      >
                         <option>Reserved</option>
                       </select>
                     </label>
-                    <Button className='mt-4 bg-purple-500 text-white'>
-                      Add New Table
-                    </Button>
                   </form>
                 </CardContent>
               </Card>
             </div>
             <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>
-              <button
-                className='text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+              <Button
+                className='text-red-500 background-transparent font-bold uppercase px-6 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                 type='button'
                 onClick={() => setShowNewModal(false)}
               >
                 Close
-              </button>
-              <button
-                className='bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+              </Button>
+              <Button
+                className='bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                 type='button'
-                onClick={() => setShowNewModal(false)}
+                onClick={() => handleSave()}
               >
                 Save Changes
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -175,12 +219,10 @@ export function EditModal({
             <div className='flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t'>
               <h3 className='text-3xl font-semibold'>Edit Modal</h3>
               <button
-                className='p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
+                className='p-1 ml-auto bg-transparent border-0 text-red-500 opacity-80 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
                 onClick={() => setShowEditModal(false)}
               >
-                <span className='bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none'>
-                  ×
-                </span>
+                X
               </button>
             </div>
             {status && (
@@ -269,12 +311,10 @@ export function DeleteModal({ setShowModal }) {
             <div className='flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t'>
               <h3 className='text-3xl font-semibold'>Delete Modal</h3>
               <button
-                className='p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
+                className='p-1 ml-auto bg-transparent border-0 text-red-500 opacity-80 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
                 onClick={() => setShowModal(false)}
               >
-                <span className='bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none'>
-                  ×
-                </span>
+                X
               </button>
             </div>
             {/* <div className='relative p-6 flex-auto'>

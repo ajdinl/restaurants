@@ -78,12 +78,9 @@ const updateTableStatus = async (category, id, data) => {
   return { item, error }
 }
 
-const addNewItem = async (category, id, item) => {
-  const { data, error } = await supabase
-    .from(category)
-    .insert({ items: [item] })
-    .eq('id', id)
-  return { data, error }
+const addNewReservation = async (data) => {
+  const { data: item, error } = await supabase.from('tables').insert(data)
+  return { item, error }
 }
 
 export {
@@ -96,5 +93,5 @@ export {
   deleteItem,
   updateTableStatus,
   updateArrayItem,
-  addNewItem,
+  addNewReservation,
 }
