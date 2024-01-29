@@ -262,10 +262,11 @@ export default function DashboardComponent() {
                         Order #{order.number}:
                         <ul className='flex flex-row'>
                           {order.items.map((item, index) => (
-                            <>
-                              <p key={item} className='ml-4'>
-                                {item}
-                              </p>
+                            <div
+                              key={index}
+                              className='flex flex-row items-center'
+                            >
+                              <p className='ml-4'>{item}</p>
                               <div className='flex flex-row items-center'>
                                 <PencilIcon
                                   className='h-6 w-6 text-gray-600 cursor-pointer mr-6 ml-4'
@@ -289,7 +290,7 @@ export default function DashboardComponent() {
                                   X
                                 </button>
                               </div>
-                            </>
+                            </div>
                           ))}
                         </ul>
                       </li>
