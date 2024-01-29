@@ -258,18 +258,23 @@ export default function DashboardComponent() {
                       </li>
                     ))
                   : restaurantOrders?.map((order) => (
-                      <li key={order.id} className='flex flex-row'>
-                        Order #{order.number}:
-                        <ul className='flex flex-row'>
+                      <li
+                        key={order.id}
+                        className='flex flex-col md:flex-row md:items-center mb-4'
+                      >
+                        <span className='mb-2 md:mr-2'>
+                          Order #{order.number}:
+                        </span>
+                        <ul className='flex flex-col md:flex-row flex-wrap'>
                           {order.items.map((item, index) => (
                             <div
                               key={index}
-                              className='flex flex-row items-center'
+                              className='flex flex-row items-center mb-2 md:mb-0 md:mr-4'
                             >
                               <p className='ml-4'>{item}</p>
-                              <div className='flex flex-row items-center'>
+                              <div className='flex flex-row items-center ml-2'>
                                 <PencilIcon
-                                  className='h-6 w-6 text-gray-600 cursor-pointer mr-6 ml-4'
+                                  className='h-6 w-6 text-gray-600 cursor-pointer mr-2'
                                   onClick={() =>
                                     setEditSelectedItem({
                                       ...order,
