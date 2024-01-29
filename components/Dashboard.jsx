@@ -32,6 +32,7 @@ export default function DashboardComponent() {
   const view = searchParams.get('view')
   const isAdmin = user?.user?.user_metadata.is_admin
   const userId = user?.user?.id
+  const restaurantId = data?.id
   const restaurantMenu = data?.menu
   const restaurantTables = data?.tables
   const restaurantOrders = data?.orders
@@ -490,6 +491,8 @@ export default function DashboardComponent() {
           setShowNewModal={setShowNewModal}
           selected={selected}
           isAdmin={isAdmin}
+          restaurantId={restaurantId}
+          fetchRestaurantsData={fetchRestaurantsData}
         />
       )}
       {showEditModal && (

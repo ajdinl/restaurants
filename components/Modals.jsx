@@ -15,21 +15,32 @@ import {
   Button,
 } from '@/components'
 
-export function NewModal({ setShowNewModal, selected, isAdmin }) {
+export function NewModal({
+  setShowNewModal,
+  selected,
+  isAdmin,
+  restaurantId,
+  fetchRestaurantsData,
+}) {
   const [table, setTable] = useState({
-    number: 1,
-    capacity: 2,
+    restaurant_id: restaurantId,
     status: 'Reserved',
   })
 
-  const handleSave = () => {
-    setShowNewModal(false)
-    if (!table) {
+  const handleSave = async () => {
+    if (!table.number || !table.capacity) {
       return
     }
-    addNewReservation(table)
+    const { data, error } = await addNewReservation(table)
+    if (error) {
+      console.error('Error adding item:', error)
+      return
+    } else {
+      fetchRestaurantsData()
+      setShowNewModal(false)
+    }
   }
-  console.log(table)
+
   return (
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
