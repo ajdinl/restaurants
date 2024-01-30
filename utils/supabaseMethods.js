@@ -27,12 +27,12 @@ const signInWithPassword = async (email, password) => {
   return { data, error }
 }
 
-const fetchRestaurants = async (isAdmin, userId) => {
+const fetchRestaurants = async (userId) => {
   let query = supabase
     .from('restaurants')
     .select('*, menu(*), orders(*), tables(*)')
 
-  if (!isAdmin) {
+  if (userId) {
     query = query.eq('user_id', userId).single()
   }
 
