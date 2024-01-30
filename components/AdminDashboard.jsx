@@ -16,7 +16,6 @@ import {
   CardContent,
   NewUserForm,
   NewRestaurantForm,
-  Button,
   PencilIcon,
   EditModal,
   NewModal,
@@ -134,7 +133,12 @@ export default function AdminDashboardComponent() {
                   >
                     <p className='text-4xl w-44'>{restaurant.name}</p>
                     <ul className='border-l-2 border-gray-600 p-4 w-64'>
-                      <p className='text-2xl'>Menu</p>
+                      <div className='flex flex-row'>
+                        <p className='text-2xl'>Menu</p>
+                        <button className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'>
+                          +
+                        </button>
+                      </div>
                       {restaurant.menu
                         .sort((a, b) => a.number - b.number)
                         .map((menu) => (
@@ -149,7 +153,7 @@ export default function AdminDashboardComponent() {
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
                                     <PencilIcon
-                                      className='h-4 w-4 text-gray-600 cursor-pointer'
+                                      className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
                                       onClick={() =>
                                         setEditSelectedItem({
                                           ...menu,
@@ -162,7 +166,7 @@ export default function AdminDashboardComponent() {
                                       Edit
                                     </PencilIcon>
                                     <button
-                                      className='ml-2 cursor-pointer text-red-500'
+                                      className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
                                       onClick={() =>
                                         handleDeleteItem('menu', menu, index)
                                       }
@@ -177,7 +181,12 @@ export default function AdminDashboardComponent() {
                         ))}
                     </ul>
                     <ul className='border-l-2 border-gray-600 p-4 w-64'>
-                      <p className='text-2xl'>Tables</p>
+                      <div className='flex flex-row'>
+                        <p className='text-2xl'>Tables</p>
+                        <button className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'>
+                          +
+                        </button>
+                      </div>
                       {restaurant.tables
                         .sort((a, b) => a.number - b.number)
                         .map((table) => (
@@ -190,7 +199,7 @@ export default function AdminDashboardComponent() {
                             </p>
                             <div className='flex flex-row items-center'>
                               <PencilIcon
-                                className='h-4 w-4 text-gray-600 cursor-pointer'
+                                className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
                                 onClick={() =>
                                   setEditSelectedItem({
                                     ...table,
@@ -201,7 +210,7 @@ export default function AdminDashboardComponent() {
                                 Edit
                               </PencilIcon>
                               <button
-                                className='ml-2 cursor-pointer text-red-500'
+                                className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
                                 onClick={() =>
                                   handleDeleteItem('tables', table)
                                 }
@@ -213,7 +222,12 @@ export default function AdminDashboardComponent() {
                         ))}
                     </ul>
                     <ul className='flex flex-1 border-l-2 border-gray-600 p-4'>
-                      <p className='text-2xl mr-2'>Orders</p>
+                      <div className='flex flex-col'>
+                        <p className='text-2xl mr-2'>Orders</p>
+                        <button className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'>
+                          +
+                        </button>
+                      </div>
                       {restaurant.orders
                         .sort((a, b) => a.number - b.number)
                         .map((order) => (
@@ -228,7 +242,7 @@ export default function AdminDashboardComponent() {
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
                                     <PencilIcon
-                                      className='h-4 w-4 text-gray-600 cursor-pointer'
+                                      className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
                                       onClick={() =>
                                         setEditSelectedItem({
                                           ...order,
@@ -241,7 +255,7 @@ export default function AdminDashboardComponent() {
                                       Edit
                                     </PencilIcon>
                                     <button
-                                      className='ml-2 cursor-pointer text-red-500'
+                                      className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
                                       onClick={() =>
                                         handleDeleteItem('orders', order, index)
                                       }
