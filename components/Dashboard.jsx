@@ -162,7 +162,7 @@ export default function DashboardComponent() {
                               <p>{item}</p>
                               <div className='flex flex-row items-center '>
                                 <PencilIcon
-                                  className='h-6 w-6 text-gray-600 cursor-pointer mr-6'
+                                  className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-6'
                                   onClick={() =>
                                     setEditSelectedItem({
                                       ...menu,
@@ -175,7 +175,7 @@ export default function DashboardComponent() {
                                   Edit
                                 </PencilIcon>
                                 <button
-                                  className='text-2xl cursor-pointer text-red-500'
+                                  className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
                                   onClick={() =>
                                     handleDeleteItem('menu', menu, index)
                                   }
@@ -223,7 +223,7 @@ export default function DashboardComponent() {
                         guests: {table.capacity}
                         <div className='flex flex-row items-center'>
                           <PencilIcon
-                            className='h-6 w-6 text-gray-600 cursor-pointer mr-4 ml-6'
+                            className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-4 ml-6'
                             onClick={() =>
                               setEditSelectedItem({
                                 ...table,
@@ -234,7 +234,7 @@ export default function DashboardComponent() {
                             Edit
                           </PencilIcon>
                           <button
-                            className='text-2xl cursor-pointer text-red-500'
+                            className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
                             onClick={() => handleDeleteItem('tables', table)}
                           >
                             X
@@ -289,7 +289,7 @@ export default function DashboardComponent() {
                               <p className='ml-4'>{item}</p>
                               <div className='flex flex-row items-center ml-2'>
                                 <PencilIcon
-                                  className='h-6 w-6 text-gray-600 cursor-pointer mr-2'
+                                  className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-2'
                                   onClick={() =>
                                     setEditSelectedItem({
                                       ...order,
@@ -302,7 +302,7 @@ export default function DashboardComponent() {
                                   Edit
                                 </PencilIcon>
                                 <button
-                                  className='text-2xl cursor-pointer text-red-500'
+                                  className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
                                   onClick={() =>
                                     handleDeleteItem('orders', order, index)
                                   }
