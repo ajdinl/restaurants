@@ -1,5 +1,5 @@
-import DashboardComponent from '@/components/Dashboard'
+import AdminDashboardComponent from '@/components/AdminDashboard'
 
 export default function AdminDashboard() {
-  return <DashboardComponent />
+  return <AdminDashboardComponent />
 }
