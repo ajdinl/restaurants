@@ -23,7 +23,7 @@ import {
 
 export default function AdminDashboardComponent() {
   const [user, setUser] = useState(null)
-  const [data, setData] = useState([])
+  const [restaurants, setRestaurants] = useState([])
   const [showEditModal, setShowEditModal] = useState(false)
   const [selected, setSelected] = useState(null)
   const [showNewModal, setShowNewModal] = useState(false)
@@ -52,7 +52,7 @@ export default function AdminDashboardComponent() {
         return
       }
 
-      setData(data)
+      setRestaurants(data)
     } catch (error) {
       console.error('Error fetching restaurant:', error)
     }
@@ -100,7 +100,7 @@ export default function AdminDashboardComponent() {
     setShowEditModal(true)
   }
 
-  const openNewTableModal = (category) => {
+  const openNewModal = (category) => {
     setShowNewModal(true)
     setSelected(category)
   }
@@ -125,8 +125,8 @@ export default function AdminDashboardComponent() {
               <CardDescription>List of all restaurants.</CardDescription>
             </CardHeader>
             <CardContent>
-              {data &&
-                data.map((restaurant) => (
+              {restaurants &&
+                restaurants.map((restaurant) => (
                   <div
                     key={restaurant.id}
                     className='flex flex-row justify-between space-x-20 border-b-2 border-gray-600'
@@ -135,7 +135,10 @@ export default function AdminDashboardComponent() {
                     <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <div className='flex flex-row'>
                         <p className='text-2xl'>Menu</p>
-                        <button className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'>
+                        <button
+                          className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+                          onClick={() => openNewModal('menu')}
+                        >
                           +
                         </button>
                       </div>
@@ -183,7 +186,10 @@ export default function AdminDashboardComponent() {
                     <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <div className='flex flex-row'>
                         <p className='text-2xl'>Tables</p>
-                        <button className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'>
+                        <button
+                          className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+                          onClick={() => openNewModal('tables')}
+                        >
                           +
                         </button>
                       </div>
@@ -224,7 +230,10 @@ export default function AdminDashboardComponent() {
                     <ul className='flex flex-1 border-l-2 border-gray-600 p-4'>
                       <div className='flex flex-col'>
                         <p className='text-2xl mr-2'>Orders</p>
-                        <button className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'>
+                        <button
+                          className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
+                          onClick={() => openNewModal('orders')}
+                        >
                           +
                         </button>
                       </div>
@@ -303,6 +312,7 @@ export default function AdminDashboardComponent() {
           selected={selected}
           isAdmin={true}
           fetchRestaurantsData={fetchRestaurantsData}
+          restaurants={restaurants}
         />
       )}
       {showEditModal && (

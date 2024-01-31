@@ -104,7 +104,7 @@ export default function DashboardComponent() {
     setShowEditModal(true)
   }
 
-  const openNewTableModal = (category) => {
+  const openNewModal = (category) => {
     setShowNewModal(true)
     setSelected(category)
   }
@@ -130,7 +130,7 @@ export default function DashboardComponent() {
                 {view && (
                   <Button
                     className='bg-green-500 hover:bg-green-600 text-white'
-                    onClick={() => openNewTableModal('Dish')}
+                    onClick={() => openNewModal('Dish')}
                   >
                     Add New Dish
                   </Button>
@@ -199,7 +199,7 @@ export default function DashboardComponent() {
                 {view && (
                   <Button
                     className='bg-red-500 hover:bg-red-600 text-white'
-                    onClick={() => openNewTableModal('Reservation')}
+                    onClick={() => openNewModal('Reservation')}
                   >
                     Reserve a Table
                   </Button>
@@ -254,7 +254,7 @@ export default function DashboardComponent() {
                 {view && (
                   <Button
                     className='bg-blue-500 hover:bg-blue-600 text-white'
-                    onClick={() => openNewTableModal('Order')}
+                    onClick={() => openNewModal('Order')}
                   >
                     Add New Order
                   </Button>
