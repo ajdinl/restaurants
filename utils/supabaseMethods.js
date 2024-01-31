@@ -70,10 +70,10 @@ const updateArrayItem = async (category, id, array) => {
   return { data, error }
 }
 
-const updateTableStatus = async (category, id, data) => {
+const updateTable = async (category, id, status, capacity) => {
   const { data: item, error } = await supabase
     .from(category)
-    .update({ status: data })
+    .update({ status, capacity })
     .eq('id', id)
   return { item, error }
 }
@@ -91,7 +91,7 @@ export {
   createRestaurant,
   deleteArrayItem,
   deleteItem,
-  updateTableStatus,
+  updateTable,
   updateArrayItem,
   addNewReservation,
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { updateTableStatus, updateArrayItem } from '@/utils/supabaseMethods'
+import { updateTable, updateArrayItem } from '@/utils/supabaseMethods'
 import { Button } from '@/components'
 
 export default function EditModal({
@@ -10,14 +10,21 @@ export default function EditModal({
   fetchRestaurantsData,
 }) {
   const [status, setStatus] = useState(selected.status)
+  const [capacity, setCapacity] = useState(selected.capacity)
   const [selectedItem, setSelectedItem] = useState(selected.item)
   const [openDropdown, setOpenDropdown] = useState(false)
 
-  const handleUpdateTableStatus = async (category, selected, data) => {
-    const { data: item, error } = await updateTableStatus(
+  const handleUpdateTable = async (
+    category,
+    selected,
+    tableStatus,
+    tableCapacity
+  ) => {
+    const { data, error } = await updateTable(
       category,
       selected.id,
-      data
+      tableStatus,
+      tableCapacity
     )
     if (error) {
       console.error('Error updating item:', error)
@@ -60,7 +67,7 @@ export default function EditModal({
       return
     }
     if (status) {
-      handleUpdateTableStatus(selected.category, selected, status)
+      handleUpdateTable(selected.category, selected, status, capacity)
     }
   }
 
@@ -125,6 +132,22 @@ export default function EditModal({
                     </ul>
                   )}
                 </div>
+                <select
+                  className='mt-2 p-2 border border-gray-300 rounded'
+                  defaultValue={capacity}
+                  onChange={(e) => setCapacity(e.target.value)}
+                >
+                  <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                  <option value='5'>5</option>
+                  <option value='6'>6</option>
+                  <option value='7'>7</option>
+                  <option value='8'>8</option>
+                  <option value='9'>9</option>
+                  <option value='10'>10</option>
+                </select>
               </div>
             )}
             {selectedItem && (
