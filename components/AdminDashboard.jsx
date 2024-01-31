@@ -146,7 +146,7 @@ export default function AdminDashboardComponent() {
                         .sort((a, b) => a.number - b.number)
                         .map((menu) => (
                           <li key={menu.id}>
-                            <p className='mb-2'>Menu #{menu.number}</p>
+                            <p className='my-2'>Menu #{menu.number}</p>
                             <ul>
                               {menu.items.map((item, index) => (
                                 <li
@@ -193,6 +193,9 @@ export default function AdminDashboardComponent() {
                           +
                         </button>
                       </div>
+                      <p className='text-sm text-center py-1'>
+                        Number - Status - Capacity
+                      </p>
                       {restaurant.tables
                         .sort((a, b) => a.number - b.number)
                         .map((table) => (
@@ -201,7 +204,8 @@ export default function AdminDashboardComponent() {
                             className='flex flex-row justify-between border-b border-gray-600 w-60'
                           >
                             <p>
-                              Table #{table.number} - {table.status}
+                              Table #{table.number} - {table.status} -{' '}
+                              {table.capacity}
                             </p>
                             <div className='flex flex-row items-center'>
                               <PencilIcon
