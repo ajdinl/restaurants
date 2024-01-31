@@ -21,6 +21,7 @@ export function NewModal({
   isAdmin,
   restaurantId,
   fetchRestaurantsData,
+  restaurants,
 }) {
   const [table, setTable] = useState({
     restaurant_id: restaurantId,
@@ -66,10 +67,20 @@ export function NewModal({
                     {isAdmin && (
                       <label className='block'>
                         <span className='text-gray-700'>Restaurant</span>
-                        <select className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
-                          <option>Restaurant 1</option>
-                          <option>Restaurant 2</option>
-                          <option>Restaurant 3</option>
+                        <select
+                          onChange={(e) =>
+                            setTable({
+                              ...table,
+                              restaurant_id: e.target.value,
+                            })
+                          }
+                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                        >
+                          {restaurants.map((restaurant) => (
+                            <option key={restaurant.id} value={restaurant.id}>
+                              {restaurant.name}
+                            </option>
+                          ))}
                         </select>
                       </label>
                     )}
