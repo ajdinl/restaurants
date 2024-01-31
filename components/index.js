@@ -8,9 +8,9 @@ import {
 import NewUserForm from '@/components/NewUserForm'
 import NewRestaurantForm from '@/components/NewRestaurantForm'
 import { Button } from '@/components/Button'
-import { PencilIcon } from '@/components/Icons'
-import { EditModal } from '@/components/Modals'
-import { MenuIcon } from '@/components/Icons'
+import { PencilIcon, MenuIcon } from '@/components/Icons'
+import NewModal from '@/components/modals/NewModal'
+import EditModal from '@/components/modals/EditModal'
 
 export {
   Card,
@@ -24,4 +24,5 @@ export {
   PencilIcon,
   EditModal,
   MenuIcon,
+  NewModal,
 }

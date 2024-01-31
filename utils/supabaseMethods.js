@@ -27,12 +27,12 @@ const signInWithPassword = async (email, password) => {
   return { data, error }
 }
 
-const fetchRestaurants = async (isAdmin, userId) => {
+const fetchRestaurants = async (userId) => {
   let query = supabase
     .from('restaurants')
     .select('*, menu(*), orders(*), tables(*)')
 
-  if (!isAdmin) {
+  if (userId) {
     query = query.eq('user_id', userId).single()
   }
 
@@ -70,11 +70,16 @@ const updateArrayItem = async (category, id, array) => {
   return { data, error }
 }
 
-const updateTableStatus = async (category, id, data) => {
+const updateTable = async (category, id, status, capacity) => {
   const { data: item, error } = await supabase
     .from(category)
-    .update({ status: data })
+    .update({ status, capacity })
     .eq('id', id)
+  return { item, error }
+}
+
+const addNewReservation = async (data) => {
+  const { data: item, error } = await supabase.from('tables').insert(data)
   return { item, error }
 }
 
@@ -86,6 +91,7 @@ export {
   createRestaurant,
   deleteArrayItem,
   deleteItem,
-  updateTableStatus,
+  updateTable,
   updateArrayItem,
+  addNewReservation,
 }
