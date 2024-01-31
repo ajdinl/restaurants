@@ -137,7 +137,7 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl'>Menu</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() => openNewModal('menu')}
+                          onClick={() => openNewModal('Dish')}
                         >
                           +
                         </button>
@@ -188,7 +188,7 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl'>Tables</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() => openNewModal('tables')}
+                          onClick={() => openNewModal('Reservation')}
                         >
                           +
                         </button>
@@ -236,7 +236,7 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl mr-2'>Orders</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
-                          onClick={() => openNewModal('orders')}
+                          onClick={() => openNewModal('Order')}
                         >
                           +
                         </button>
