@@ -83,6 +83,13 @@ const addNewReservation = async (data) => {
   return { item, error }
 }
 
+const addNewMenu = async (restaurantId, menuNumber) => {
+  const { data: item, error } = await supabase
+    .from('menu')
+    .insert({ restaurant_id: restaurantId, number: menuNumber })
+  return { item, error }
+}
+
 export {
   createUser,
   getUser,
@@ -94,4 +101,5 @@ export {
   updateTable,
   updateArrayItem,
   addNewReservation,
+  addNewMenu,
 }
