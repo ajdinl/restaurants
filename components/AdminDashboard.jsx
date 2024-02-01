@@ -142,7 +142,7 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl'>Menu</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() => openNewModal('Dish')}
+                          onClick={() => openNewModal({ category: 'Menu' })}
                         >
                           +
                         </button>
@@ -151,7 +151,17 @@ export default function AdminDashboardComponent() {
                         .sort((a, b) => a.number - b.number)
                         .map((menu) => (
                           <li key={menu.id}>
-                            <p className='my-2'>Menu #{menu.number}</p>
+                            <div className='flex flex-row'>
+                              <p className='my-3'>Menu #{menu.number}</p>
+                              <button
+                                className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+                                onClick={() =>
+                                  openNewModal({ category: 'Dish', menu: menu })
+                                }
+                              >
+                                +
+                              </button>
+                            </div>
                             <ul>
                               {menu.items.map((item, index) => (
                                 <li
@@ -193,7 +203,9 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl'>Tables</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() => openNewModal('Reservation')}
+                          onClick={() =>
+                            openNewModal({ category: 'Reservation' })
+                          }
                         >
                           +
                         </button>
@@ -241,7 +253,7 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl mr-2'>Orders</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
-                          onClick={() => openNewModal('Order')}
+                          onClick={() => openNewModal({ category: 'Order' })}
                         >
                           +
                         </button>
