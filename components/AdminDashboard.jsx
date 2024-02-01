@@ -142,7 +142,13 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl'>Menu</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() => openNewModal({ category: 'Menu' })}
+                          onClick={() =>
+                            openNewModal({
+                              category: 'Menu',
+                              restaurantId: restaurant.id,
+                              menuNumber: restaurant.menu.length + 1,
+                            })
+                          }
                         >
                           +
                         </button>
@@ -163,7 +169,7 @@ export default function AdminDashboardComponent() {
                               </button>
                             </div>
                             <ul>
-                              {menu.items.map((item, index) => (
+                              {menu.items?.map((item, index) => (
                                 <li
                                   key={index}
                                   className='flex flex-row justify-between border-b border-gray-600 w-60'

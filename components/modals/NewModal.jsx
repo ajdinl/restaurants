@@ -1,7 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { addNewReservation, updateArrayItem } from '@/utils/supabaseMethods'
+import {
+  addNewReservation,
+  updateArrayItem,
+  addNewMenu,
+} from '@/utils/supabaseMethods'
 import {
   Card,
   CardHeader,
@@ -21,6 +25,7 @@ export default function NewModal({
 }) {
   const [table, setTable] = useState({})
   const [dish, setDish] = useState(null)
+  const [menu, setMenu] = useState([])
   const [error, setError] = useState('')
 
   const handleSave = async () => {
@@ -28,6 +33,8 @@ export default function NewModal({
       handleReservationSave()
     } else if (selected.category === 'Dish') {
       handleDishSave()
+    } else if (selected.category === 'Menu') {
+      handleMenuSave()
     }
   }
 
@@ -75,6 +82,20 @@ export default function NewModal({
       setShowNewModal(false)
     }
   }
+
+  const handleMenuSave = async () => {
+    const { restaurantId, menuNumber } = selected
+
+    const { data, error } = await addNewMenu(restaurantId, menuNumber)
+    if (error) {
+      console.error('Error adding item:', error)
+      return
+    } else {
+      fetchRestaurantsData()
+      setShowNewModal(false)
+    }
+  }
+
   return (
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
@@ -196,6 +217,16 @@ export default function NewModal({
                       </label>
                     </form>
                   )}
+                  {selected.category === 'Menu' && (
+                    <form className='space-y-4'>
+                      <Button
+                        className='bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                        onClick={() => handleMenuSave()}
+                      >
+                        Add
+                      </Button>
+                    </form>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -212,7 +243,7 @@ export default function NewModal({
                 type='button'
                 onClick={() => handleSave()}
               >
-                Save Changes
+                {selected.category === 'Menu' ? 'Add' : 'Save'}
               </Button>
             </div>
           </div>
