@@ -335,6 +335,14 @@ export default function DashboardComponent() {
                             key={order.id}
                             className='flex flex-col md:flex-row md:items-center mb-4'
                           >
+                            <button
+                              className='mx-2 -mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
+                              onClick={() =>
+                                openNewModal({ category: 'Order Dish' })
+                              }
+                            >
+                              +
+                            </button>
                             <span>Order #{order.number}:</span>
                             <ul className='flex flex-col md:flex-row flex-wrap'>
                               {order.items?.map((item, index) => (
