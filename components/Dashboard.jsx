@@ -26,6 +26,7 @@ export default function DashboardComponent() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [selected, setSelected] = useState(null)
   const [showNewModal, setShowNewModal] = useState(false)
+  const [loading, setLoading] = useState(true)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
   const userId = user?.user?.id
@@ -55,7 +56,7 @@ export default function DashboardComponent() {
         console.error('Error fetching restaurant:', error)
         return
       }
-
+      setLoading(false)
       setData(data)
     } catch (error) {
       console.error('Error fetching restaurant:', error)
@@ -120,30 +121,33 @@ export default function DashboardComponent() {
   }, [user])
 
   return (
-    <div>
-      <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
-        {(!view || view === 'menu') && (
-          <Card className={`${!view ? 'cursor-pointer' : ''}`}>
-            <CardHeader>
-              <div className='flex flex-row items-center justify-between'>
-                <CardTitle view={view}>Menu</CardTitle>
-                {view && (
-                  <Button
-                    className='bg-green-500 hover:bg-green-600 text-white'
-                    onClick={() => openNewModal('Dish')}
-                  >
-                    Add New Dish
-                  </Button>
+    <>
+      {data && (
+        <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
+          {(!view || view === 'menu') && (
+            <Card className={`${!view ? 'cursor-pointer' : ''}`}>
+              <CardHeader>
+                <div className='flex flex-row items-center justify-between'>
+                  <CardTitle view={view}>Menu</CardTitle>
+                  {view && (
+                    <Button
+                      className='bg-green-500 hover:bg-green-600 text-white'
+                      onClick={() => openNewModal('Dish')}
+                    >
+                      Add New Dish
+                    </Button>
+                  )}
+                </div>
+                <CardDescription view={view}>
+                  List of available dishes and beverages.
+                </CardDescription>
+              </CardHeader>
+              <CardContent view={view}>
+                {loading && (
+                  <div className='text-left text-gray-500'>Loading...</div>
                 )}
-              </div>
-              <CardDescription view={view}>
-                List of available dishes and beverages.
-              </CardDescription>
-            </CardHeader>
-            <CardContent view={view}>
-              <ul className='space-y-6'>
-                {data &&
-                  restaurantMenu?.map((menu) => (
+                <ul className='space-y-6'>
+                  {restaurantMenu?.map((menu) => (
                     <li
                       key={menu.id}
                       className={`flex flex-col ${
@@ -187,139 +191,159 @@ export default function DashboardComponent() {
                           ))}
                     </li>
                   ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
-        {(!view || view === 'tables') && (
-          <Card className={`${!view ? 'cursor-pointer' : ''}`}>
-            <CardHeader>
-              <div className='flex flex-row items-center justify-between'>
-                <CardTitle view={view}>Tables</CardTitle>
-                {view && (
-                  <Button
-                    className='bg-red-500 hover:bg-red-600 text-white'
-                    onClick={() => openNewModal('Reservation')}
-                  >
-                    Reserve a Table
-                  </Button>
-                )}
-              </div>
-              <CardDescription view={view}>
-                List of table reservations.
-              </CardDescription>
-            </CardHeader>
-            <CardContent view={view}>
-              <ul className='space-y-2'>
-                {data && !view
-                  ? restaurantTables?.slice(0, 5)?.map((table) => (
-                      <li key={table.id}>
-                        Table #{table.number}: {table.status}
-                      </li>
-                    ))
-                  : restaurantTables?.map((table) => (
-                      <li key={table.id} className='flex flex-row'>
-                        Table #{table.number}: {table.status} - Number of
-                        guests: {table.capacity}
-                        <div className='flex flex-row items-center'>
-                          <PencilIcon
-                            className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-4 ml-6'
-                            onClick={() =>
-                              setEditSelectedItem({
-                                ...table,
-                                category: 'tables',
-                              })
-                            }
-                          >
-                            Edit
-                          </PencilIcon>
-                          <button
-                            className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
-                            onClick={() => handleDeleteItem('tables', table)}
-                          >
-                            X
-                          </button>
-                        </div>
-                      </li>
-                    ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
-        {(!view || view === 'orders') && (
-          <Card className={`${!view ? 'cursor-pointer' : ''}`}>
-            <CardHeader>
-              <div className='flex flex-row items-center justify-between'>
-                <CardTitle view={view}>Orders</CardTitle>
-                {view && (
-                  <Button
-                    className='bg-blue-500 hover:bg-blue-600 text-white'
-                    onClick={() => openNewModal('Order')}
-                  >
-                    Add New Order
-                  </Button>
-                )}
-              </div>
-              <CardDescription view={view}>
-                List of current orders.
-              </CardDescription>
-            </CardHeader>
-            <CardContent view={view}>
-              <ul className={`${view ? 'space-y-4' : 'space-y-2'}`}>
-                {data && !view
-                  ? restaurantOrders?.slice(0, 5)?.map((order) => (
-                      <li key={order.id}>
-                        Order #{order.number}: {order.items?.join(', ')}
-                      </li>
-                    ))
-                  : restaurantOrders?.map((order) => (
-                      <li
-                        key={order.id}
-                        className='flex flex-col md:flex-row md:items-center mb-4'
-                      >
-                        <span className='mb-2 md:mr-2'>
-                          Order #{order.number}:
-                        </span>
-                        <ul className='flex flex-col md:flex-row flex-wrap'>
-                          {order.items.map((item, index) => (
-                            <div
-                              key={index}
-                              className='flex flex-row items-center mb-2 md:mb-0 md:mr-4'
-                            >
-                              <p className='ml-4'>{item}</p>
-                              <div className='flex flex-row items-center ml-2'>
-                                <PencilIcon
-                                  className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-2'
-                                  onClick={() =>
-                                    setEditSelectedItem({
-                                      ...order,
-                                      category: 'orders',
-                                      item,
-                                      index,
-                                    })
-                                  }
-                                >
-                                  Edit
-                                </PencilIcon>
-                                <button
-                                  className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
-                                  onClick={() =>
-                                    handleDeleteItem('orders', order, index)
-                                  }
-                                >
-                                  X
-                                </button>
-                              </div>
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+          {(!view || view === 'tables') && (
+            <Card className={`${!view ? 'cursor-pointer' : ''}`}>
+              <CardHeader>
+                <div className='flex flex-row items-center justify-between'>
+                  <CardTitle view={view}>Tables</CardTitle>
+                  {view && (
+                    <Button
+                      className='bg-red-500 hover:bg-red-600 text-white'
+                      onClick={() => openNewModal('Reservation')}
+                    >
+                      Reserve a Table
+                    </Button>
+                  )}
+                </div>
+                <CardDescription view={view}>
+                  List of table reservations.
+                </CardDescription>
+              </CardHeader>
+              <CardContent view={view}>
+                <ul className='space-y-2'>
+                  {loading && (
+                    <div className='text-left text-gray-500'>Loading...</div>
+                  )}
+                  {!view
+                    ? restaurantTables
+                        ?.sort((a, b) => a.id - b.id)
+                        .slice(0, 5)
+                        ?.map((table) => (
+                          <li key={table.id}>
+                            Table #{table.number}: {table.status}
+                          </li>
+                        ))
+                    : restaurantTables
+                        ?.sort((a, b) => a.id - b.id)
+                        .map((table) => (
+                          <li key={table.id} className='flex flex-row'>
+                            Table #{table.number}: {table.status} - Number of
+                            guests: {table.capacity}
+                            <div className='flex flex-row items-center'>
+                              <PencilIcon
+                                className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-4 ml-6'
+                                onClick={() =>
+                                  setEditSelectedItem({
+                                    ...table,
+                                    category: 'tables',
+                                  })
+                                }
+                              >
+                                Edit
+                              </PencilIcon>
+                              <button
+                                className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
+                                onClick={() =>
+                                  handleDeleteItem('tables', table)
+                                }
+                              >
+                                X
+                              </button>
                             </div>
-                          ))}
-                        </ul>
-                      </li>
-                    ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
-      </main>
+                          </li>
+                        ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+          {(!view || view === 'orders') && (
+            <Card className={`${!view ? 'cursor-pointer' : ''}`}>
+              <CardHeader>
+                <div className='flex flex-row items-center justify-between'>
+                  <CardTitle view={view}>Orders</CardTitle>
+                  {view && (
+                    <Button
+                      className='bg-blue-500 hover:bg-blue-600 text-white'
+                      onClick={() => openNewModal('Order')}
+                    >
+                      Add New Order
+                    </Button>
+                  )}
+                </div>
+                <CardDescription view={view}>
+                  List of current orders.
+                </CardDescription>
+              </CardHeader>
+              <CardContent view={view}>
+                <ul className={`${view ? 'space-y-4' : 'space-y-2'}`}>
+                  {loading && (
+                    <div className='text-left text-gray-500'>Loading...</div>
+                  )}
+                  {!view
+                    ? restaurantOrders
+                        ?.sort((a, b) => a.number - b.number)
+                        .slice(0, 5)
+                        ?.map((order) => (
+                          <li key={order.id}>
+                            Order #{order.number}: {order.items?.join(', ')}
+                          </li>
+                        ))
+                    : restaurantOrders
+                        ?.sort((a, b) => a.number - b.number)
+                        ?.map((order) => (
+                          <li
+                            key={order.id}
+                            className='flex flex-col md:flex-row md:items-center mb-4'
+                          >
+                            <span className='mb-2 md:mr-2'>
+                              Order #{order.number}:
+                            </span>
+                            <ul className='flex flex-col md:flex-row flex-wrap'>
+                              {order.items?.map((item, index) => (
+                                <div
+                                  key={index}
+                                  className='flex flex-row items-center mb-2 md:mb-0 md:mr-4'
+                                >
+                                  <p className='ml-4'>{item}</p>
+                                  <div className='flex flex-row items-center ml-2'>
+                                    <PencilIcon
+                                      className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-2'
+                                      onClick={() =>
+                                        setEditSelectedItem({
+                                          ...order,
+                                          category: 'orders',
+                                          item,
+                                          index,
+                                        })
+                                      }
+                                    >
+                                      Edit
+                                    </PencilIcon>
+                                    <button
+                                      className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
+                                      onClick={() =>
+                                        handleDeleteItem('orders', order, index)
+                                      }
+                                    >
+                                      X
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </ul>
+                          </li>
+                        ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+        </main>
+      )}
+
       {showNewModal && (
         <NewModal
           setShowNewModal={setShowNewModal}
@@ -335,6 +359,6 @@ export default function DashboardComponent() {
           fetchRestaurantsData={fetchRestaurantsData}
         />
       )}
-    </div>
+    </>
   )
 }
