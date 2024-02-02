@@ -175,16 +175,18 @@ export default function NewModal({
                           className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
                           <option></option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                          <option>6</option>
-                          <option>7</option>
-                          <option>8</option>
-                          <option>9</option>
-                          <option>10</option>
+                          {restaurants
+                            .filter(
+                              (restaurant) =>
+                                restaurant.id === selected.restaurantId
+                            )
+                            .map((restaurant) =>
+                              restaurant.tables.map((table) => (
+                                <option key={table.id} value={table.number}>
+                                  Table #{table.number}
+                                </option>
+                              ))
+                            )}
                         </select>
                       </label>
                       <label className='block'>
@@ -257,6 +259,7 @@ export default function NewModal({
                         }
                         className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                       >
+                        <option></option>
                         {restaurants
                           .filter(
                             (restaurant) =>

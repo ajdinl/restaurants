@@ -210,7 +210,10 @@ export default function AdminDashboardComponent() {
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
                           onClick={() =>
-                            openNewModal({ category: 'Reservation' })
+                            openNewModal({
+                              category: 'Reservation',
+                              restaurantId: restaurant.id,
+                            })
                           }
                         >
                           +
