@@ -104,9 +104,9 @@ export default function DashboardComponent() {
     setShowEditModal(true)
   }
 
-  const openNewModal = (category) => {
+  const openNewModal = (itemDetails) => {
     setShowNewModal(true)
-    setSelected(category)
+    setSelected(itemDetails)
   }
 
   useEffect(() => {

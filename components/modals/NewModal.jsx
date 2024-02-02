@@ -97,12 +97,12 @@ export default function NewModal({
   }
 
   const handleOrderSave = async () => {
-    const { restaurantId, tableId, orderNumber } = selected
-    console.log(restaurantId, tableId)
+    const { restaurantId, orderNumber } = selected
+    const tableNumber = table.table_number
 
     const { data, error } = await addNewOrder(
       restaurantId,
-      tableId,
+      tableNumber,
       orderNumber
     )
     if (error) {
@@ -251,6 +251,25 @@ export default function NewModal({
                   )}
                   {selected.category === 'Order' && (
                     <form className='space-y-4'>
+                      <select
+                        onChange={(e) =>
+                          setTable({ ...table, table_number: e.target.value })
+                        }
+                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                      >
+                        {restaurants
+                          .filter(
+                            (restaurant) =>
+                              restaurant.id === selected.restaurantId
+                          )
+                          .map((restaurant) =>
+                            restaurant.tables.map((table) => (
+                              <option key={table.id} value={table.number}>
+                                Table #{table.number}
+                              </option>
+                            ))
+                          )}
+                      </select>
                       <Button
                         className='bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                         onClick={() => handleOrderSave()}

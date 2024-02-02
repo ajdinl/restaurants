@@ -90,10 +90,10 @@ const addNewMenu = async (restaurantId, menuNumber) => {
   return { item, error }
 }
 
-const addNewOrder = async (restaurantId, tableId, orderNumber) => {
+const addNewOrder = async (restaurantId, tableNumber, orderNumber) => {
   const { data: item, error } = await supabase.from('orders').insert({
     restaurant_id: restaurantId,
-    table_id: tableId,
+    table_number: tableNumber,
     number: orderNumber,
   })
   return { item, error }

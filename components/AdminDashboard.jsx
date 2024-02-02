@@ -100,9 +100,9 @@ export default function AdminDashboardComponent() {
     setShowEditModal(true)
   }
 
-  const openNewModal = (category) => {
+  const openNewModal = (itemDetails) => {
     setShowNewModal(true)
-    setSelected(category)
+    setSelected(itemDetails)
   }
 
   useEffect(() => {
@@ -263,7 +263,6 @@ export default function AdminDashboardComponent() {
                             openNewModal({
                               category: 'Order',
                               restaurantId: restaurant.id,
-                              tableId: restaurant.tables[0].id,
                               orderNumber: restaurant.orders.length + 1,
                             })
                           }
@@ -276,7 +275,10 @@ export default function AdminDashboardComponent() {
                         .map((order) => (
                           <li key={order.id}>
                             <div className='flex flex-row items-center'>
-                              <p className='ml-2'>Order #{order.number}:</p>
+                              <p className='ml-2'>
+                                Order #{order.number} - Table #
+                                {order.table_number}:
+                              </p>
                               <button
                                 className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
                                 onClick={() =>
