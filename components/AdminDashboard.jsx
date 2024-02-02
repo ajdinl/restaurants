@@ -259,7 +259,14 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl mr-2'>Orders</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
-                          onClick={() => openNewModal({ category: 'Order' })}
+                          onClick={() =>
+                            openNewModal({
+                              category: 'Order',
+                              restaurantId: restaurant.id,
+                              tableId: restaurant.tables[0].id,
+                              orderNumber: restaurant.orders.length + 1,
+                            })
+                          }
                         >
                           +
                         </button>
@@ -268,9 +275,19 @@ export default function AdminDashboardComponent() {
                         .sort((a, b) => a.number - b.number)
                         .map((order) => (
                           <li key={order.id}>
-                            <p className='ml-2'>Order #{order.number}:</p>
+                            <div className='flex flex-row items-center'>
+                              <p className='ml-2'>Order #{order.number}:</p>
+                              <button
+                                className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
+                                onClick={() =>
+                                  openNewModal({ category: 'Order Dish' })
+                                }
+                              >
+                                +
+                              </button>
+                            </div>
                             <ul className='mr-2 p-2'>
-                              {order.items.map((item, index) => (
+                              {order.items?.map((item, index) => (
                                 <li
                                   key={index}
                                   className='flex flex-row justify-between border-b border-gray-600 w-60'

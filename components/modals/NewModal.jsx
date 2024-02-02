@@ -5,6 +5,7 @@ import {
   addNewReservation,
   updateArrayItem,
   addNewMenu,
+  addNewOrder,
 } from '@/utils/supabaseMethods'
 import {
   Card,
@@ -25,7 +26,6 @@ export default function NewModal({
 }) {
   const [table, setTable] = useState({})
   const [dish, setDish] = useState(null)
-  const [menu, setMenu] = useState([])
   const [error, setError] = useState('')
 
   const handleSave = async () => {
@@ -39,7 +39,7 @@ export default function NewModal({
   }
 
   const handleReservationSave = async () => {
-    if (!table.number || !table.capacity) {
+    if (!table.number || !table.capacity || !table.restaurant_id) {
       setError('Please select field')
       return
     }
@@ -96,6 +96,24 @@ export default function NewModal({
     }
   }
 
+  const handleOrderSave = async () => {
+    const { restaurantId, tableId, orderNumber } = selected
+    console.log(restaurantId, tableId)
+
+    const { data, error } = await addNewOrder(
+      restaurantId,
+      tableId,
+      orderNumber
+    )
+    if (error) {
+      console.error('Error adding item:', error)
+      return
+    } else {
+      fetchRestaurantsData()
+      setShowNewModal(false)
+    }
+  }
+
   return (
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
@@ -124,6 +142,9 @@ export default function NewModal({
                       {isAdmin && (
                         <label className='block'>
                           <span className='text-gray-700'>Restaurant</span>
+                          <span className='text-red-500 ml-4 text-sm'>
+                            {!table.restaurant_id && error}
+                          </span>
                           <select
                             onChange={(e) =>
                               setTable({
@@ -133,6 +154,7 @@ export default function NewModal({
                             }
                             className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                           >
+                            <option></option>
                             {restaurants.map((restaurant) => (
                               <option key={restaurant.id} value={restaurant.id}>
                                 {restaurant.name}
@@ -152,7 +174,7 @@ export default function NewModal({
                           }
                           className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
-                          <option>Select</option>
+                          <option></option>
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -176,7 +198,7 @@ export default function NewModal({
                           }
                           className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
-                          <option>Select</option>
+                          <option></option>
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -227,6 +249,16 @@ export default function NewModal({
                       </Button>
                     </form>
                   )}
+                  {selected.category === 'Order' && (
+                    <form className='space-y-4'>
+                      <Button
+                        className='bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                        onClick={() => handleOrderSave()}
+                      >
+                        Add
+                      </Button>
+                    </form>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -243,7 +275,9 @@ export default function NewModal({
                 type='button'
                 onClick={() => handleSave()}
               >
-                {selected.category === 'Menu' ? 'Add' : 'Save'}
+                {selected.category === 'Menu' || selected.category === 'Order'
+                  ? 'Add'
+                  : 'Save'}
               </Button>
             </div>
           </div>
