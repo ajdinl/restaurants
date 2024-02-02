@@ -100,9 +100,9 @@ export default function AdminDashboardComponent() {
     setShowEditModal(true)
   }
 
-  const openNewModal = (category) => {
+  const openNewModal = (itemDetails) => {
     setShowNewModal(true)
-    setSelected(category)
+    setSelected(itemDetails)
   }
 
   useEffect(() => {
@@ -118,6 +118,11 @@ export default function AdminDashboardComponent() {
   return (
     <div>
       <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
+        {!view && (
+          <div className='text-3xl text-center'>
+            Welcome to the Admin Dashboard
+          </div>
+        )}
         {view === 'restaurants' && (
           <Card>
             <CardHeader>
@@ -137,7 +142,13 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl'>Menu</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() => openNewModal('Dish')}
+                          onClick={() =>
+                            openNewModal({
+                              category: 'Menu',
+                              restaurantId: restaurant.id,
+                              menuNumber: restaurant.menu.length + 1,
+                            })
+                          }
                         >
                           +
                         </button>
@@ -146,9 +157,19 @@ export default function AdminDashboardComponent() {
                         .sort((a, b) => a.number - b.number)
                         .map((menu) => (
                           <li key={menu.id}>
-                            <p className='my-2'>Menu #{menu.number}</p>
+                            <div className='flex flex-row'>
+                              <p className='my-3'>Menu #{menu.number}</p>
+                              <button
+                                className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+                                onClick={() =>
+                                  openNewModal({ category: 'Dish', menu })
+                                }
+                              >
+                                +
+                              </button>
+                            </div>
                             <ul>
-                              {menu.items.map((item, index) => (
+                              {menu.items?.map((item, index) => (
                                 <li
                                   key={index}
                                   className='flex flex-row justify-between border-b border-gray-600 w-60'
@@ -188,7 +209,12 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl'>Tables</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() => openNewModal('Reservation')}
+                          onClick={() =>
+                            openNewModal({
+                              category: 'Reservation',
+                              restaurantId: restaurant.id,
+                            })
+                          }
                         >
                           +
                         </button>
@@ -236,7 +262,13 @@ export default function AdminDashboardComponent() {
                         <p className='text-2xl mr-2'>Orders</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
-                          onClick={() => openNewModal('Order')}
+                          onClick={() =>
+                            openNewModal({
+                              category: 'Order',
+                              restaurantId: restaurant.id,
+                              orderNumber: restaurant.orders.length + 1,
+                            })
+                          }
                         >
                           +
                         </button>
@@ -245,9 +277,22 @@ export default function AdminDashboardComponent() {
                         .sort((a, b) => a.number - b.number)
                         .map((order) => (
                           <li key={order.id}>
-                            <p className='ml-2'>Order #{order.number}:</p>
+                            <div className='flex flex-row items-center'>
+                              <p className='ml-2'>
+                                Order #{order.number} - Table #
+                                {order.table_number}:
+                              </p>
+                              <button
+                                className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
+                                onClick={() =>
+                                  openNewModal({ category: 'Order Dish' })
+                                }
+                              >
+                                +
+                              </button>
+                            </div>
                             <ul className='mr-2 p-2'>
-                              {order.items.map((item, index) => (
+                              {order.items?.map((item, index) => (
                                 <li
                                   key={index}
                                   className='flex flex-row justify-between border-b border-gray-600 w-60'
