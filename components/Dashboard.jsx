@@ -133,9 +133,15 @@ export default function DashboardComponent() {
                   {view && (
                     <Button
                       className='bg-green-500 hover:bg-green-600 text-white'
-                      onClick={() => openNewModal('Dish')}
+                      onClick={() =>
+                        openNewModal({
+                          category: 'Menu',
+                          restaurantId,
+                          menuNumber: restaurantMenu.length + 1,
+                        })
+                      }
                     >
-                      Add New Dish
+                      Add New Menu
                     </Button>
                   )}
                 </div>
@@ -148,50 +154,67 @@ export default function DashboardComponent() {
                   <div className='text-left text-gray-500'>Loading...</div>
                 )}
                 <ul className='space-y-6'>
-                  {restaurantMenu?.map((menu) => (
-                    <li
-                      key={menu.id}
-                      className={`flex flex-col ${
-                        view ? 'space-y-4' : 'space-y-2'
-                      }`}
-                    >
-                      {!view
-                        ? menu.items
-                            ?.slice(0, 5)
-                            ?.map((item) => <div key={item}>{item}</div>)
-                        : menu.items?.map((item, index) => (
-                            <div
-                              key={item}
-                              className='flex flex-row w-1/5 items-center justify-between'
+                  {restaurantMenu
+                    ?.sort((a, b) => a.number - b.number)
+                    .map((menu) => (
+                      <li
+                        key={menu.id}
+                        className={`flex flex-col ${
+                          view ? 'space-y-4' : 'space-y-2'
+                        }`}
+                      >
+                        <div className='flex flex-row'>
+                          <p className={`${view ? 'text-3xl' : 'text-xl'}`}>
+                            Menu #{menu.number}
+                          </p>
+                          {view && (
+                            <button
+                              className='mx-3 text-green-400 hover:text-green-500 text-4xl leading-none font-semibold'
+                              onClick={() =>
+                                openNewModal({ category: 'Dish', menu })
+                              }
                             >
-                              <p>{item}</p>
-                              <div className='flex flex-row items-center '>
-                                <PencilIcon
-                                  className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-6'
-                                  onClick={() =>
-                                    setEditSelectedItem({
-                                      ...menu,
-                                      category: 'menu',
-                                      item,
-                                      index,
-                                    })
-                                  }
-                                >
-                                  Edit
-                                </PencilIcon>
-                                <button
-                                  className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
-                                  onClick={() =>
-                                    handleDeleteItem('menu', menu, index)
-                                  }
-                                >
-                                  X
-                                </button>
+                              +
+                            </button>
+                          )}
+                        </div>
+                        {!view
+                          ? menu.items
+                              ?.slice(0, 5)
+                              ?.map((item) => <div key={item}>{item}</div>)
+                          : menu.items?.map((item, index) => (
+                              <div
+                                key={item}
+                                className='flex flex-row w-1/5 items-center justify-between'
+                              >
+                                <p>{item}</p>
+                                <div className='flex flex-row items-center'>
+                                  <PencilIcon
+                                    className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-6'
+                                    onClick={() =>
+                                      setEditSelectedItem({
+                                        ...menu,
+                                        category: 'menu',
+                                        item,
+                                        index,
+                                      })
+                                    }
+                                  >
+                                    Edit
+                                  </PencilIcon>
+                                  <button
+                                    className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
+                                    onClick={() =>
+                                      handleDeleteItem('menu', menu, index)
+                                    }
+                                  >
+                                    X
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          ))}
-                    </li>
-                  ))}
+                            ))}
+                      </li>
+                    ))}
                 </ul>
               </CardContent>
             </Card>
@@ -204,7 +227,13 @@ export default function DashboardComponent() {
                   {view && (
                     <Button
                       className='bg-red-500 hover:bg-red-600 text-white'
-                      onClick={() => openNewModal('Reservation')}
+                      onClick={() =>
+                        openNewModal({
+                          category: 'Reservation',
+                          restaurantId,
+                          tables: restaurantTables,
+                        })
+                      }
                     >
                       Reserve a Table
                     </Button>
@@ -269,7 +298,13 @@ export default function DashboardComponent() {
                   {view && (
                     <Button
                       className='bg-blue-500 hover:bg-blue-600 text-white'
-                      onClick={() => openNewModal('Order')}
+                      onClick={() =>
+                        openNewModal({
+                          category: 'Order',
+                          restaurantId,
+                          orderNumber: restaurantOrders.length + 1,
+                        })
+                      }
                     >
                       Add New Order
                     </Button>
@@ -300,9 +335,7 @@ export default function DashboardComponent() {
                             key={order.id}
                             className='flex flex-col md:flex-row md:items-center mb-4'
                           >
-                            <span className='mb-2 md:mr-2'>
-                              Order #{order.number}:
-                            </span>
+                            <span>Order #{order.number}:</span>
                             <ul className='flex flex-col md:flex-row flex-wrap'>
                               {order.items?.map((item, index) => (
                                 <div
