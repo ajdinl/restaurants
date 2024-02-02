@@ -35,11 +35,13 @@ export default function NewModal({
       handleDishSave()
     } else if (selected.category === 'Menu') {
       handleMenuSave()
+    } else if (selected.category === 'Order') {
+      handleOrderSave()
     }
   }
 
   const handleReservationSave = async () => {
-    if (!table.number || !table.capacity || !table.restaurant_id) {
+    if (!table.number || !table.capacity || (isAdmin && !table.restaurant_id)) {
       setError('Please select field')
       return
     }
@@ -168,26 +170,43 @@ export default function NewModal({
                         <span className='text-red-500 ml-4 text-sm'>
                           {!table.number && error}
                         </span>
-                        <select
-                          onChange={(e) =>
-                            setTable({ ...table, number: e.target.value })
-                          }
-                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-                        >
-                          <option></option>
-                          {restaurants
-                            .filter(
-                              (restaurant) =>
-                                restaurant.id === selected.restaurantId
-                            )
-                            .map((restaurant) =>
-                              restaurant.tables.map((table) => (
-                                <option key={table.id} value={table.number}>
-                                  Table #{table.number}
-                                </option>
-                              ))
-                            )}
-                        </select>
+                        {isAdmin && (
+                          <select
+                            onChange={(e) =>
+                              setTable({ ...table, number: e.target.value })
+                            }
+                            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          >
+                            <option></option>
+                            {restaurants
+                              ?.filter(
+                                (restaurant) =>
+                                  restaurant.id === selected.restaurantId
+                              )
+                              .map((restaurant) =>
+                                restaurant.tables.map((table) => (
+                                  <option key={table.id} value={table.number}>
+                                    Table #{table.number}
+                                  </option>
+                                ))
+                              )}
+                          </select>
+                        )}
+                        {!isAdmin && (
+                          <select
+                            onChange={(e) =>
+                              setTable({ ...table, number: e.target.value })
+                            }
+                            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          >
+                            <option></option>
+                            {selected.tables.map((table) => (
+                              <option key={table.id} value={table.number}>
+                                Table #{table.number}
+                              </option>
+                            ))}
+                          </select>
+                        )}
                       </label>
                       <label className='block'>
                         <span className='text-gray-700'>Number of Guests</span>
@@ -253,26 +272,28 @@ export default function NewModal({
                   )}
                   {selected.category === 'Order' && (
                     <form className='space-y-4'>
-                      <select
-                        onChange={(e) =>
-                          setTable({ ...table, table_number: e.target.value })
-                        }
-                        className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-                      >
-                        <option></option>
-                        {restaurants
-                          .filter(
-                            (restaurant) =>
-                              restaurant.id === selected.restaurantId
-                          )
-                          .map((restaurant) =>
-                            restaurant.tables.map((table) => (
-                              <option key={table.id} value={table.number}>
-                                Table #{table.number}
-                              </option>
-                            ))
-                          )}
-                      </select>
+                      {isAdmin && (
+                        <select
+                          onChange={(e) =>
+                            setTable({ ...table, table_number: e.target.value })
+                          }
+                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                        >
+                          <option></option>
+                          {restaurants
+                            ?.filter(
+                              (restaurant) =>
+                                restaurant.id === selected.restaurantId
+                            )
+                            .map((restaurant) =>
+                              restaurant.tables.map((table) => (
+                                <option key={table.id} value={table.number}>
+                                  Table #{table.number}
+                                </option>
+                              ))
+                            )}
+                        </select>
+                      )}
                       <Button
                         className='bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                         onClick={() => handleOrderSave()}
