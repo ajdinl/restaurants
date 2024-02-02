@@ -26,7 +26,7 @@ export default function DashboardComponent() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [selected, setSelected] = useState(null)
   const [showNewModal, setShowNewModal] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
   const userId = user?.user?.id
@@ -49,6 +49,7 @@ export default function DashboardComponent() {
   }
 
   const fetchRestaurantsData = async () => {
+    setLoading(true)
     try {
       const { data, error } = await fetchRestaurants(userId)
 
