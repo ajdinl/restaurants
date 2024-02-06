@@ -30,7 +30,7 @@ const signInWithPassword = async (email, password) => {
 const fetchRestaurants = async (userId) => {
   let query = supabase
     .from('restaurants')
-    .select('*, menu(*), orders(*), tables(*)')
+    .select('*, menu(*), tables(*), orders(*), reservations(*)')
 
   if (userId) {
     query = query.eq('user_id', userId).single()
