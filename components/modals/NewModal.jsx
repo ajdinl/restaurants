@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import {
-  addNewReservation,
+  addNewTable,
   updateArrayItem,
   addNewMenu,
   addNewOrder,
@@ -29,8 +29,8 @@ export default function NewModal({
   const [error, setError] = useState('')
 
   const handleSave = async () => {
-    if (selected.category === 'Reservation') {
-      handleReservationSave()
+    if (selected.category === 'Table') {
+      handleTableSave()
     } else if (selected.category === 'Dish') {
       handleDishSave()
     } else if (selected.category === 'Menu') {
@@ -40,8 +40,8 @@ export default function NewModal({
     }
   }
 
-  const handleReservationSave = async () => {
-    if (!table.number || !table.capacity || (isAdmin && !table.restaurant_id)) {
+  const handleTableSave = async () => {
+    if ((isAdmin && !table.restaurant_id) || !table.capacity) {
       setError('Please select field')
       return
     }
@@ -49,7 +49,24 @@ export default function NewModal({
       table.restaurant_id = restaurantId
     }
 
-    const { data, error } = await addNewReservation(table)
+    if (!table.number) {
+      let newTableNumber
+      if (isAdmin) {
+        const tables = restaurants.filter(
+          (restaurant) => restaurant.id == Number(table.restaurant_id)
+        )[0].tables
+        const lastTable = tables[tables.length - 1]
+        newTableNumber = lastTable.number + 1
+      } else {
+        const tables = selected.tables
+        const lastTable = tables[tables.length - 1]
+        newTableNumber = lastTable.number + 1
+      }
+
+      table.number = newTableNumber
+    }
+
+    const { data, error } = await addNewTable(table)
     if (error) {
       console.error('Error adding item:', error)
       return
@@ -141,7 +158,7 @@ export default function NewModal({
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {selected.category === 'Reservation' && (
+                  {selected.category === 'Table' && (
                     <form className='space-y-4'>
                       {isAdmin && (
                         <label className='block'>
@@ -167,49 +184,6 @@ export default function NewModal({
                           </select>
                         </label>
                       )}
-                      <label className='block'>
-                        <span className='text-gray-700'>Table Number</span>
-                        <span className='text-red-500 ml-4 text-sm'>
-                          {!table.number && error}
-                        </span>
-                        {isAdmin && (
-                          <select
-                            onChange={(e) =>
-                              setTable({ ...table, number: e.target.value })
-                            }
-                            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-                          >
-                            <option></option>
-                            {restaurants
-                              ?.filter(
-                                (restaurant) =>
-                                  restaurant.id === selected.restaurantId
-                              )
-                              .map((restaurant) =>
-                                restaurant.tables.map((table) => (
-                                  <option key={table.id} value={table.number}>
-                                    Table #{table.number}
-                                  </option>
-                                ))
-                              )}
-                          </select>
-                        )}
-                        {!isAdmin && (
-                          <select
-                            onChange={(e) =>
-                              setTable({ ...table, number: e.target.value })
-                            }
-                            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-                          >
-                            <option></option>
-                            {selected.tables.map((table) => (
-                              <option key={table.id} value={table.number}>
-                                Table #{table.number}
-                              </option>
-                            ))}
-                          </select>
-                        )}
-                      </label>
                       <label className='block'>
                         <span className='text-gray-700'>Maximum Capacity</span>
                         <span className='text-red-500 ml-4 text-sm'>
