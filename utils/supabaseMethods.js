@@ -78,7 +78,7 @@ const updateTable = async (category, id, capacity) => {
   return { item, error }
 }
 
-const addNewReservation = async (data) => {
+const addNewTable = async (data) => {
   const { data: item, error } = await supabase.from('tables').insert(data)
   return { item, error }
 }
@@ -109,7 +109,7 @@ export {
   deleteItem,
   updateTable,
   updateArrayItem,
-  addNewReservation,
+  addNewTable,
   addNewMenu,
   addNewOrder,
 }
