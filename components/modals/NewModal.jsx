@@ -48,9 +48,6 @@ export default function NewModal({
     if (!table.restaurant_id) {
       table.restaurant_id = restaurantId
     }
-    if (!table.status) {
-      table.status = 'Reserved'
-    }
 
     const { data, error } = await addNewReservation(table)
     if (error) {

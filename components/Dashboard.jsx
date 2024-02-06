@@ -253,16 +253,13 @@ export default function DashboardComponent() {
                         ?.sort((a, b) => a.id - b.id)
                         .slice(0, 5)
                         ?.map((table) => (
-                          <li key={table.id}>
-                            Table #{table.number}: {table.status}
-                          </li>
+                          <li key={table.id}>Table #{table.number}</li>
                         ))
                     : restaurantTables
                         ?.sort((a, b) => a.id - b.id)
                         .map((table) => (
                           <li key={table.id} className='flex flex-row'>
-                            Table #{table.number}: {table.status} - Number of
-                            guests: {table.capacity}
+                            Table #{table.number} - Capacity - {table.capacity}
                             <div className='flex flex-row items-center'>
                               <PencilIcon
                                 className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-4 ml-6'

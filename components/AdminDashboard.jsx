@@ -230,7 +230,7 @@ export default function AdminDashboardComponent() {
                             className='flex flex-row justify-between border-b border-gray-600 w-60'
                           >
                             <p>
-                              Table #{table.number} - {table.status} -{' '}
+                              Table #{table.number} - Capacity -{' '}
                               {table.capacity}
                             </p>
                             <div className='flex flex-row items-center'>
