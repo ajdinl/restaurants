@@ -213,7 +213,7 @@ export default function AdminDashboardComponent() {
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
                           onClick={() =>
                             openNewModal({
-                              category: 'Reservation',
+                              category: 'Table',
                               restaurantId: restaurant.id,
                             })
                           }
@@ -229,8 +229,7 @@ export default function AdminDashboardComponent() {
                             className='flex flex-row justify-between border-b border-gray-600 w-60'
                           >
                             <p>
-                              Table #{table.number} - Capacity -{' '}
-                              {table.capacity}
+                              Table #{table.number} - Capacity: {table.capacity}
                             </p>
                             <div className='flex flex-row items-center'>
                               <PencilIcon
@@ -256,7 +255,7 @@ export default function AdminDashboardComponent() {
                           </li>
                         ))}
                     </ul>
-                    <ul className='border-l-2 border-gray-600 p-4 w-60'>
+                    <ul className='border-l-2 border-gray-600 p-4 w-60 space-y-2'>
                       <div className='flex flex-row'>
                         <p className='text-2xl'>Reservations</p>
                         <button
@@ -271,27 +270,26 @@ export default function AdminDashboardComponent() {
                           +
                         </button>
                       </div>
-                      <p className='text-sm text-center py-1 w-56'>
-                        Table Number - Status - Capacity
-                      </p>
-                      {restaurant.tables
+                      {restaurant.reservations
                         .sort((a, b) => a.number - b.number)
-                        .map((table) => (
+                        .map((reservation) => (
                           <li
-                            key={table.id}
+                            key={reservation.id}
                             className='flex flex-row justify-between border-b border-gray-600 w-60'
                           >
-                            <p>
-                              Table #{table.number} - Capacity -{' '}
-                              {table.capacity}
-                            </p>
+                            <div className='flex flex-col'>
+                              <p>Reservation #{reservation.number}</p>
+                              <p>Table #{reservation.table_number}</p>
+                              <p>Status: {reservation.status}</p>
+                              <p>Guests: {reservation.capacity}</p>
+                            </div>
                             <div className='flex flex-row items-center'>
                               <PencilIcon
                                 className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
                                 onClick={() =>
                                   setEditSelectedItem({
-                                    ...table,
-                                    category: 'tables',
+                                    ...reservation,
+                                    category: 'reservations',
                                   })
                                 }
                               >
@@ -300,7 +298,7 @@ export default function AdminDashboardComponent() {
                               <button
                                 className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
                                 onClick={() =>
-                                  handleDeleteItem('tables', table)
+                                  handleDeleteItem('reservations', reservation)
                                 }
                               >
                                 X
