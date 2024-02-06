@@ -136,7 +136,9 @@ export default function AdminDashboardComponent() {
                     key={restaurant.id}
                     className='flex flex-row justify-between space-x-20 border-b-2 border-gray-600'
                   >
-                    <p className='text-4xl w-44'>{restaurant.name}</p>
+                    <p className='text-2xl min-w-20 w-auto max-w-44 flex flex-nowrap overflow-x-auto'>
+                      {restaurant.name}
+                    </p>
                     <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <div className='flex flex-row'>
                         <p className='text-2xl'>Menu</p>
@@ -204,7 +206,7 @@ export default function AdminDashboardComponent() {
                           </li>
                         ))}
                     </ul>
-                    <ul className='border-l-2 border-gray-600 p-4 w-64'>
+                    <ul className='border-l-2 border-gray-600 p-4 w-60'>
                       <div className='flex flex-row'>
                         <p className='text-2xl'>Tables</p>
                         <button
@@ -219,8 +221,58 @@ export default function AdminDashboardComponent() {
                           +
                         </button>
                       </div>
-                      <p className='text-sm text-center py-1'>
-                        Number - Status - Capacity
+                      {restaurant.tables
+                        .sort((a, b) => a.number - b.number)
+                        .map((table) => (
+                          <li
+                            key={table.id}
+                            className='flex flex-row justify-between border-b border-gray-600 w-60'
+                          >
+                            <p>
+                              Table #{table.number} - Capacity -{' '}
+                              {table.capacity}
+                            </p>
+                            <div className='flex flex-row items-center'>
+                              <PencilIcon
+                                className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
+                                onClick={() =>
+                                  setEditSelectedItem({
+                                    ...table,
+                                    category: 'tables',
+                                  })
+                                }
+                              >
+                                Edit
+                              </PencilIcon>
+                              <button
+                                className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
+                                onClick={() =>
+                                  handleDeleteItem('tables', table)
+                                }
+                              >
+                                X
+                              </button>
+                            </div>
+                          </li>
+                        ))}
+                    </ul>
+                    <ul className='border-l-2 border-gray-600 p-4 w-60'>
+                      <div className='flex flex-row'>
+                        <p className='text-2xl'>Reservations</p>
+                        <button
+                          className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+                          onClick={() =>
+                            openNewModal({
+                              category: 'Reservation',
+                              restaurantId: restaurant.id,
+                            })
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                      <p className='text-sm text-center py-1 w-56'>
+                        Table Number - Status - Capacity
                       </p>
                       {restaurant.tables
                         .sort((a, b) => a.number - b.number)
@@ -257,7 +309,7 @@ export default function AdminDashboardComponent() {
                           </li>
                         ))}
                     </ul>
-                    <ul className='flex flex-1 border-l-2 border-gray-600 p-4'>
+                    <ul className='flex flex-row flex-nowrap overflow-x-auto border-l-2 border-gray-600 p-4 w-1/2'>
                       <div className='flex flex-col'>
                         <p className='text-2xl mr-2'>Orders</p>
                         <button
@@ -283,7 +335,7 @@ export default function AdminDashboardComponent() {
                                 {order.table_number}:
                               </p>
                               <button
-                                className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
+                                className='mx-3 -mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
                                 onClick={() =>
                                   openNewModal({ category: 'Order Dish' })
                                 }
