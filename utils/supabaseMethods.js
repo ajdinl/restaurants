@@ -70,10 +70,10 @@ const updateArrayItem = async (category, id, array) => {
   return { data, error }
 }
 
-const updateTable = async (category, id, status, capacity) => {
+const updateTable = async (category, id, capacity) => {
   const { data: item, error } = await supabase
     .from(category)
-    .update({ status, capacity })
+    .update({ capacity })
     .eq('id', id)
   return { item, error }
 }
