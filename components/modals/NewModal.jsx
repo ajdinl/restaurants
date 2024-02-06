@@ -37,6 +37,8 @@ export default function NewModal({
       handleMenuSave()
     } else if (selected.category === 'Order') {
       handleOrderSave()
+    } else if (selected.category === 'Order Dish') {
+      handeOrderDishSave()
     }
   }
 
@@ -135,6 +137,31 @@ export default function NewModal({
     }
   }
 
+  const handeOrderDishSave = async () => {
+    if (!dish) {
+      setError('Please fill name of the dish')
+      return
+    }
+
+    const selectedArray = Array.isArray(selected.order.items)
+      ? [...selected.order.items]
+      : []
+    selectedArray.push(dish)
+
+    const { data, error } = await updateArrayItem(
+      'orders',
+      selected.order.id,
+      selectedArray
+    )
+    if (error) {
+      console.error('Error adding item:', error)
+      return
+    } else {
+      fetchRestaurantsData()
+      setShowNewModal(false)
+    }
+  }
+
   return (
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
@@ -210,7 +237,8 @@ export default function NewModal({
                       </label>
                     </form>
                   )}
-                  {selected.category === 'Dish' && (
+                  {(selected.category === 'Dish' ||
+                    selected.category === 'Order Dish') && (
                     <form className='space-y-4'>
                       <label className='block'>
                         <span className='text-gray-700'>Name</span>
