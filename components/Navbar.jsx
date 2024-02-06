@@ -80,9 +80,9 @@ export default function Navbar({ isAdmin }) {
             </>
           )}
           {/* <Link className='text-gray-500 dark:text-gray-400' href='#'>
-          Reservations
-        </Link>
-        <Link className='text-gray-500 dark:text-gray-400' href='#'>
+            Reservations
+          </Link> */}
+          {/*  <Link className='text-gray-500 dark:text-gray-400' href='#'>
           Reports
         </Link> */}
         </nav>

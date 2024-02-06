@@ -229,19 +229,17 @@ export default function DashboardComponent() {
                       className='bg-red-500 hover:bg-red-600 text-white'
                       onClick={() =>
                         openNewModal({
-                          category: 'Reservation',
+                          category: 'Table',
                           restaurantId,
                           tables: restaurantTables,
                         })
                       }
                     >
-                      Reserve a Table
+                      Create New Table
                     </Button>
                   )}
                 </div>
-                <CardDescription view={view}>
-                  List of table reservations.
-                </CardDescription>
+                <CardDescription view={view}>List of tables.</CardDescription>
               </CardHeader>
               <CardContent view={view}>
                 <ul className='space-y-2'>
