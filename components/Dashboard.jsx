@@ -185,7 +185,7 @@ export default function DashboardComponent() {
                           : menu.items?.map((item, index) => (
                               <div
                                 key={item}
-                                className='flex flex-row w-1/5 items-center justify-between'
+                                className='flex flex-row w-full items-center justify-between bg-gray-100 p-3 rounded-lg'
                               >
                                 <p>{item}</p>
                                 <div className='flex flex-row items-center'>
@@ -256,7 +256,10 @@ export default function DashboardComponent() {
                     : restaurantTables
                         ?.sort((a, b) => a.id - b.id)
                         .map((table) => (
-                          <li key={table.id} className='flex flex-row'>
+                          <li
+                            key={table.id}
+                            className='flex flex-row bg-gray-100 p-3 rounded-lg'
+                          >
                             Table #{table.number} - Capacity - {table.capacity}
                             <div className='flex flex-row items-center'>
                               <PencilIcon
@@ -328,17 +331,19 @@ export default function DashboardComponent() {
                         ?.map((order) => (
                           <li
                             key={order.id}
-                            className='flex flex-col md:flex-row md:items-center mb-4'
+                            className='flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 p-3 rounded-lg'
                           >
                             <button
-                              className='mx-2 -mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
+                              className='flex justify-end md:mx-2 md:-mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
                               onClick={() =>
                                 openNewModal({ category: 'Order Dish', order })
                               }
                             >
                               +
                             </button>
-                            <span>Order #{order.number}:</span>
+                            <span className='-mt-8 mb-2 md:-mt-0 md:mb-0'>
+                              Order #{order.number}:
+                            </span>
                             <ul className='flex flex-col md:flex-row flex-wrap'>
                               {order.items?.map((item, index) => (
                                 <div
