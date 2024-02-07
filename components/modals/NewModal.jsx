@@ -115,8 +115,9 @@ export default function NewModal({
   }
 
   const handleOrderSave = async () => {
-    const { restaurantId, orderNumber } = selected
+    const { restaurantId, orderNumbers } = selected
     const tableNumber = table.table_number
+    const orderNumber = orderNumbers[orderNumbers.length - 1] + 1
 
     if (!tableNumber) {
       setError('Please select table')
@@ -285,6 +286,21 @@ export default function NewModal({
                                 </option>
                               ))
                             )}
+                        </select>
+                      )}
+                      {!isAdmin && (
+                        <select
+                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          onChange={(e) =>
+                            setTable({ ...table, table_number: e.target.value })
+                          }
+                        >
+                          <option></option>
+                          {selected.tables?.map((table) => (
+                            <option key={table.id} value={table.number}>
+                              Table #{table.number}
+                            </option>
+                          ))}
                         </select>
                       )}
                       <span className='text-red-500 text-sm'>{error}</span>

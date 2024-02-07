@@ -300,7 +300,10 @@ export default function DashboardComponent() {
                         openNewModal({
                           category: 'Order',
                           restaurantId,
-                          orderNumber: restaurantOrders.length + 1,
+                          orderNumbers: restaurantOrders.map(
+                            (order) => order.number
+                          ),
+                          tables: restaurantTables,
                         })
                       }
                     >
