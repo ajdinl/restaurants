@@ -9,7 +9,7 @@ export default function Navbar({ isAdmin }) {
   return (
     <>
       <header className='flex items-center justify-between h-16 px-4 border-b shrink-0 md:px-6'>
-        <nav className='flex-col hidden gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 lg:gap-6'>
+        <nav className='flex flex-row items-center gap-5 lg:gap-6 text-lg font-medium '>
           <Link
             className='flex items-center gap-2 text-lg font-semibold md:text-base'
             href='/'
