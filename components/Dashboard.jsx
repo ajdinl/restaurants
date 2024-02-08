@@ -130,11 +130,8 @@ export default function DashboardComponent() {
                               <button
                                 className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
                                 onClick={() =>
-                                  handleDeleteItem(
-                                    'menu',
-                                    menu,
-                                    index,
-                                    fetchRestaurantsData
+                                  handleDeleteItem('menu', menu, index, () =>
+                                    fetchRestaurantsData()
                                   )
                                 }
                               >
@@ -197,11 +194,8 @@ export default function DashboardComponent() {
                           <button
                             className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
                             onClick={() =>
-                              handleDeleteItem(
-                                'tables',
-                                table,
-                                '',
-                                fetchRestaurantsData
+                              handleDeleteItem('tables', table, null, () =>
+                                fetchRestaurantsData()
                               )
                             }
                           >
@@ -288,7 +282,7 @@ export default function DashboardComponent() {
                                       'orders',
                                       order,
                                       index,
-                                      fetchRestaurantsData
+                                      () => fetchRestaurantsData()
                                     )
                                   }
                                 >

@@ -1,12 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import {
-  getUser,
-  fetchRestaurants,
-  deleteArrayItem,
-  deleteItem,
-} from '@/utils/supabaseMethods'
+import { fetchRestaurants } from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
   Card,
@@ -20,6 +15,7 @@ import {
   EditModal,
   NewModal,
 } from '@/components'
+import { fetchUserData, handleDeleteItem } from '@/components/functions'
 
 export default function AdminDashboardComponent() {
   const [user, setUser] = useState(null)
@@ -29,19 +25,6 @@ export default function AdminDashboardComponent() {
   const [showNewModal, setShowNewModal] = useState(false)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
-
-  const fetchUserData = async () => {
-    try {
-      const { data, error } = await getUser()
-      if (error) {
-        console.error('Error fetching user:', error)
-        return
-      }
-      setUser(data)
-    } catch (error) {
-      console.error('Error fetching user:', error)
-    }
-  }
 
   const fetchRestaurantsData = async () => {
     try {
@@ -58,43 +41,6 @@ export default function AdminDashboardComponent() {
     }
   }
 
-  const handleDeleteItem = async (category, selected, index) => {
-    let selectedArray = selected.items
-    let displayError
-    const text = `Are you sure you want to delete this item?`
-
-    if (index) {
-      if (confirm(text) === true) {
-        selectedArray = selectedArray.filter((_, i) => i !== index)
-      } else {
-        return
-      }
-
-      const { data, error } = await deleteArrayItem(
-        category,
-        selected.id,
-        selectedArray
-      )
-      displayError = error
-    }
-
-    if (!index) {
-      if (confirm(text) === true) {
-        const { data, error } = await deleteItem(category, selected.id)
-        displayError = error
-      } else {
-        return
-      }
-    }
-
-    if (displayError) {
-      console.error('Error deleting item:', displayError)
-      return
-    } else {
-      fetchRestaurantsData()
-    }
-  }
-
   const setEditSelectedItem = (item) => {
     setSelected(item)
     setShowEditModal(true)
@@ -106,7 +52,7 @@ export default function AdminDashboardComponent() {
   }
 
   useEffect(() => {
-    fetchUserData()
+    fetchUserData(setUser)
   }, [])
 
   useEffect(() => {
@@ -194,7 +140,12 @@ export default function AdminDashboardComponent() {
                                     <button
                                       className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
                                       onClick={() =>
-                                        handleDeleteItem('menu', menu, index)
+                                        handleDeleteItem(
+                                          'menu',
+                                          menu,
+                                          index,
+                                          () => fetchRestaurantsData()
+                                        )
                                       }
                                     >
                                       X
@@ -246,7 +197,9 @@ export default function AdminDashboardComponent() {
                               <button
                                 className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
                                 onClick={() =>
-                                  handleDeleteItem('tables', table)
+                                  handleDeleteItem('tables', table, null, () =>
+                                    fetchRestaurantsData()
+                                  )
                                 }
                               >
                                 X
@@ -298,7 +251,12 @@ export default function AdminDashboardComponent() {
                               <button
                                 className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
                                 onClick={() =>
-                                  handleDeleteItem('reservations', reservation)
+                                  handleDeleteItem(
+                                    'reservations',
+                                    reservation,
+                                    null,
+                                    () => fetchRestaurantsData()
+                                  )
                                 }
                               >
                                 X
@@ -365,7 +323,12 @@ export default function AdminDashboardComponent() {
                                     <button
                                       className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
                                       onClick={() =>
-                                        handleDeleteItem('orders', order, index)
+                                        handleDeleteItem(
+                                          'orders',
+                                          order,
+                                          index,
+                                          () => fetchRestaurantsData()
+                                        )
                                       }
                                     >
                                       X
