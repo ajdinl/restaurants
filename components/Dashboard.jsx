@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { PencilIcon, EditModal, NewModal, DashboardWrapper } from '@/components'
 import {
+  EditModal,
+  NewModal,
+  DashboardWrapper,
+  EditIcon,
+  DeleteIcon,
   fetchUserData,
   fetchRestaurantsData,
-  handleDeleteItem,
-} from '@/components/functions'
+} from '@/components'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)
@@ -105,29 +108,20 @@ export default function DashboardComponent() {
                           >
                             <p>{item}</p>
                             <div className='flex flex-row items-center'>
-                              <PencilIcon
-                                className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-6'
-                                onClick={() =>
-                                  setEditSelectedItem({
-                                    ...menu,
-                                    category: 'menu',
-                                    item,
-                                    index,
-                                  })
-                                }
-                              >
-                                Edit
-                              </PencilIcon>
-                              <button
-                                className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
-                                onClick={() =>
-                                  handleDeleteItem('menu', menu, index, () =>
-                                    getRestaurantsData()
-                                  )
-                                }
-                              >
-                                X
-                              </button>
+                              <EditIcon
+                                className='h-6 w-6 mr-6'
+                                setEditSelectedItem={setEditSelectedItem}
+                                selected={menu}
+                                category='menu'
+                                item={item}
+                                index={index}
+                              />
+                              <DeleteIcon
+                                category='menu'
+                                data={menu}
+                                index={index}
+                                getRestaurantsData={getRestaurantsData}
+                              />
                             </div>
                           </div>
                         ))}
@@ -168,27 +162,18 @@ export default function DashboardComponent() {
                       >
                         Table #{table.number} - Capacity - {table.capacity}
                         <div className='flex flex-row items-center'>
-                          <PencilIcon
-                            className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-4 ml-6'
-                            onClick={() =>
-                              setEditSelectedItem({
-                                ...table,
-                                category: 'tables',
-                              })
-                            }
-                          >
-                            Edit
-                          </PencilIcon>
-                          <button
-                            className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
-                            onClick={() =>
-                              handleDeleteItem('tables', table, null, () =>
-                                getRestaurantsData()
-                              )
-                            }
-                          >
-                            X
-                          </button>
+                          <EditIcon
+                            className='h-6 w-6 mr-4 ml-6'
+                            setEditSelectedItem={setEditSelectedItem}
+                            selected={table}
+                            category='tables'
+                          />
+                          <DeleteIcon
+                            category='tables'
+                            data={table}
+                            index={null}
+                            getRestaurantsData={getRestaurantsData}
+                          />
                         </div>
                       </li>
                     ))}
@@ -247,32 +232,20 @@ export default function DashboardComponent() {
                             >
                               <p className='ml-4'>{item}</p>
                               <div className='flex flex-row items-center ml-2'>
-                                <PencilIcon
-                                  className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-2'
-                                  onClick={() =>
-                                    setEditSelectedItem({
-                                      ...order,
-                                      category: 'orders',
-                                      item,
-                                      index,
-                                    })
-                                  }
-                                >
-                                  Edit
-                                </PencilIcon>
-                                <button
-                                  className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
-                                  onClick={() =>
-                                    handleDeleteItem(
-                                      'orders',
-                                      order,
-                                      index,
-                                      () => getRestaurantsData()
-                                    )
-                                  }
-                                >
-                                  X
-                                </button>
+                                <EditIcon
+                                  className='h-6 w-6 mr-2'
+                                  setEditSelectedItem={setEditSelectedItem}
+                                  selected={order}
+                                  category='orders'
+                                  item={item}
+                                  index={index}
+                                />
+                                <DeleteIcon
+                                  category='orders'
+                                  data={order}
+                                  index={index}
+                                  getRestaurantsData={getRestaurantsData}
+                                />
                               </div>
                             </div>
                           ))}

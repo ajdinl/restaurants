@@ -10,15 +10,13 @@ import {
   CardContent,
   NewUserForm,
   NewRestaurantForm,
-  PencilIcon,
   EditModal,
   NewModal,
-} from '@/components'
-import {
+  EditIcon,
+  DeleteIcon,
   fetchUserData,
   fetchRestaurantsData,
-  handleDeleteItem,
-} from '@/components/functions'
+} from '@/components'
 
 export default function AdminDashboardComponent() {
   const [user, setUser] = useState(null)
@@ -120,32 +118,20 @@ export default function AdminDashboardComponent() {
                                 >
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
-                                    <PencilIcon
-                                      className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
-                                      onClick={() =>
-                                        setEditSelectedItem({
-                                          ...menu,
-                                          category: 'menu',
-                                          item,
-                                          index,
-                                        })
-                                      }
-                                    >
-                                      Edit
-                                    </PencilIcon>
-                                    <button
-                                      className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
-                                      onClick={() =>
-                                        handleDeleteItem(
-                                          'menu',
-                                          menu,
-                                          index,
-                                          () => getRestaurantsData()
-                                        )
-                                      }
-                                    >
-                                      X
-                                    </button>
+                                    <EditIcon
+                                      setEditSelectedItem={setEditSelectedItem}
+                                      selected={menu}
+                                      category='menu'
+                                      item={item}
+                                      index={index}
+                                    />
+                                    <DeleteIcon
+                                      category='menu'
+                                      data={menu}
+                                      index={index}
+                                      getRestaurantsData={getRestaurantsData}
+                                      className='ml-2'
+                                    />
                                   </div>
                                 </li>
                               ))}
@@ -179,27 +165,18 @@ export default function AdminDashboardComponent() {
                               Table #{table.number} - Capacity: {table.capacity}
                             </p>
                             <div className='flex flex-row items-center'>
-                              <PencilIcon
-                                className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
-                                onClick={() =>
-                                  setEditSelectedItem({
-                                    ...table,
-                                    category: 'tables',
-                                  })
-                                }
-                              >
-                                Edit
-                              </PencilIcon>
-                              <button
-                                className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
-                                onClick={() =>
-                                  handleDeleteItem('tables', table, null, () =>
-                                    getRestaurantsData()
-                                  )
-                                }
-                              >
-                                X
-                              </button>
+                              <EditIcon
+                                setEditSelectedItem={setEditSelectedItem}
+                                selected={table}
+                                category='tables'
+                              />
+                              <DeleteIcon
+                                category='tables'
+                                data={table}
+                                index={null}
+                                getRestaurantsData={getRestaurantsData}
+                                className='ml-2'
+                              />
                             </div>
                           </li>
                         ))}
@@ -233,30 +210,18 @@ export default function AdminDashboardComponent() {
                               <p>Guests: {reservation.capacity}</p>
                             </div>
                             <div className='flex flex-row items-center'>
-                              <PencilIcon
-                                className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
-                                onClick={() =>
-                                  setEditSelectedItem({
-                                    ...reservation,
-                                    category: 'reservations',
-                                  })
-                                }
-                              >
-                                Edit
-                              </PencilIcon>
-                              <button
-                                className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
-                                onClick={() =>
-                                  handleDeleteItem(
-                                    'reservations',
-                                    reservation,
-                                    null,
-                                    () => getRestaurantsData()
-                                  )
-                                }
-                              >
-                                X
-                              </button>
+                              <EditIcon
+                                setEditSelectedItem={setEditSelectedItem}
+                                selected={reservation}
+                                category='reservations'
+                              />
+                              <DeleteIcon
+                                category='reservations'
+                                data={reservation}
+                                index={null}
+                                getRestaurantsData={getRestaurantsData}
+                                className='ml-2'
+                              />
                             </div>
                           </li>
                         ))}
@@ -303,32 +268,20 @@ export default function AdminDashboardComponent() {
                                 >
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
-                                    <PencilIcon
-                                      className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
-                                      onClick={() =>
-                                        setEditSelectedItem({
-                                          ...order,
-                                          category: 'orders',
-                                          item,
-                                          index,
-                                        })
-                                      }
-                                    >
-                                      Edit
-                                    </PencilIcon>
-                                    <button
-                                      className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
-                                      onClick={() =>
-                                        handleDeleteItem(
-                                          'orders',
-                                          order,
-                                          index,
-                                          () => getRestaurantsData()
-                                        )
-                                      }
-                                    >
-                                      X
-                                    </button>
+                                    <EditIcon
+                                      setEditSelectedItem={setEditSelectedItem}
+                                      selected={order}
+                                      category='orders'
+                                      item={item}
+                                      index={index}
+                                    />
+                                    <DeleteIcon
+                                      category='orders'
+                                      data={order}
+                                      index={index}
+                                      getRestaurantsData={getRestaurantsData}
+                                      className='ml-2'
+                                    />
                                   </div>
                                 </li>
                               ))}
