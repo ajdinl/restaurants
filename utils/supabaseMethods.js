@@ -99,6 +99,11 @@ const addNewOrder = async (restaurantId, tableNumber, orderNumber) => {
   return { item, error }
 }
 
+const addNewReservation = async (data) => {
+  const { data: item, error } = await supabase.from('reservations').insert(data)
+  return { item, error }
+}
+
 export {
   createUser,
   getUser,
@@ -112,4 +117,5 @@ export {
   addNewTable,
   addNewMenu,
   addNewOrder,
+  addNewReservation,
 }

@@ -6,6 +6,7 @@ import {
   updateArrayItem,
   addNewMenu,
   addNewOrder,
+  addNewReservation,
 } from '@/utils/supabaseMethods'
 import {
   Card,
@@ -39,6 +40,8 @@ export default function NewModal({
       handleOrderSave()
     } else if (selected.category === 'Order Dish') {
       handeOrderDishSave()
+    } else if (selected.category === 'Reservation') {
+      handleReservationSave()
     }
   }
 
@@ -163,6 +166,24 @@ export default function NewModal({
     }
   }
 
+  const handleReservationSave = async () => {
+    if (table.restaurant_id) {
+      const filterRestarurant = restaurants.filter((restaurant) => {
+        return restaurant.id == table.restaurant_id
+      })
+      const reservationNumber = filterRestarurant[0].reservations.length + 1
+      table.number = reservationNumber
+    }
+    const { data, error } = await addNewReservation(table)
+    if (error) {
+      console.error('Error adding item:', error)
+      return
+    } else {
+      fetchRestaurantsData()
+      setShowNewModal(false)
+    }
+  }
+
   return (
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
@@ -214,6 +235,98 @@ export default function NewModal({
                       )}
                       <label className='block'>
                         <span className='text-gray-700'>Maximum Capacity</span>
+                        <span className='text-red-500 ml-4 text-sm'>
+                          {!table.capacity && error}
+                        </span>
+                        <select
+                          onChange={(e) =>
+                            setTable({ ...table, capacity: e.target.value })
+                          }
+                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                        >
+                          <option></option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                          <option>6</option>
+                          <option>7</option>
+                          <option>8</option>
+                          <option>9</option>
+                          <option>10</option>
+                        </select>
+                      </label>
+                    </form>
+                  )}
+                  {selected.category === 'Reservation' && (
+                    <form className='space-y-4'>
+                      {isAdmin && (
+                        <label className='block'>
+                          <span className='text-gray-700'>Restaurant</span>
+                          <span className='text-red-500 ml-4 text-sm'>
+                            {!table.restaurant_id && error}
+                          </span>
+                          <select
+                            onChange={(e) =>
+                              setTable({
+                                ...table,
+                                restaurant_id: e.target.value,
+                              })
+                            }
+                            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          >
+                            <option></option>
+                            {restaurants.map((restaurant) => (
+                              <option key={restaurant.id} value={restaurant.id}>
+                                {restaurant.name}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      )}
+                      <label className='block'>
+                        <span className='text-gray-700'>Table Number</span>
+                        <span className='text-red-500 ml-4 text-sm'>
+                          {!table.number && error}
+                        </span>
+                        <select
+                          onChange={(e) =>
+                            setTable({ ...table, table_number: e.target.value })
+                          }
+                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                        >
+                          <option></option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                          <option>6</option>
+                          <option>7</option>
+                          <option>8</option>
+                          <option>9</option>
+                          <option>10</option>
+                        </select>
+                      </label>
+                      <label className='block'>
+                        <span className='text-gray-700'>Status</span>
+                        <span className='text-red-500 ml-4 text-sm'>
+                          {!table.status && error}
+                        </span>
+                        <select
+                          onChange={(e) =>
+                            setTable({ ...table, status: e.target.value })
+                          }
+                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                        >
+                          <option></option>
+                          <option>Available</option>
+                          <option>Reserved</option>
+                        </select>
+                      </label>
+                      <label className='block'>
+                        <span className='text-gray-700'>Number of Guests</span>
                         <span className='text-red-500 ml-4 text-sm'>
                           {!table.capacity && error}
                         </span>
