@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { fetchRestaurants } from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
   Card,
@@ -15,7 +14,11 @@ import {
   EditModal,
   NewModal,
 } from '@/components'
-import { fetchUserData, handleDeleteItem } from '@/components/functions'
+import {
+  fetchUserData,
+  fetchRestaurantsData,
+  handleDeleteItem,
+} from '@/components/functions'
 
 export default function AdminDashboardComponent() {
   const [user, setUser] = useState(null)
@@ -26,19 +29,12 @@ export default function AdminDashboardComponent() {
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
 
-  const fetchRestaurantsData = async () => {
-    try {
-      const { data, error } = await fetchRestaurants()
-
-      if (error) {
-        console.error('Error fetching restaurant:', error)
-        return
-      }
-
-      setRestaurants(data)
-    } catch (error) {
-      console.error('Error fetching restaurant:', error)
-    }
+  const getRestaurantsData = async () => {
+    fetchRestaurantsData({
+      setLoading: () => {},
+      setData: setRestaurants,
+      userId: null,
+    })
   }
 
   const setEditSelectedItem = (item) => {
@@ -57,7 +53,7 @@ export default function AdminDashboardComponent() {
 
   useEffect(() => {
     if (user) {
-      fetchRestaurantsData()
+      getRestaurantsData()
     }
   }, [user])
 
@@ -144,7 +140,7 @@ export default function AdminDashboardComponent() {
                                           'menu',
                                           menu,
                                           index,
-                                          () => fetchRestaurantsData()
+                                          () => getRestaurantsData()
                                         )
                                       }
                                     >
@@ -198,7 +194,7 @@ export default function AdminDashboardComponent() {
                                 className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
                                 onClick={() =>
                                   handleDeleteItem('tables', table, null, () =>
-                                    fetchRestaurantsData()
+                                    getRestaurantsData()
                                   )
                                 }
                               >
@@ -255,7 +251,7 @@ export default function AdminDashboardComponent() {
                                     'reservations',
                                     reservation,
                                     null,
-                                    () => fetchRestaurantsData()
+                                    () => getRestaurantsData()
                                   )
                                 }
                               >
@@ -327,7 +323,7 @@ export default function AdminDashboardComponent() {
                                           'orders',
                                           order,
                                           index,
-                                          () => fetchRestaurantsData()
+                                          () => getRestaurantsData()
                                         )
                                       }
                                     >
@@ -373,7 +369,7 @@ export default function AdminDashboardComponent() {
           setShowNewModal={setShowNewModal}
           selected={selected}
           isAdmin={true}
-          fetchRestaurantsData={fetchRestaurantsData}
+          fetchRestaurantsData={getRestaurantsData}
           restaurants={restaurants}
         />
       )}
@@ -381,7 +377,7 @@ export default function AdminDashboardComponent() {
         <EditModal
           setShowEditModal={setShowEditModal}
           selected={selected}
-          fetchRestaurantsData={fetchRestaurantsData}
+          fetchRestaurantsData={getRestaurantsData}
         />
       )}
     </div>
