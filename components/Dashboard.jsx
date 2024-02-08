@@ -1,10 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { fetchRestaurants } from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import { PencilIcon, EditModal, NewModal, DashboardWrapper } from '@/components'
-import { fetchUserData, handleDeleteItem } from '@/components/functions'
+import {
+  fetchUserData,
+  fetchRestaurantsData,
+  handleDeleteItem,
+} from '@/components/functions'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)
@@ -21,22 +24,6 @@ export default function DashboardComponent() {
   const restaurantTables = data?.tables
   const restaurantOrders = data?.orders
 
-  const fetchRestaurantsData = async () => {
-    setLoading(true)
-    try {
-      const { data, error } = await fetchRestaurants(userId)
-
-      if (error) {
-        console.error('Error fetching restaurant:', error)
-        return
-      }
-      setLoading(false)
-      setData(data)
-    } catch (error) {
-      console.error('Error fetching restaurant:', error)
-    }
-  }
-
   const setEditSelectedItem = (item) => {
     setSelected(item)
     setShowEditModal(true)
@@ -47,13 +34,17 @@ export default function DashboardComponent() {
     setSelected(itemDetails)
   }
 
+  const getRestaurantsData = async () => {
+    fetchRestaurantsData({ setLoading, setData, userId })
+  }
+
   useEffect(() => {
     fetchUserData(setUser)
   }, [])
 
   useEffect(() => {
     if (user) {
-      fetchRestaurantsData()
+      getRestaurantsData()
     }
   }, [user])
 
@@ -131,7 +122,7 @@ export default function DashboardComponent() {
                                 className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
                                 onClick={() =>
                                   handleDeleteItem('menu', menu, index, () =>
-                                    fetchRestaurantsData()
+                                    getRestaurantsData()
                                   )
                                 }
                               >
@@ -161,9 +152,6 @@ export default function DashboardComponent() {
             }}
           >
             <ul className='space-y-2'>
-              {loading && (
-                <div className='text-left text-gray-500'>Loading...</div>
-              )}
               {!view
                 ? restaurantTables
                     ?.sort((a, b) => a.number - b.number)
@@ -195,7 +183,7 @@ export default function DashboardComponent() {
                             className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
                             onClick={() =>
                               handleDeleteItem('tables', table, null, () =>
-                                fetchRestaurantsData()
+                                getRestaurantsData()
                               )
                             }
                           >
@@ -224,9 +212,6 @@ export default function DashboardComponent() {
             }}
           >
             <ul className={`${view ? 'space-y-4' : 'space-y-2'}`}>
-              {loading && (
-                <div className='text-left text-gray-500'>Loading...</div>
-              )}
               {!view
                 ? restaurantOrders
                     ?.sort((a, b) => a.number - b.number)
@@ -282,7 +267,7 @@ export default function DashboardComponent() {
                                       'orders',
                                       order,
                                       index,
-                                      () => fetchRestaurantsData()
+                                      () => getRestaurantsData()
                                     )
                                   }
                                 >
@@ -304,14 +289,14 @@ export default function DashboardComponent() {
           setShowNewModal={setShowNewModal}
           selected={selected}
           restaurantId={restaurantId}
-          fetchRestaurantsData={fetchRestaurantsData}
+          fetchRestaurantsData={getRestaurantsData}
         />
       )}
       {showEditModal && (
         <EditModal
           setShowEditModal={setShowEditModal}
           selected={selected}
-          fetchRestaurantsData={fetchRestaurantsData}
+          fetchRestaurantsData={getRestaurantsData}
         />
       )}
     </>

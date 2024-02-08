@@ -1,4 +1,9 @@
-import { getUser, deleteArrayItem, deleteItem } from '@/utils/supabaseMethods'
+import {
+  getUser,
+  fetchRestaurants,
+  deleteArrayItem,
+  deleteItem,
+} from '@/utils/supabaseMethods'
 
 export const fetchUserData = async (setUser) => {
   try {
@@ -10,6 +15,22 @@ export const fetchUserData = async (setUser) => {
     setUser(data)
   } catch (error) {
     console.error('Error fetching user:', error)
+  }
+}
+
+export const fetchRestaurantsData = async ({ setLoading, setData, userId }) => {
+  setLoading(true)
+  try {
+    const { data, error } = await fetchRestaurants(userId)
+
+    if (error) {
+      console.error('Error fetching restaurant:', error)
+      return
+    }
+    setLoading(false)
+    setData(data)
+  } catch (error) {
+    console.error('Error fetching restaurant:', error)
   }
 }
 
