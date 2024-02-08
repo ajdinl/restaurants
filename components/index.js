@@ -11,6 +11,7 @@ import { Button } from '@/components/Button'
 import { PencilIcon, MenuIcon } from '@/components/Icons'
 import NewModal from '@/components/modals/NewModal'
 import EditModal from '@/components/modals/EditModal'
+import DashboardWrapper from '@/components/DashboardWrapper'
 
 export {
   Card,
@@ -25,4 +26,5 @@ export {
   EditModal,
   MenuIcon,
   NewModal,
+  DashboardWrapper,
 }
