@@ -109,11 +109,13 @@ export default function Navbar({ isAdmin }) {
         )}
         {data && !loading && (
           <div className='flex flex-row items-center gap-4'>
-            <p>Hello, {userEmail}</p>
+            <p className='text-right text-gray-500 text-sm md:text-base'>
+              Hello, {userEmail}
+            </p>
             <form action='/auth/signout' method='post'>
               <Button
                 type='submit'
-                className='bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-500 font-semibold hover:bg-gray-200 dark:hover:bg-gray-700'
+                className='text-sm md:text-base bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-500 font-semibold hover:bg-gray-200 dark:hover:bg-gray-700'
               >
                 Sign Out
               </Button>

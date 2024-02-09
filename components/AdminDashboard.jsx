@@ -74,7 +74,7 @@ export default function AdminDashboardComponent() {
                 restaurants.map((restaurant) => (
                   <div
                     key={restaurant.id}
-                    className='flex flex-row justify-between space-x-20 border-b-2 border-gray-600'
+                    className='flex flex-col md:flex-row justify-between space-x-20 border-b-2 border-gray-600'
                   >
                     <p className='text-2xl min-w-20 w-auto max-w-44 flex flex-nowrap overflow-x-auto'>
                       {restaurant.name}

@@ -50,9 +50,7 @@ function EditIcon({
 }) {
   return (
     <PencilIcon
-      className={
-        className + ' h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
-      }
+      className={` h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer ${className}`}
       onClick={() =>
         setEditSelectedItem({
           ...selected,
@@ -68,7 +66,7 @@ function EditIcon({
 function DeleteIcon({ category, data, index, getRestaurantsData, className }) {
   return (
     <button
-      className={className + 'cursor-pointer text-red-400 hover:text-red-500'}
+      className={`cursor-pointer text-red-400 hover:text-red-500 ${className}`}
       onClick={() =>
         handleDeleteItem(category, data, index, () => getRestaurantsData())
       }
