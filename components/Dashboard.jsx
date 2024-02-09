@@ -54,7 +54,7 @@ export default function DashboardComponent() {
   return (
     <>
       {data && (
-        <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
+        <main className='flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 bg-white dark:bg-gray-900'>
           <DashboardWrapper
             wrapperData={{
               type: 'menu',
@@ -83,7 +83,11 @@ export default function DashboardComponent() {
                     }`}
                   >
                     <div className='flex flex-row'>
-                      <p className={`${view ? 'text-3xl' : 'text-xl'}`}>
+                      <p
+                        className={`${
+                          view ? 'text-3xl' : 'text-xl'
+                        } text-black dark:text-gray-300`}
+                      >
                         Menu #{menu.number}
                       </p>
                       {view && (
@@ -98,15 +102,20 @@ export default function DashboardComponent() {
                       )}
                     </div>
                     {!view
-                      ? menu.items
-                          ?.slice(0, 5)
-                          ?.map((item) => <div key={item}>{item}</div>)
+                      ? menu.items?.slice(0, 5)?.map((item) => (
+                          <div
+                            key={item}
+                            className='text-black dark:text-white'
+                          >
+                            {item}
+                          </div>
+                        ))
                       : menu.items?.map((item, index) => (
                           <div
                             key={item}
-                            className='flex flex-row w-full items-center justify-between bg-gray-100 p-3 rounded-lg'
+                            className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
                           >
-                            <p>{item}</p>
+                            <p className='text-black dark:text-white'>{item}</p>
                             <div className='flex flex-row items-center'>
                               <EditIcon
                                 className='h-6 w-6 mr-6'
@@ -151,16 +160,20 @@ export default function DashboardComponent() {
                     ?.sort((a, b) => a.number - b.number)
                     .slice(0, 5)
                     ?.map((table) => (
-                      <li key={table.id}>Table #{table.number}</li>
+                      <li key={table.id} className='text-black dark:text-white'>
+                        Table #{table.number}
+                      </li>
                     ))
                 : restaurantTables
                     ?.sort((a, b) => a.number - b.number)
                     .map((table) => (
                       <li
                         key={table.id}
-                        className='flex flex-row bg-gray-100 p-3 rounded-lg'
+                        className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
                       >
-                        Table #{table.number} - Capacity - {table.capacity}
+                        <p className='text-black dark:text-white'>
+                          Table #{table.number} - Capacity - {table.capacity}
+                        </p>
                         <div className='flex flex-row items-center'>
                           <EditIcon
                             className='h-6 w-6 mr-4 ml-6'
@@ -202,7 +215,7 @@ export default function DashboardComponent() {
                     ?.sort((a, b) => a.number - b.number)
                     .slice(0, 5)
                     ?.map((order) => (
-                      <li key={order.id}>
+                      <li key={order.id} className='text-black dark:text-white'>
                         Order #{order.number}: {order.items?.join(', ')}
                       </li>
                     ))
@@ -211,7 +224,7 @@ export default function DashboardComponent() {
                     ?.map((order) => (
                       <li
                         key={order.id}
-                        className='flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 p-3 rounded-lg'
+                        className='flex flex-col md:flex-row 2xl:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
                       >
                         <button
                           className='flex justify-end md:mx-2 md:-mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
@@ -221,17 +234,19 @@ export default function DashboardComponent() {
                         >
                           +
                         </button>
-                        <span className='-mt-8 mb-2 md:-mt-0 md:mb-0'>
+                        <span className='-mt-8 mb-2 md:-mt-0 md:mb-0 text-black dark:text-white mr-2 min-w-28'>
                           Order #{order.number}:
                         </span>
-                        <ul className='flex flex-col md:flex-row flex-wrap'>
+                        <ul className='flex flex-col lg:flex-row flex-wrap'>
                           {order.items?.map((item, index) => (
                             <div
                               key={index}
-                              className='flex flex-row items-center mb-2 md:mb-0 md:mr-4'
+                              className='flex flex-row items-center justify-between mb-2 md:mb-0 md:mr-4'
                             >
-                              <p className='ml-4'>{item}</p>
-                              <div className='flex flex-row items-center ml-2'>
+                              <p className='text-black dark:text-white'>
+                                {item}
+                              </p>
+                              <div className='flex flex-row items-center mx-2'>
                                 <EditIcon
                                   className='h-6 w-6 mr-2'
                                   setEditSelectedItem={setEditSelectedItem}

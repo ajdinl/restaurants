@@ -50,7 +50,7 @@ function EditIcon({
 }) {
   return (
     <PencilIcon
-      className={` h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer ${className}`}
+      className={`h-4 w-4 text-gray-600 dark:text-gray-400 hover:fill-gray-300 cursor-pointer ${className}`}
       onClick={() =>
         setEditSelectedItem({
           ...selected,
