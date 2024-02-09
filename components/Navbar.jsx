@@ -1,11 +1,27 @@
 'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { MenuIcon, Button } from '@/components'
 import { useSearchParams } from 'next/navigation'
+import { fetchUserData } from '@/components'
 
 export default function Navbar({ isAdmin }) {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(false)
+
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
+  const userEmail = data?.user?.email
+
+  useEffect(() => {
+    setLoading(true)
+    fetchUserData(setData)
+    if (data) {
+      setLoading(false)
+    }
+  }, [data])
+
   return (
     <>
       <header className='flex items-center justify-between h-16 px-4 border-b shrink-0 md:px-6'>
@@ -86,14 +102,24 @@ export default function Navbar({ isAdmin }) {
           Reports
         </Link> */}
         </nav>
-        <form action='/auth/signout' method='post'>
-          <Button
-            type='submit'
-            className='bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-500 font-semibold hover:bg-gray-200 dark:hover:bg-gray-700'
-          >
-            Sign Out
-          </Button>
-        </form>
+        {loading && (
+          <div className='flex flex-row items-center gap-4'>
+            <div className='text-left text-gray-500'>Loading...</div>
+          </div>
+        )}
+        {data && !loading && (
+          <div className='flex flex-row items-center gap-4'>
+            <p>Hello, {userEmail}</p>
+            <form action='/auth/signout' method='post'>
+              <Button
+                type='submit'
+                className='bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-500 font-semibold hover:bg-gray-200 dark:hover:bg-gray-700'
+              >
+                Sign Out
+              </Button>
+            </form>
+          </div>
+        )}
       </header>
     </>
   )
