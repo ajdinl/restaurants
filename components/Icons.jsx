@@ -1,3 +1,5 @@
+import { handleDeleteItem } from '@/components'
+
 function MenuIcon(props) {
   return (
     <svg
@@ -38,4 +40,40 @@ function PencilIcon(props) {
   )
 }
 
-export { MenuIcon, PencilIcon }
+function EditIcon({
+  className,
+  setEditSelectedItem,
+  selected,
+  category,
+  item,
+  index,
+}) {
+  return (
+    <PencilIcon
+      className={`h-4 w-4 text-gray-600 dark:text-gray-400 hover:fill-gray-300 cursor-pointer ${className}`}
+      onClick={() =>
+        setEditSelectedItem({
+          ...selected,
+          category,
+          item,
+          index,
+        })
+      }
+    />
+  )
+}
+
+function DeleteIcon({ category, data, index, getRestaurantsData, className }) {
+  return (
+    <button
+      className={`cursor-pointer text-red-400 hover:text-red-500 ${className}`}
+      onClick={() =>
+        handleDeleteItem(category, data, index, () => getRestaurantsData())
+      }
+    >
+      X
+    </button>
+  )
+}
+
+export { MenuIcon, PencilIcon, EditIcon, DeleteIcon }

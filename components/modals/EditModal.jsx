@@ -59,15 +59,12 @@ export default function EditModal({
 
   const handleEditSave = () => {
     setShowEditModal(false)
-    if (!selectedItem && !status) {
-      return
-    }
     if (selectedItem) {
       handleUpdateArrayItem(selected.category, selected, selectedItem)
       return
     }
-    if (status) {
-      handleUpdateTable(selected.category, selected, status, capacity)
+    if (capacity) {
+      handleUpdateTable(selected.category, selected, capacity)
     }
   }
 
@@ -94,9 +91,9 @@ export default function EditModal({
                 X
               </button>
             </div>
-            {status && (
+            {selected.capacity && (
               <div className='relative p-6 flex-auto'>
-                <div className='dropdown'>
+                {/* <div className='dropdown'>
                   <Button
                     className={
                       status === 'Available'
@@ -131,7 +128,7 @@ export default function EditModal({
                       )}
                     </ul>
                   )}
-                </div>
+                </div> */}
                 <select
                   className='mt-2 p-2 border border-gray-300 rounded'
                   defaultValue={capacity}

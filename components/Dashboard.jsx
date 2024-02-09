@@ -1,23 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import {
-  getUser,
-  fetchRestaurants,
-  deleteArrayItem,
-  deleteItem,
-} from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  Button,
-  PencilIcon,
   EditModal,
   NewModal,
+  DashboardWrapper,
+  EditIcon,
+  DeleteIcon,
+  fetchUserData,
+  fetchRestaurantsData,
 } from '@/components'
 
 export default function DashboardComponent() {
@@ -35,72 +27,6 @@ export default function DashboardComponent() {
   const restaurantTables = data?.tables
   const restaurantOrders = data?.orders
 
-  const fetchUserData = async () => {
-    try {
-      const { data, error } = await getUser()
-      if (error) {
-        console.error('Error fetching user:', error)
-        return
-      }
-      setUser(data)
-    } catch (error) {
-      console.error('Error fetching user:', error)
-    }
-  }
-
-  const fetchRestaurantsData = async () => {
-    setLoading(true)
-    try {
-      const { data, error } = await fetchRestaurants(userId)
-
-      if (error) {
-        console.error('Error fetching restaurant:', error)
-        return
-      }
-      setLoading(false)
-      setData(data)
-    } catch (error) {
-      console.error('Error fetching restaurant:', error)
-    }
-  }
-
-  const handleDeleteItem = async (category, selected, index) => {
-    let selectedArray = selected.items
-    let displayError
-    const text = `Are you sure you want to delete this item?`
-
-    if (index) {
-      if (confirm(text) === true) {
-        selectedArray = selectedArray.filter((_, i) => i !== index)
-      } else {
-        return
-      }
-
-      const { data, error } = await deleteArrayItem(
-        category,
-        selected.id,
-        selectedArray
-      )
-      displayError = error
-    }
-
-    if (!index) {
-      if (confirm(text) === true) {
-        const { data, error } = await deleteItem(category, selected.id)
-        displayError = error
-      } else {
-        return
-      }
-    }
-
-    if (displayError) {
-      console.error('Error deleting item:', displayError)
-      return
-    } else {
-      fetchRestaurantsData()
-    }
-  }
-
   const setEditSelectedItem = (item) => {
     setSelected(item)
     setShowEditModal(true)
@@ -111,278 +37,238 @@ export default function DashboardComponent() {
     setSelected(itemDetails)
   }
 
+  const getRestaurantsData = async () => {
+    fetchRestaurantsData({ setLoading, setData, userId })
+  }
+
   useEffect(() => {
-    fetchUserData()
+    fetchUserData(setUser)
   }, [])
 
   useEffect(() => {
     if (user) {
-      fetchRestaurantsData()
+      getRestaurantsData()
     }
   }, [user])
 
   return (
     <>
       {data && (
-        <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
-          {(!view || view === 'menu') && (
-            <Card className={`${!view ? 'cursor-pointer' : ''}`}>
-              <CardHeader>
-                <div className='flex flex-row items-center justify-between'>
-                  <CardTitle view={view}>Menu</CardTitle>
-                  {view && (
-                    <Button
-                      className='bg-green-500 hover:bg-green-600 text-white'
-                      onClick={() =>
-                        openNewModal({
-                          category: 'Menu',
-                          restaurantId,
-                          menuNumber: restaurantMenu.length + 1,
-                        })
-                      }
-                    >
-                      Add New Menu
-                    </Button>
-                  )}
-                </div>
-                <CardDescription view={view}>
-                  List of available dishes and beverages.
-                </CardDescription>
-              </CardHeader>
-              <CardContent view={view}>
-                {loading && (
-                  <div className='text-left text-gray-500'>Loading...</div>
-                )}
-                <ul className='space-y-6'>
-                  {restaurantMenu
-                    ?.sort((a, b) => a.number - b.number)
-                    .map((menu) => (
-                      <li
-                        key={menu.id}
-                        className={`flex flex-col ${
-                          view ? 'space-y-4' : 'space-y-2'
-                        }`}
+        <main className='flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 bg-white dark:bg-gray-900'>
+          <DashboardWrapper
+            wrapperData={{
+              type: 'menu',
+              title: 'Menu',
+              description: 'List of available dishes and beverages.',
+              buttonText: 'Add New Menu',
+              view,
+              loading,
+              openNewModal,
+              modalData: {
+                category: 'Menu',
+                restaurantId,
+                menuNumber:
+                  restaurantMenu?.map((menu) => menu.number).pop() + 1,
+              },
+            }}
+          >
+            <ul className='space-y-6'>
+              {restaurantMenu
+                ?.sort((a, b) => a.number - b.number)
+                .map((menu) => (
+                  <li
+                    key={menu.id}
+                    className={`flex flex-col ${
+                      view ? 'space-y-4' : 'space-y-2'
+                    }`}
+                  >
+                    <div className='flex flex-row'>
+                      <p
+                        className={`${
+                          view ? 'text-3xl' : 'text-xl'
+                        } text-black dark:text-gray-300`}
                       >
-                        <div className='flex flex-row'>
-                          <p className={`${view ? 'text-3xl' : 'text-xl'}`}>
-                            Menu #{menu.number}
-                          </p>
-                          {view && (
-                            <button
-                              className='mx-3 text-green-400 hover:text-green-500 text-4xl leading-none font-semibold'
-                              onClick={() =>
-                                openNewModal({ category: 'Dish', menu })
-                              }
-                            >
-                              +
-                            </button>
-                          )}
+                        Menu #{menu.number}
+                      </p>
+                      {view && (
+                        <button
+                          className='mx-3 text-green-400 hover:text-green-500 text-4xl leading-none font-semibold'
+                          onClick={() =>
+                            openNewModal({ category: 'Dish', menu })
+                          }
+                        >
+                          +
+                        </button>
+                      )}
+                    </div>
+                    {!view
+                      ? menu.items?.slice(0, 5)?.map((item) => (
+                          <div
+                            key={item}
+                            className='text-black dark:text-white'
+                          >
+                            {item}
+                          </div>
+                        ))
+                      : menu.items?.map((item, index) => (
+                          <div
+                            key={item}
+                            className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                          >
+                            <p className='text-black dark:text-white'>{item}</p>
+                            <div className='flex flex-row items-center'>
+                              <EditIcon
+                                className='h-6 w-6 mr-6'
+                                setEditSelectedItem={setEditSelectedItem}
+                                selected={menu}
+                                category='menu'
+                                item={item}
+                                index={index}
+                              />
+                              <DeleteIcon
+                                category='menu'
+                                data={menu}
+                                index={index}
+                                getRestaurantsData={getRestaurantsData}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                  </li>
+                ))}
+            </ul>
+          </DashboardWrapper>
+          <DashboardWrapper
+            wrapperData={{
+              type: 'tables',
+              title: 'Tables',
+              description: 'List of tables.',
+              buttonText: 'Create New Table',
+              view,
+              loading,
+              openNewModal,
+              modalData: {
+                category: 'Table',
+                restaurantId,
+                tables: restaurantTables,
+              },
+            }}
+          >
+            <ul className='space-y-2'>
+              {!view
+                ? restaurantTables
+                    ?.sort((a, b) => a.number - b.number)
+                    .slice(0, 5)
+                    ?.map((table) => (
+                      <li key={table.id} className='text-black dark:text-white'>
+                        Table #{table.number}
+                      </li>
+                    ))
+                : restaurantTables
+                    ?.sort((a, b) => a.number - b.number)
+                    .map((table) => (
+                      <li
+                        key={table.id}
+                        className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                      >
+                        <p className='text-black dark:text-white'>
+                          Table #{table.number} - Capacity - {table.capacity}
+                        </p>
+                        <div className='flex flex-row items-center'>
+                          <EditIcon
+                            className='h-6 w-6 mr-4 ml-6'
+                            setEditSelectedItem={setEditSelectedItem}
+                            selected={table}
+                            category='tables'
+                          />
+                          <DeleteIcon
+                            category='tables'
+                            data={table}
+                            index={null}
+                            getRestaurantsData={getRestaurantsData}
+                          />
                         </div>
-                        {!view
-                          ? menu.items
-                              ?.slice(0, 5)
-                              ?.map((item) => <div key={item}>{item}</div>)
-                          : menu.items?.map((item, index) => (
-                              <div
-                                key={item}
-                                className='flex flex-row w-1/5 items-center justify-between'
-                              >
-                                <p>{item}</p>
-                                <div className='flex flex-row items-center'>
-                                  <PencilIcon
-                                    className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-6'
-                                    onClick={() =>
-                                      setEditSelectedItem({
-                                        ...menu,
-                                        category: 'menu',
-                                        item,
-                                        index,
-                                      })
-                                    }
-                                  >
-                                    Edit
-                                  </PencilIcon>
-                                  <button
-                                    className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
-                                    onClick={() =>
-                                      handleDeleteItem('menu', menu, index)
-                                    }
-                                  >
-                                    X
-                                  </button>
-                                </div>
-                              </div>
-                            ))}
                       </li>
                     ))}
-                </ul>
-              </CardContent>
-            </Card>
-          )}
-          {(!view || view === 'tables') && (
-            <Card className={`${!view ? 'cursor-pointer' : ''}`}>
-              <CardHeader>
-                <div className='flex flex-row items-center justify-between'>
-                  <CardTitle view={view}>Tables</CardTitle>
-                  {view && (
-                    <Button
-                      className='bg-red-500 hover:bg-red-600 text-white'
-                      onClick={() =>
-                        openNewModal({
-                          category: 'Reservation',
-                          restaurantId,
-                          tables: restaurantTables,
-                        })
-                      }
-                    >
-                      Reserve a Table
-                    </Button>
-                  )}
-                </div>
-                <CardDescription view={view}>
-                  List of table reservations.
-                </CardDescription>
-              </CardHeader>
-              <CardContent view={view}>
-                <ul className='space-y-2'>
-                  {loading && (
-                    <div className='text-left text-gray-500'>Loading...</div>
-                  )}
-                  {!view
-                    ? restaurantTables
-                        ?.sort((a, b) => a.id - b.id)
-                        .slice(0, 5)
-                        ?.map((table) => (
-                          <li key={table.id}>
-                            Table #{table.number}: {table.status}
-                          </li>
-                        ))
-                    : restaurantTables
-                        ?.sort((a, b) => a.id - b.id)
-                        .map((table) => (
-                          <li key={table.id} className='flex flex-row'>
-                            Table #{table.number}: {table.status} - Number of
-                            guests: {table.capacity}
-                            <div className='flex flex-row items-center'>
-                              <PencilIcon
-                                className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-4 ml-6'
-                                onClick={() =>
-                                  setEditSelectedItem({
-                                    ...table,
-                                    category: 'tables',
-                                  })
-                                }
-                              >
-                                Edit
-                              </PencilIcon>
-                              <button
-                                className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
-                                onClick={() =>
-                                  handleDeleteItem('tables', table)
-                                }
-                              >
-                                X
-                              </button>
-                            </div>
-                          </li>
-                        ))}
-                </ul>
-              </CardContent>
-            </Card>
-          )}
-          {(!view || view === 'orders') && (
-            <Card className={`${!view ? 'cursor-pointer' : ''}`}>
-              <CardHeader>
-                <div className='flex flex-row items-center justify-between'>
-                  <CardTitle view={view}>Orders</CardTitle>
-                  {view && (
-                    <Button
-                      className='bg-blue-500 hover:bg-blue-600 text-white'
-                      onClick={() =>
-                        openNewModal({
-                          category: 'Order',
-                          restaurantId,
-                          orderNumber: restaurantOrders.length + 1,
-                        })
-                      }
-                    >
-                      Add New Order
-                    </Button>
-                  )}
-                </div>
-                <CardDescription view={view}>
-                  List of current orders.
-                </CardDescription>
-              </CardHeader>
-              <CardContent view={view}>
-                <ul className={`${view ? 'space-y-4' : 'space-y-2'}`}>
-                  {loading && (
-                    <div className='text-left text-gray-500'>Loading...</div>
-                  )}
-                  {!view
-                    ? restaurantOrders
-                        ?.sort((a, b) => a.number - b.number)
-                        .slice(0, 5)
-                        ?.map((order) => (
-                          <li key={order.id}>
-                            Order #{order.number}: {order.items?.join(', ')}
-                          </li>
-                        ))
-                    : restaurantOrders
-                        ?.sort((a, b) => a.number - b.number)
-                        ?.map((order) => (
-                          <li
-                            key={order.id}
-                            className='flex flex-col md:flex-row md:items-center mb-4'
-                          >
-                            <button
-                              className='mx-2 -mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
-                              onClick={() =>
-                                openNewModal({ category: 'Order Dish' })
-                              }
+            </ul>
+          </DashboardWrapper>
+          <DashboardWrapper
+            wrapperData={{
+              type: 'orders',
+              title: 'Orders',
+              description: 'List of current orders.',
+              buttonText: 'Add New Order',
+              view,
+              loading,
+              openNewModal,
+              modalData: {
+                category: 'Order',
+                restaurantId,
+                orderNumbers: restaurantOrders?.map((order) => order.number),
+                tables: restaurantTables,
+              },
+            }}
+          >
+            <ul className={`${view ? 'space-y-4' : 'space-y-2'}`}>
+              {!view
+                ? restaurantOrders
+                    ?.sort((a, b) => a.number - b.number)
+                    .slice(0, 5)
+                    ?.map((order) => (
+                      <li key={order.id} className='text-black dark:text-white'>
+                        Order #{order.number}: {order.items?.join(', ')}
+                      </li>
+                    ))
+                : restaurantOrders
+                    ?.sort((a, b) => a.number - b.number)
+                    ?.map((order) => (
+                      <li
+                        key={order.id}
+                        className='flex flex-col md:flex-row 2xl:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                      >
+                        <button
+                          className='flex justify-end md:mx-2 md:-mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
+                          onClick={() =>
+                            openNewModal({ category: 'Order Dish', order })
+                          }
+                        >
+                          +
+                        </button>
+                        <span className='-mt-8 mb-2 md:-mt-0 md:mb-0 text-black dark:text-white mr-2 min-w-28'>
+                          Order #{order.number}:
+                        </span>
+                        <ul className='flex flex-col lg:flex-row flex-wrap'>
+                          {order.items?.map((item, index) => (
+                            <div
+                              key={index}
+                              className='flex flex-row items-center justify-between mb-2 md:mb-0 md:mr-4'
                             >
-                              +
-                            </button>
-                            <span>Order #{order.number}:</span>
-                            <ul className='flex flex-col md:flex-row flex-wrap'>
-                              {order.items?.map((item, index) => (
-                                <div
-                                  key={index}
-                                  className='flex flex-row items-center mb-2 md:mb-0 md:mr-4'
-                                >
-                                  <p className='ml-4'>{item}</p>
-                                  <div className='flex flex-row items-center ml-2'>
-                                    <PencilIcon
-                                      className='h-6 w-6 text-gray-600 hover:fill-gray-300 cursor-pointer mr-2'
-                                      onClick={() =>
-                                        setEditSelectedItem({
-                                          ...order,
-                                          category: 'orders',
-                                          item,
-                                          index,
-                                        })
-                                      }
-                                    >
-                                      Edit
-                                    </PencilIcon>
-                                    <button
-                                      className='text-2xl cursor-pointer text-red-400 hover:text-red-500'
-                                      onClick={() =>
-                                        handleDeleteItem('orders', order, index)
-                                      }
-                                    >
-                                      X
-                                    </button>
-                                  </div>
-                                </div>
-                              ))}
-                            </ul>
-                          </li>
-                        ))}
-                </ul>
-              </CardContent>
-            </Card>
-          )}
+                              <p className='text-black dark:text-white'>
+                                {item}
+                              </p>
+                              <div className='flex flex-row items-center mx-2'>
+                                <EditIcon
+                                  className='h-6 w-6 mr-2'
+                                  setEditSelectedItem={setEditSelectedItem}
+                                  selected={order}
+                                  category='orders'
+                                  item={item}
+                                  index={index}
+                                />
+                                <DeleteIcon
+                                  category='orders'
+                                  data={order}
+                                  index={index}
+                                  getRestaurantsData={getRestaurantsData}
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </ul>
+                      </li>
+                    ))}
+            </ul>
+          </DashboardWrapper>
         </main>
       )}
 
@@ -391,14 +277,14 @@ export default function DashboardComponent() {
           setShowNewModal={setShowNewModal}
           selected={selected}
           restaurantId={restaurantId}
-          fetchRestaurantsData={fetchRestaurantsData}
+          fetchRestaurantsData={getRestaurantsData}
         />
       )}
       {showEditModal && (
         <EditModal
           setShowEditModal={setShowEditModal}
           selected={selected}
-          fetchRestaurantsData={fetchRestaurantsData}
+          fetchRestaurantsData={getRestaurantsData}
         />
       )}
     </>

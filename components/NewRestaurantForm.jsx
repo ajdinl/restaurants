@@ -30,7 +30,7 @@ export default function NewRestaurantForm() {
   return (
     <form className='space-y-4' onSubmit={(e) => handleSubmit(e)}>
       <label className='block'>
-        <span className='text-gray-700'>Name</span>
+        <span className='text-gray-700 dark:text-gray-400'>Name</span>
         <input
           className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='text'
@@ -44,7 +44,7 @@ export default function NewRestaurantForm() {
         />
       </label>
       <label className='block'>
-        <span className='text-gray-700'>Address</span>
+        <span className='text-gray-700 dark:text-gray-400'>Address</span>
         <input
           className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='text'
@@ -58,7 +58,7 @@ export default function NewRestaurantForm() {
         />
       </label>
       <label className='block'>
-        <span className='text-gray-700'>Phone Number</span>
+        <span className='text-gray-700 dark:text-gray-400'>Phone Number</span>
         <input
           className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='tel'

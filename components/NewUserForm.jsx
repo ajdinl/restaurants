@@ -34,7 +34,7 @@ export default function NewUserForm() {
   return (
     <form className='space-y-4' onSubmit={(e) => handleSubmit(e)}>
       <label className='block'>
-        <span className='text-gray-700'>Email</span>
+        <span className='text-gray-700 dark:text-gray-400'>Email</span>
         <input
           className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='email'
@@ -46,7 +46,7 @@ export default function NewUserForm() {
         />
       </label>
       <label className='block'>
-        <span className='text-gray-700'>Password</span>
+        <span className='text-gray-700 dark:text-gray-400'>Password</span>
         <input
           className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='password'
@@ -58,7 +58,7 @@ export default function NewUserForm() {
         />
       </label>
       <label className='block'>
-        <span className='text-gray-700'>Full Name</span>
+        <span className='text-gray-700 dark:text-gray-400'>Full Name</span>
         <input
           className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='text'
@@ -93,7 +93,7 @@ export default function NewUserForm() {
             })
           }
         />
-        <span className='ml-2 text-gray-700'>Moderator</span>
+        <span className='ml-2 text-gray-700 dark:text-gray-400'>Moderator</span>
       </label>
       <Button type='submit' className='mt-4 bg-purple-500 text-white'>
         Add New User

@@ -1,12 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import {
-  getUser,
-  fetchRestaurants,
-  deleteArrayItem,
-  deleteItem,
-} from '@/utils/supabaseMethods'
 import { useSearchParams } from 'next/navigation'
 import {
   Card,
@@ -16,9 +10,12 @@ import {
   CardContent,
   NewUserForm,
   NewRestaurantForm,
-  PencilIcon,
   EditModal,
   NewModal,
+  EditIcon,
+  DeleteIcon,
+  fetchUserData,
+  fetchRestaurantsData,
 } from '@/components'
 
 export default function AdminDashboardComponent() {
@@ -30,69 +27,12 @@ export default function AdminDashboardComponent() {
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
 
-  const fetchUserData = async () => {
-    try {
-      const { data, error } = await getUser()
-      if (error) {
-        console.error('Error fetching user:', error)
-        return
-      }
-      setUser(data)
-    } catch (error) {
-      console.error('Error fetching user:', error)
-    }
-  }
-
-  const fetchRestaurantsData = async () => {
-    try {
-      const { data, error } = await fetchRestaurants()
-
-      if (error) {
-        console.error('Error fetching restaurant:', error)
-        return
-      }
-
-      setRestaurants(data)
-    } catch (error) {
-      console.error('Error fetching restaurant:', error)
-    }
-  }
-
-  const handleDeleteItem = async (category, selected, index) => {
-    let selectedArray = selected.items
-    let displayError
-    const text = `Are you sure you want to delete this item?`
-
-    if (index) {
-      if (confirm(text) === true) {
-        selectedArray = selectedArray.filter((_, i) => i !== index)
-      } else {
-        return
-      }
-
-      const { data, error } = await deleteArrayItem(
-        category,
-        selected.id,
-        selectedArray
-      )
-      displayError = error
-    }
-
-    if (!index) {
-      if (confirm(text) === true) {
-        const { data, error } = await deleteItem(category, selected.id)
-        displayError = error
-      } else {
-        return
-      }
-    }
-
-    if (displayError) {
-      console.error('Error deleting item:', displayError)
-      return
-    } else {
-      fetchRestaurantsData()
-    }
+  const getRestaurantsData = async () => {
+    fetchRestaurantsData({
+      setLoading: () => {},
+      setData: setRestaurants,
+      userId: null,
+    })
   }
 
   const setEditSelectedItem = (item) => {
@@ -106,18 +46,18 @@ export default function AdminDashboardComponent() {
   }
 
   useEffect(() => {
-    fetchUserData()
+    fetchUserData(setUser)
   }, [])
 
   useEffect(() => {
     if (user) {
-      fetchRestaurantsData()
+      getRestaurantsData()
     }
   }, [user])
 
   return (
     <div>
-      <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
+      <main className='flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 bg-white dark:bg-gray-900 text-black dark:text-white'>
         {!view && (
           <div className='text-3xl text-center'>
             Welcome to the Admin Dashboard
@@ -134,9 +74,11 @@ export default function AdminDashboardComponent() {
                 restaurants.map((restaurant) => (
                   <div
                     key={restaurant.id}
-                    className='flex flex-row justify-between space-x-20 border-b-2 border-gray-600'
+                    className='flex flex-col md:flex-row justify-between space-x-20 border-b-2 border-gray-600'
                   >
-                    <p className='text-4xl w-44'>{restaurant.name}</p>
+                    <p className='text-2xl min-w-20 w-auto max-w-44 flex flex-nowrap overflow-x-auto'>
+                      {restaurant.name}
+                    </p>
                     <ul className='border-l-2 border-gray-600 p-4 w-64'>
                       <div className='flex flex-row'>
                         <p className='text-2xl'>Menu</p>
@@ -176,27 +118,20 @@ export default function AdminDashboardComponent() {
                                 >
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
-                                    <PencilIcon
-                                      className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
-                                      onClick={() =>
-                                        setEditSelectedItem({
-                                          ...menu,
-                                          category: 'menu',
-                                          item,
-                                          index,
-                                        })
-                                      }
-                                    >
-                                      Edit
-                                    </PencilIcon>
-                                    <button
-                                      className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
-                                      onClick={() =>
-                                        handleDeleteItem('menu', menu, index)
-                                      }
-                                    >
-                                      X
-                                    </button>
+                                    <EditIcon
+                                      setEditSelectedItem={setEditSelectedItem}
+                                      selected={menu}
+                                      category='menu'
+                                      item={item}
+                                      index={index}
+                                    />
+                                    <DeleteIcon
+                                      category='menu'
+                                      data={menu}
+                                      index={index}
+                                      getRestaurantsData={getRestaurantsData}
+                                      className='ml-2'
+                                    />
                                   </div>
                                 </li>
                               ))}
@@ -204,9 +139,51 @@ export default function AdminDashboardComponent() {
                           </li>
                         ))}
                     </ul>
-                    <ul className='border-l-2 border-gray-600 p-4 w-64'>
+                    <ul className='border-l-2 border-gray-600 p-4 w-60'>
                       <div className='flex flex-row'>
                         <p className='text-2xl'>Tables</p>
+                        <button
+                          className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+                          onClick={() =>
+                            openNewModal({
+                              category: 'Table',
+                              restaurantId: restaurant.id,
+                            })
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                      {restaurant.tables
+                        .sort((a, b) => a.number - b.number)
+                        .map((table) => (
+                          <li
+                            key={table.id}
+                            className='flex flex-row justify-between border-b border-gray-600 w-60'
+                          >
+                            <p>
+                              Table #{table.number} - Capacity: {table.capacity}
+                            </p>
+                            <div className='flex flex-row items-center'>
+                              <EditIcon
+                                setEditSelectedItem={setEditSelectedItem}
+                                selected={table}
+                                category='tables'
+                              />
+                              <DeleteIcon
+                                category='tables'
+                                data={table}
+                                index={null}
+                                getRestaurantsData={getRestaurantsData}
+                                className='ml-2'
+                              />
+                            </div>
+                          </li>
+                        ))}
+                    </ul>
+                    <ul className='border-l-2 border-gray-600 p-4 w-60 space-y-2'>
+                      <div className='flex flex-row'>
+                        <p className='text-2xl'>Reservations</p>
                         <button
                           className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
                           onClick={() =>
@@ -219,45 +196,37 @@ export default function AdminDashboardComponent() {
                           +
                         </button>
                       </div>
-                      <p className='text-sm text-center py-1'>
-                        Number - Status - Capacity
-                      </p>
-                      {restaurant.tables
+                      {restaurant.reservations
                         .sort((a, b) => a.number - b.number)
-                        .map((table) => (
+                        .map((reservation) => (
                           <li
-                            key={table.id}
+                            key={reservation.id}
                             className='flex flex-row justify-between border-b border-gray-600 w-60'
                           >
-                            <p>
-                              Table #{table.number} - {table.status} -{' '}
-                              {table.capacity}
-                            </p>
+                            <div className='flex flex-col'>
+                              <p>Reservation #{reservation.number}</p>
+                              <p>Table #{reservation.table_number}</p>
+                              <p>Status: {reservation.status}</p>
+                              <p>Guests: {reservation.capacity}</p>
+                            </div>
                             <div className='flex flex-row items-center'>
-                              <PencilIcon
-                                className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
-                                onClick={() =>
-                                  setEditSelectedItem({
-                                    ...table,
-                                    category: 'tables',
-                                  })
-                                }
-                              >
-                                Edit
-                              </PencilIcon>
-                              <button
-                                className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
-                                onClick={() =>
-                                  handleDeleteItem('tables', table)
-                                }
-                              >
-                                X
-                              </button>
+                              <EditIcon
+                                setEditSelectedItem={setEditSelectedItem}
+                                selected={reservation}
+                                category='reservations'
+                              />
+                              <DeleteIcon
+                                category='reservations'
+                                data={reservation}
+                                index={null}
+                                getRestaurantsData={getRestaurantsData}
+                                className='ml-2'
+                              />
                             </div>
                           </li>
                         ))}
                     </ul>
-                    <ul className='flex flex-1 border-l-2 border-gray-600 p-4'>
+                    <ul className='flex flex-row flex-nowrap overflow-x-auto border-l-2 border-gray-600 p-4 w-1/2'>
                       <div className='flex flex-col'>
                         <p className='text-2xl mr-2'>Orders</p>
                         <button
@@ -283,7 +252,7 @@ export default function AdminDashboardComponent() {
                                 {order.table_number}:
                               </p>
                               <button
-                                className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
+                                className='mx-3 -mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
                                 onClick={() =>
                                   openNewModal({ category: 'Order Dish' })
                                 }
@@ -299,27 +268,20 @@ export default function AdminDashboardComponent() {
                                 >
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
-                                    <PencilIcon
-                                      className='h-4 w-4 text-gray-600 hover:fill-gray-300 cursor-pointer'
-                                      onClick={() =>
-                                        setEditSelectedItem({
-                                          ...order,
-                                          category: 'orders',
-                                          item,
-                                          index,
-                                        })
-                                      }
-                                    >
-                                      Edit
-                                    </PencilIcon>
-                                    <button
-                                      className='ml-2 cursor-pointer text-red-400 hover:text-red-500'
-                                      onClick={() =>
-                                        handleDeleteItem('orders', order, index)
-                                      }
-                                    >
-                                      X
-                                    </button>
+                                    <EditIcon
+                                      setEditSelectedItem={setEditSelectedItem}
+                                      selected={order}
+                                      category='orders'
+                                      item={item}
+                                      index={index}
+                                    />
+                                    <DeleteIcon
+                                      category='orders'
+                                      data={order}
+                                      index={index}
+                                      getRestaurantsData={getRestaurantsData}
+                                      className='ml-2'
+                                    />
                                   </div>
                                 </li>
                               ))}
@@ -360,7 +322,7 @@ export default function AdminDashboardComponent() {
           setShowNewModal={setShowNewModal}
           selected={selected}
           isAdmin={true}
-          fetchRestaurantsData={fetchRestaurantsData}
+          fetchRestaurantsData={getRestaurantsData}
           restaurants={restaurants}
         />
       )}
@@ -368,7 +330,7 @@ export default function AdminDashboardComponent() {
         <EditModal
           setShowEditModal={setShowEditModal}
           selected={selected}
-          fetchRestaurantsData={fetchRestaurantsData}
+          fetchRestaurantsData={getRestaurantsData}
         />
       )}
     </div>

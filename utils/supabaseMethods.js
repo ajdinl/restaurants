@@ -30,7 +30,7 @@ const signInWithPassword = async (email, password) => {
 const fetchRestaurants = async (userId) => {
   let query = supabase
     .from('restaurants')
-    .select('*, menu(*), orders(*), tables(*)')
+    .select('*, menu(*), tables(*), orders(*), reservations(*)')
 
   if (userId) {
     query = query.eq('user_id', userId).single()
@@ -70,15 +70,15 @@ const updateArrayItem = async (category, id, array) => {
   return { data, error }
 }
 
-const updateTable = async (category, id, status, capacity) => {
+const updateTable = async (category, id, capacity) => {
   const { data: item, error } = await supabase
     .from(category)
-    .update({ status, capacity })
+    .update({ capacity })
     .eq('id', id)
   return { item, error }
 }
 
-const addNewReservation = async (data) => {
+const addNewTable = async (data) => {
   const { data: item, error } = await supabase.from('tables').insert(data)
   return { item, error }
 }
@@ -99,6 +99,11 @@ const addNewOrder = async (restaurantId, tableNumber, orderNumber) => {
   return { item, error }
 }
 
+const addNewReservation = async (data) => {
+  const { data: item, error } = await supabase.from('reservations').insert(data)
+  return { item, error }
+}
+
 export {
   createUser,
   getUser,
@@ -109,7 +114,8 @@ export {
   deleteItem,
   updateTable,
   updateArrayItem,
-  addNewReservation,
+  addNewTable,
   addNewMenu,
   addNewOrder,
+  addNewReservation,
 }
