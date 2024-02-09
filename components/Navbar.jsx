@@ -130,7 +130,7 @@ export default function Navbar({ isAdmin }) {
           <p className='text-gray-500 dark:text-gray-300'>Loading...</p>
         )}
         {data && !loading && (
-          <div className=''>
+          <div>
             <p
               className='font-bold text-gray-500 dark:text-gray-300 text-lg cursor-pointer'
               onClick={handleUserMenu}
