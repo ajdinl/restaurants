@@ -44,6 +44,10 @@ export default function Navbar({ isAdmin }) {
     )
   }
 
+  if (showUserMenu) {
+    setTimeout(() => setShowUserMenu(false), 3000)
+  }
+
   return (
     <ThemeProvider attribute='class'>
       <header className='flex items-center justify-between h-16 px-4 border-b shrink-0 md:px-6 bg-white dark:bg-gray-900'>
