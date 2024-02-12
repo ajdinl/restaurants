@@ -8,9 +8,8 @@ import {
   DashboardWrapper,
   EditIcon,
   DeleteIcon,
-  fetchUserData,
-  fetchRestaurantsData,
 } from '@/components'
+import { fetchUserData, fetchRestaurantsData } from '@/utils/functions'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)

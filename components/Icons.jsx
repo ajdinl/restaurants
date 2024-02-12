@@ -1,4 +1,4 @@
-import { handleDeleteItem } from '@/components'
+import { handleDeleteItem } from '@/utils/functions'
 
 function MenuIcon(props) {
   return (

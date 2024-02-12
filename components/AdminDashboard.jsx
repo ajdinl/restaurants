@@ -14,9 +14,8 @@ import {
   NewModal,
   EditIcon,
   DeleteIcon,
-  fetchUserData,
-  fetchRestaurantsData,
 } from '@/components'
+import { fetchUserData, fetchRestaurantsData } from '@/utils/functions'
 
 export default function AdminDashboardComponent() {
   const [user, setUser] = useState(null)

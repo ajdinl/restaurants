@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { updateTable, updateArrayItem } from '@/utils/supabaseMethods'
-import { Button } from '@/components'
 
 export default function EditModal({
   setShowEditModal,

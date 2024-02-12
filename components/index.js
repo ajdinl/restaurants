@@ -12,11 +12,6 @@ import { PencilIcon, MenuIcon, EditIcon, DeleteIcon } from '@/components/Icons'
 import NewModal from '@/components/modals/NewModal'
 import EditModal from '@/components/modals/EditModal'
 import DashboardWrapper from '@/components/DashboardWrapper'
-import {
-  fetchUserData,
-  fetchRestaurantsData,
-  handleDeleteItem,
-} from '@/components/functions'
 
 export {
   Card,
@@ -34,7 +29,4 @@ export {
   DashboardWrapper,
   EditIcon,
   DeleteIcon,
-  fetchUserData,
-  fetchRestaurantsData,
-  handleDeleteItem,
 }

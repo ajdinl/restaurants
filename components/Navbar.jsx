@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { MenuIcon, Button } from '@/components'
 import { useSearchParams } from 'next/navigation'
-import { fetchUserData } from '@/components'
+import { fetchUserData } from '@/utils/functions'
 import { ThemeProvider } from 'next-themes'
 import { useTheme } from 'next-themes'
 
