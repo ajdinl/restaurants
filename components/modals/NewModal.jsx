@@ -87,7 +87,9 @@ export default function NewModal({
       return
     }
 
-    const selectedArray = [...selected.menu.items]
+    const selectedArray = Array.isArray(selected.menu.items)
+      ? [...selected.menu.items]
+      : []
     selectedArray.push(dish)
 
     const { data, error } = await updateArrayItem(
