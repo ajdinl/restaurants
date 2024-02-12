@@ -61,7 +61,9 @@ export default function NewModal({
           (restaurant) => restaurant.id == Number(table.restaurant_id)
         )[0].tables
         const lastTable = tables[tables.length - 1]
-        newTableNumber = lastTable.number + 1
+        lastTable
+          ? (newTableNumber = lastTable.number + 1)
+          : (newTableNumber = 1)
       } else {
         const tables = selected.tables
         const lastTable = tables[tables.length - 1]
