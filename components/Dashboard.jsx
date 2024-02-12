@@ -85,14 +85,14 @@ export default function DashboardComponent() {
                     <div className='flex flex-row'>
                       <p
                         className={`${
-                          view ? 'text-3xl' : 'text-xl'
+                          view ? 'text-xl' : 'text-xl'
                         } text-black dark:text-gray-300`}
                       >
                         Menu #{menu.number}
                       </p>
                       {view && (
                         <button
-                          className='mx-3 text-green-400 hover:text-green-500 text-4xl leading-none font-semibold'
+                          className='mx-3 -mt-1 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
                           onClick={() =>
                             openNewModal({ category: 'Dish', menu })
                           }
@@ -118,7 +118,7 @@ export default function DashboardComponent() {
                             <p className='text-black dark:text-white'>{item}</p>
                             <div className='flex flex-row items-center'>
                               <EditIcon
-                                className='h-6 w-6 mr-6'
+                                className='h-5 w-5 mr-6'
                                 setEditSelectedItem={setEditSelectedItem}
                                 selected={menu}
                                 category='menu'
@@ -176,7 +176,7 @@ export default function DashboardComponent() {
                         </p>
                         <div className='flex flex-row items-center'>
                           <EditIcon
-                            className='h-6 w-6 mr-4 ml-6'
+                            className='h-5 w-5 mr-4 ml-6'
                             setEditSelectedItem={setEditSelectedItem}
                             selected={table}
                             category='tables'
@@ -215,8 +215,12 @@ export default function DashboardComponent() {
                     ?.sort((a, b) => a.number - b.number)
                     .slice(0, 5)
                     ?.map((order) => (
-                      <li key={order.id} className='text-black dark:text-white'>
-                        Order #{order.number}: {order.items?.join(', ')}
+                      <li
+                        key={order.id}
+                        className='flex flex-col text-black dark:text-white'
+                      >
+                        <p className='font-bold'>Order #{order.number}:</p>
+                        {order.items?.join(', ')}
                       </li>
                     ))
                 : restaurantOrders
@@ -224,7 +228,7 @@ export default function DashboardComponent() {
                     ?.map((order) => (
                       <li
                         key={order.id}
-                        className='flex flex-col md:flex-row 2xl:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                        className='flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
                       >
                         <button
                           className='flex justify-end md:mx-2 md:-mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
@@ -248,7 +252,7 @@ export default function DashboardComponent() {
                               </p>
                               <div className='flex flex-row items-center mx-2'>
                                 <EditIcon
-                                  className='h-6 w-6 mr-2'
+                                  className='h-5 w-5 mr-2'
                                   setEditSelectedItem={setEditSelectedItem}
                                   selected={order}
                                   category='orders'
