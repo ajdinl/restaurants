@@ -88,7 +88,10 @@ export default function AdminDashboardComponent() {
                             openNewModal({
                               category: 'Menu',
                               restaurantId: restaurant.id,
-                              menuNumber: restaurant.menu.length + 1,
+                              menuNumber:
+                                restaurant.menu
+                                  .map((menu) => menu.number)
+                                  .pop() + 1,
                             })
                           }
                         >
