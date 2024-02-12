@@ -124,7 +124,9 @@ export default function NewModal({
   const handleOrderSave = async () => {
     const { restaurantId, orderNumbers } = selected
     const tableNumber = table.table_number
-    const orderNumber = orderNumbers[orderNumbers.length - 1] + 1
+    const orderNumber = orderNumbers
+      ? orderNumbers[orderNumbers.length - 1] + 1
+      : 1
 
     if (!tableNumber) {
       setError('Please select table')
@@ -150,7 +152,6 @@ export default function NewModal({
       setError('Please fill name of the dish')
       return
     }
-
     const selectedArray = Array.isArray(selected.order.items)
       ? [...selected.order.items]
       : []
