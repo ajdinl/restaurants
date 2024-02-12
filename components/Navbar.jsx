@@ -123,9 +123,16 @@ export default function Navbar({ isAdmin }) {
               </Link>
             </>
           )}
-          {/* <Link className='text-gray-500 dark:text-gray-400' href='#'>
-          Reservations
-        </Link> */}
+          <Link
+            href='?view=reservations'
+            className={
+              view === 'reservations'
+                ? 'font-bold dark:text-white'
+                : 'text-gray-500 dark:text-gray-400'
+            }
+          >
+            Reservations
+          </Link>
           {/* <Link className='text-gray-500 dark:text-gray-400' href='#'>
           Reports
         </Link> */}
