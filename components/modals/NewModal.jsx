@@ -188,11 +188,13 @@ export default function NewModal({
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
         <div className='relative w-1/4 min-w-96 my-6 mx-auto max-w-3xl'>
-          <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
+          <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white dark:bg-gray-800 dark:shadow-md dark:shadow-gray-500/50 outline-none focus:outline-none'>
             <div className='flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t'>
-              <h3 className='text-3xl font-semibold'>New Modal</h3>
+              <h3 className='text-3xl font-semibold dark:text-white'>
+                New Modal
+              </h3>
               <button
-                className='p-1 ml-auto bg-transparent border-0 text-red-500 opacity-80 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
+                className='p-1 ml-auto bg-transparent border-0 text-red-500 opacity-80 float-right text-xl leading-none font-semibold outline-none focus:outline-none'
                 onClick={() => setShowNewModal(false)}
               >
                 X
@@ -211,7 +213,9 @@ export default function NewModal({
                     <form className='space-y-4'>
                       {isAdmin && (
                         <label className='block'>
-                          <span className='text-gray-700'>Restaurant</span>
+                          <span className='text-gray-700 dark:text-gray-400'>
+                            Restaurant
+                          </span>
                           <span className='text-red-500 ml-4 text-sm'>
                             {!table.restaurant_id && error}
                           </span>
@@ -222,7 +226,7 @@ export default function NewModal({
                                 restaurant_id: e.target.value,
                               })
                             }
-                            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                            className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                           >
                             <option></option>
                             {restaurants.map((restaurant) => (
@@ -234,7 +238,9 @@ export default function NewModal({
                         </label>
                       )}
                       <label className='block'>
-                        <span className='text-gray-700'>Maximum Capacity</span>
+                        <span className='text-gray-700 dark:text-gray-400'>
+                          Maximum Capacity
+                        </span>
                         <span className='text-red-500 ml-4 text-sm'>
                           {!table.capacity && error}
                         </span>
@@ -242,7 +248,7 @@ export default function NewModal({
                           onChange={(e) =>
                             setTable({ ...table, capacity: e.target.value })
                           }
-                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          className='mt-1 block w-full rounded border-gray-300 bg-gray-100 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
                           <option></option>
                           <option>1</option>
@@ -263,7 +269,9 @@ export default function NewModal({
                     <form className='space-y-4'>
                       {isAdmin && (
                         <label className='block'>
-                          <span className='text-gray-700'>Restaurant</span>
+                          <span className='text-gray-700 dark:text-gray-400'>
+                            Restaurant
+                          </span>
                           <span className='text-red-500 ml-4 text-sm'>
                             {!table.restaurant_id && error}
                           </span>
@@ -274,7 +282,7 @@ export default function NewModal({
                                 restaurant_id: e.target.value,
                               })
                             }
-                            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                            className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                           >
                             <option></option>
                             {restaurants.map((restaurant) => (
@@ -286,7 +294,9 @@ export default function NewModal({
                         </label>
                       )}
                       <label className='block'>
-                        <span className='text-gray-700'>Table Number</span>
+                        <span className='text-gray-700 dark:text-gray-400'>
+                          Table Number
+                        </span>
                         <span className='text-red-500 ml-4 text-sm'>
                           {!table.number && error}
                         </span>
@@ -294,7 +304,7 @@ export default function NewModal({
                           onChange={(e) =>
                             setTable({ ...table, table_number: e.target.value })
                           }
-                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          className='mt-1 block w-full rounded dark:bg-gray-400 border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
                           <option></option>
                           <option>1</option>
@@ -310,7 +320,9 @@ export default function NewModal({
                         </select>
                       </label>
                       <label className='block'>
-                        <span className='text-gray-700'>Status</span>
+                        <span className='text-gray-700 dark:text-gray-400'>
+                          Status
+                        </span>
                         <span className='text-red-500 ml-4 text-sm'>
                           {!table.status && error}
                         </span>
@@ -318,7 +330,7 @@ export default function NewModal({
                           onChange={(e) =>
                             setTable({ ...table, status: e.target.value })
                           }
-                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
                           <option></option>
                           <option>Available</option>
@@ -326,7 +338,9 @@ export default function NewModal({
                         </select>
                       </label>
                       <label className='block'>
-                        <span className='text-gray-700'>Number of Guests</span>
+                        <span className='text-gray-700 dark:text-gray-400'>
+                          Number of Guests
+                        </span>
                         <span className='text-red-500 ml-4 text-sm'>
                           {!table.capacity && error}
                         </span>
@@ -334,7 +348,7 @@ export default function NewModal({
                           onChange={(e) =>
                             setTable({ ...table, capacity: e.target.value })
                           }
-                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
                           <option></option>
                           <option>1</option>
@@ -355,14 +369,16 @@ export default function NewModal({
                     selected.category === 'Order Dish') && (
                     <form className='space-y-4'>
                       <label className='block'>
-                        <span className='text-gray-700'>Name</span>
+                        <span className='text-gray-700 dark:text-gray-400'>
+                          Name
+                        </span>
                         <span className='text-red-500 ml-4 text-sm'>
                           {!dish && error}
                         </span>
                         <input
                           type='text'
                           onChange={(e) => setDish(e.target.value)}
-                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         />
                       </label>
                     </form>
@@ -384,7 +400,7 @@ export default function NewModal({
                           onChange={(e) =>
                             setTable({ ...table, table_number: e.target.value })
                           }
-                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
                           <option></option>
                           {restaurants
@@ -403,7 +419,7 @@ export default function NewModal({
                       )}
                       {!isAdmin && (
                         <select
-                          className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                           onChange={(e) =>
                             setTable({ ...table, table_number: e.target.value })
                           }

@@ -81,11 +81,13 @@ export default function EditModal({
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
         <div className='relative w-auto my-6 mx-auto max-w-3xl'>
-          <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
+          <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white dark:bg-gray-800 dark:shadow-md dark:shadow-gray-500/50 outline-none focus:outline-none'>
             <div className='flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t'>
-              <h3 className='text-3xl font-semibold'>Edit Modal</h3>
+              <h3 className='text-3xl font-semibold dark:text-white'>
+                Edit Modal
+              </h3>
               <button
-                className='p-1 ml-auto bg-transparent border-0 text-red-500 opacity-80 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
+                className='p-1 ml-auto bg-transparent border-0 text-red-500 opacity-80 float-right text-xl leading-none font-semibold outline-none focus:outline-none'
                 onClick={() => setShowEditModal(false)}
               >
                 X
@@ -130,7 +132,7 @@ export default function EditModal({
                   )}
                 </div> */}
                 <select
-                  className='mt-2 p-2 border border-gray-300 rounded'
+                  className='mt-2 p-2 border border-gray-300 dark:bg-gray-400 rounded'
                   defaultValue={capacity}
                   onChange={(e) => setCapacity(e.target.value)}
                 >
@@ -155,7 +157,7 @@ export default function EditModal({
                     value={selectedItem}
                     onChange={(e) => setSelectedItem(e.target.value)}
                     placeholder='Item'
-                    className='w-full p-2 border border-gray-300 rounded'
+                    className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
                   />
                 </form>
               </div>
