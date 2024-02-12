@@ -257,7 +257,10 @@ export default function AdminDashboardComponent() {
                               <button
                                 className='mx-3 -mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
                                 onClick={() =>
-                                  openNewModal({ category: 'Order Dish' })
+                                  openNewModal({
+                                    category: 'Order Dish',
+                                    order,
+                                  })
                                 }
                               >
                                 +
