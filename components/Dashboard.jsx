@@ -112,7 +112,7 @@ export default function DashboardComponent() {
                       : menu.items?.map((item, index) => (
                           <div
                             key={item}
-                            className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                            className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded'
                           >
                             <p className='text-black dark:text-white'>{item}</p>
                             <div className='flex flex-row items-center'>
@@ -168,7 +168,7 @@ export default function DashboardComponent() {
                     .map((table) => (
                       <li
                         key={table.id}
-                        className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                        className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded'
                       >
                         <p className='text-black dark:text-white'>
                           Table #{table.number} - Capacity - {table.capacity}
@@ -227,7 +227,7 @@ export default function DashboardComponent() {
                     ?.map((order) => (
                       <li
                         key={order.id}
-                        className='flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                        className='flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded'
                       >
                         <button
                           className='flex justify-end md:mx-2 md:-mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
