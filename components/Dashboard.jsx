@@ -25,6 +25,7 @@ export default function DashboardComponent() {
   const restaurantMenu = data?.menu
   const restaurantTables = data?.tables
   const restaurantOrders = data?.orders
+  const restaurantReservations = data?.reservations
 
   const setEditSelectedItem = (item) => {
     setSelected(item)
@@ -160,7 +161,7 @@ export default function DashboardComponent() {
                     .slice(0, 5)
                     ?.map((table) => (
                       <li key={table.id} className='text-black dark:text-white'>
-                        Table #{table.number}
+                        Table #{table.number} - Capacity - {table.capacity}
                       </li>
                     ))
                 : restaurantTables
@@ -268,6 +269,75 @@ export default function DashboardComponent() {
                             </div>
                           ))}
                         </ul>
+                      </li>
+                    ))}
+            </ul>
+          </DashboardWrapper>
+          <DashboardWrapper
+            wrapperData={{
+              type: 'reservations',
+              title: 'Reservations',
+              description: 'List of current reservations.',
+              buttonText: 'Add New Reservation',
+              view,
+              loading,
+              openNewModal,
+              modalData: {
+                category: 'Reservation',
+                restaurantId,
+                reservationNumbers: restaurantReservations
+                  ?.map((reservation) => reservation.number)
+                  .slice(0, 5),
+                tables: restaurantTables,
+              },
+            }}
+          >
+            <ul className={`${view ? 'space-y-4' : 'space-y-2'}`}>
+              {!view
+                ? restaurantReservations
+                    ?.sort((a, b) => a.number - b.number)
+                    .slice(0, 5)
+                    ?.map((reservation) => (
+                      <li
+                        key={reservation.id}
+                        className='flex flex-col text-black dark:text-white'
+                      >
+                        <p className='font-bold'>
+                          Reservation #{reservation.number} - Table #
+                          {reservation.table_number} - Status:{' '}
+                          {reservation.status} - Number of guests:{' '}
+                          {reservation.capacity}
+                        </p>
+                      </li>
+                    ))
+                : restaurantReservations
+                    ?.sort((a, b) => a.number - b.number)
+                    ?.map((reservation) => (
+                      <li
+                        key={reservation.id}
+                        className='flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded'
+                      >
+                        <div className='flex flex-row items-center justify-between w-full'>
+                          <span className='-mt-8 mb-2 md:-mt-0 md:mb-0 text-black dark:text-white mr-2 min-w-28'>
+                            Reservation #{reservation.number} - Table #
+                            {reservation.table_number} - Status:{' '}
+                            {reservation.status} - Number of guests:{' '}
+                            {reservation.capacity}
+                          </span>
+                          <div className='flex flex-row items-center mx-2'>
+                            <EditIcon
+                              className='h-5 w-5 mr-2'
+                              setEditSelectedItem={setEditSelectedItem}
+                              selected={reservation}
+                              category='reservations'
+                            />
+                            <DeleteIcon
+                              category='reservations'
+                              data={reservation}
+                              getRestaurantsData={getRestaurantsData}
+                            />
+                          </div>
+                        </div>
                       </li>
                     ))}
             </ul>

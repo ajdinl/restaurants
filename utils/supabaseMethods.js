@@ -104,6 +104,14 @@ const addNewReservation = async (data) => {
   return { item, error }
 }
 
+const updateReservation = async (category, id, reservation) => {
+  const { data: item, error } = await supabase
+    .from(category)
+    .update({ status: reservation })
+    .eq('id', id)
+  return { item, error }
+}
+
 export {
   createUser,
   getUser,
@@ -118,4 +126,5 @@ export {
   addNewMenu,
   addNewOrder,
   addNewReservation,
+  updateReservation,
 }
