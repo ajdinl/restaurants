@@ -125,14 +125,14 @@ export default function DashboardComponent() {
                             <p className='text-black dark:text-white'>{item}</p>
                             <div className='flex flex-row items-center'>
                               <EditIcon
-                                action={() => {
+                                action={() =>
                                   setEditSelectedItem({
                                     ...menu,
                                     category: 'menu',
                                     item,
                                     index,
                                   })
-                                }}
+                                }
                                 className='h-5 w-5 mr-6'
                               />
                               <DeleteIcon
@@ -189,10 +189,13 @@ export default function DashboardComponent() {
                         </p>
                         <div className='flex flex-row items-center'>
                           <EditIcon
+                            action={() =>
+                              setEditSelectedItem({
+                                ...table,
+                                category: 'tables',
+                              })
+                            }
                             className='h-5 w-5 mr-4 ml-6'
-                            setEditSelectedItem={setEditSelectedItem}
-                            selected={table}
-                            category='tables'
                           />
                           <DeleteIcon
                             action={() =>
@@ -267,12 +270,15 @@ export default function DashboardComponent() {
                               </p>
                               <div className='flex flex-row items-center mx-2'>
                                 <EditIcon
+                                  action={() =>
+                                    setEditSelectedItem({
+                                      ...order,
+                                      category: 'orders',
+                                      item,
+                                      index,
+                                    })
+                                  }
                                   className='h-5 w-5 mr-2'
-                                  setEditSelectedItem={setEditSelectedItem}
-                                  selected={order}
-                                  category='orders'
-                                  item={item}
-                                  index={index}
                                 />
                                 <DeleteIcon
                                   action={() =>
@@ -344,10 +350,13 @@ export default function DashboardComponent() {
                           </span>
                           <div className='flex flex-row items-center mx-2'>
                             <EditIcon
+                              action={() =>
+                                setEditSelectedItem({
+                                  ...reservation,
+                                  category: 'reservations',
+                                })
+                              }
                               className='h-5 w-5 mr-2'
-                              setEditSelectedItem={setEditSelectedItem}
-                              selected={reservation}
-                              category='reservations'
                             />
                             <DeleteIcon
                               action={() =>
