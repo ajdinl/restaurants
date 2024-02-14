@@ -16,7 +16,7 @@ function CardTitle({ view, children }) {
   return (
     <h2
       className={`font-bold text-gray-800 dark:text-white ${
-        view ? 'text-2xl mb-2' : 'text-xl'
+        view ? 'text-base sm:text-2xl mb-2' : 'text-xl'
       }`}
     >
       {children}
@@ -28,7 +28,7 @@ function CardDescription({ view, children }) {
   return (
     <p
       className={`text-gray-600 dark:text-gray-400 ${
-        view ? 'text-base sm:text-xl mb-2' : 'text-md'
+        view ? 'text-sm sm:text-xl mb-2' : 'text-md'
       }`}
     >
       {children}

@@ -34,7 +34,7 @@ export default function AuthForm() {
   return (
     <form
       onSubmit={handleLogin}
-      className='space-y-6 w-11/12 mx-auto text-center'
+      className='space-y-6 w-full md:w-11/12 mx-auto text-center'
     >
       <input
         type='email'

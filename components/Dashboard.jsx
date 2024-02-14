@@ -67,7 +67,7 @@ export default function DashboardComponent() {
               type: 'menu',
               title: 'Menu',
               description: 'List of available dishes and beverages.',
-              buttonText: 'Add New Menu',
+              buttonText: 'Add Menu',
               view,
               loading,
               openNewModal,
@@ -156,7 +156,7 @@ export default function DashboardComponent() {
               type: 'tables',
               title: 'Tables',
               description: 'List of tables.',
-              buttonText: 'Create New Table',
+              buttonText: 'Add Table',
               view,
               loading,
               openNewModal,
@@ -215,7 +215,7 @@ export default function DashboardComponent() {
               type: 'orders',
               title: 'Orders',
               description: 'List of current orders.',
-              buttonText: 'Add New Order',
+              buttonText: 'Add Order',
               view,
               loading,
               openNewModal,
@@ -302,7 +302,7 @@ export default function DashboardComponent() {
               type: 'reservations',
               title: 'Reservations',
               description: 'List of current reservations.',
-              buttonText: 'Add New Reservation',
+              buttonText: 'Add Reservation',
               view,
               loading,
               openNewModal,
@@ -342,7 +342,7 @@ export default function DashboardComponent() {
                         className='flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded'
                       >
                         <div className='flex flex-row items-center justify-between w-full'>
-                          <span className='-mt-8 mb-2 md:-mt-0 md:mb-0 text-black dark:text-white mr-2 min-w-28'>
+                          <span className='sm:-mt-8 mb-2 md:-mt-0 md:mb-0 text-black dark:text-white mr-2 min-w-28'>
                             Reservation #{reservation.number} - Table #
                             {reservation.table_number} - Status:{' '}
                             {reservation.status} - Number of guests:{' '}

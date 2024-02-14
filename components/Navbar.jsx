@@ -51,7 +51,7 @@ export default function Navbar({ isAdmin }) {
   return (
     <ThemeProvider attribute='class'>
       <header className='flex items-center justify-between h-16 px-4 border-b shrink-0 md:px-6 bg-white dark:bg-gray-900'>
-        <nav className='flex flex-row items-center gap-4 md:gap-6 text-sm md:text-lg font-medium'>
+        <nav className='flex flex-row items-center gap-2 md:gap-6 text-sm md:text-lg font-medium'>
           <Link
             href='/'
             className='flex items-center gap-2 text-lg font-semibold md:text-base'
@@ -138,12 +138,14 @@ export default function Navbar({ isAdmin }) {
         </Link> */}
         </nav>
         {loading && (
-          <p className='text-gray-500 dark:text-gray-300'>Loading...</p>
+          <p className='text-gray-500 dark:text-gray-300 text-sm md:text-lg'>
+            Loading...
+          </p>
         )}
         {data && !loading && (
           <div>
             <p
-              className='font-bold text-gray-500 dark:text-gray-300 text-lg cursor-pointer'
+              className='font-bold text-gray-500 dark:text-gray-300 text-sm md:text-lg cursor-pointer'
               onClick={handleUserMenu}
             >
               {userName}
