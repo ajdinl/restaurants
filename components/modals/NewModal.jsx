@@ -172,12 +172,21 @@ export default function NewModal({
   }
 
   const handleReservationSave = async () => {
-    if (table.restaurant_id) {
+    restaurantId ? (table.restaurant_id = restaurantId) : (restaurantId = null)
+    table.number = selected?.reservationNumbers?.length
+      ? selected.reservationNumbers.pop() + 1
+      : 1
+    if (table.restaurant_id && restaurants) {
       const filterRestarurant = restaurants.filter((restaurant) => {
         return restaurant.id == table.restaurant_id
       })
       const reservationNumber = filterRestarurant[0].reservations.length + 1
       table.number = reservationNumber
+    }
+
+    if (!table.capacity || !table.table_number || !table.status) {
+      setError('Please select field')
+      return
     }
     const { data, error } = await addNewReservation(table)
     if (error) {
@@ -303,25 +312,49 @@ export default function NewModal({
                           Table Number
                         </span>
                         <span className='text-red-500 ml-4 text-sm'>
-                          {!table.number && error}
+                          {!table.table_number && error}
                         </span>
                         <select
                           onChange={(e) =>
-                            setTable({ ...table, table_number: e.target.value })
+                            setTable({
+                              ...table,
+                              table_number: e.target.value,
+                              table_id:
+                                e.target.options[
+                                  e.target.selectedIndex
+                                ].getAttribute('table_id'),
+                            })
                           }
                           className='mt-1 block w-full rounded dark:bg-gray-400 border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
                           <option></option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                          <option>6</option>
-                          <option>7</option>
-                          <option>8</option>
-                          <option>9</option>
-                          <option>10</option>
+                          {!isAdmin &&
+                            selected.tables?.map((table) => (
+                              <option
+                                key={table.number}
+                                value={table.number}
+                                table_id={table.id}
+                              >
+                                {table.number}
+                              </option>
+                            ))}
+                          {isAdmin &&
+                            restaurants
+                              ?.filter(
+                                (restaurant) =>
+                                  restaurant.id === selected.restaurantId
+                              )
+                              .map((restaurant) =>
+                                restaurant.tables.map((table) => (
+                                  <option
+                                    key={table.id}
+                                    value={table.number}
+                                    table_id={table.id}
+                                  >
+                                    {table.number}
+                                  </option>
+                                ))
+                              )}
                         </select>
                       </label>
                       <label className='block'>
@@ -338,7 +371,6 @@ export default function NewModal({
                           className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
                           <option></option>
-                          <option>Available</option>
                           <option>Reserved</option>
                         </select>
                       </label>
@@ -356,16 +388,38 @@ export default function NewModal({
                           className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         >
                           <option></option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                          <option>6</option>
-                          <option>7</option>
-                          <option>8</option>
-                          <option>9</option>
-                          <option>10</option>
+                          {!isAdmin &&
+                            selected.tables.map((ta) => {
+                              if (ta.id == table.table_id) {
+                                return Array.from(
+                                  { length: ta.capacity },
+                                  (_, index) => (
+                                    <option key={index + 1} value={index + 1}>
+                                      {index + 1}
+                                    </option>
+                                  )
+                                )
+                              }
+                              return null
+                            })}
+                          {isAdmin &&
+                            restaurants
+                              ?.filter(
+                                (restaurant) =>
+                                  restaurant.id === selected.restaurantId
+                              )
+                              .map((restaurant) =>
+                                restaurant.tables.map((table) =>
+                                  Array.from(
+                                    { length: table.capacity },
+                                    (_, index) => (
+                                      <option key={index + 1} value={index + 1}>
+                                        {index + 1}
+                                      </option>
+                                    )
+                                  )
+                                )
+                              )}
                         </select>
                       </label>
                     </form>
