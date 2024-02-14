@@ -8,9 +8,9 @@ import {
   DashboardWrapper,
   EditIcon,
   DeleteIcon,
-  fetchUserData,
-  fetchRestaurantsData,
+  DeleteModal,
 } from '@/components'
+import { fetchUserData, fetchRestaurantsData } from '@/utils/functions'
 
 export default function DashboardComponent() {
   const [user, setUser] = useState(null)
@@ -19,6 +19,7 @@ export default function DashboardComponent() {
   const [selected, setSelected] = useState(null)
   const [showNewModal, setShowNewModal] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
   const userId = user?.user?.id
@@ -26,10 +27,16 @@ export default function DashboardComponent() {
   const restaurantMenu = data?.menu
   const restaurantTables = data?.tables
   const restaurantOrders = data?.orders
+  const restaurantReservations = data?.reservations
 
   const setEditSelectedItem = (item) => {
     setSelected(item)
     setShowEditModal(true)
+  }
+
+  const setDeleteSelectedItem = (item) => {
+    setSelected(item)
+    setShowDeleteModal(true)
   }
 
   const openNewModal = (itemDetails) => {
@@ -60,7 +67,7 @@ export default function DashboardComponent() {
               type: 'menu',
               title: 'Menu',
               description: 'List of available dishes and beverages.',
-              buttonText: 'Add New Menu',
+              buttonText: 'Add Menu',
               view,
               loading,
               openNewModal,
@@ -85,14 +92,14 @@ export default function DashboardComponent() {
                     <div className='flex flex-row'>
                       <p
                         className={`${
-                          view ? 'text-3xl' : 'text-xl'
+                          view ? 'text-xl' : 'text-xl'
                         } text-black dark:text-gray-300`}
                       >
                         Menu #{menu.number}
                       </p>
                       {view && (
                         <button
-                          className='mx-3 text-green-400 hover:text-green-500 text-4xl leading-none font-semibold'
+                          className='mx-3 -mt-1 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
                           onClick={() =>
                             openNewModal({ category: 'Dish', menu })
                           }
@@ -113,23 +120,29 @@ export default function DashboardComponent() {
                       : menu.items?.map((item, index) => (
                           <div
                             key={item}
-                            className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                            className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded'
                           >
                             <p className='text-black dark:text-white'>{item}</p>
                             <div className='flex flex-row items-center'>
                               <EditIcon
-                                className='h-6 w-6 mr-6'
-                                setEditSelectedItem={setEditSelectedItem}
-                                selected={menu}
-                                category='menu'
-                                item={item}
-                                index={index}
+                                action={() =>
+                                  setEditSelectedItem({
+                                    ...menu,
+                                    category: 'menu',
+                                    item,
+                                    index,
+                                  })
+                                }
+                                className='h-5 w-5 mr-6'
                               />
                               <DeleteIcon
-                                category='menu'
-                                data={menu}
-                                index={index}
-                                getRestaurantsData={getRestaurantsData}
+                                action={() =>
+                                  setDeleteSelectedItem({
+                                    category: 'menu',
+                                    data: menu,
+                                    index,
+                                  })
+                                }
                               />
                             </div>
                           </div>
@@ -143,7 +156,7 @@ export default function DashboardComponent() {
               type: 'tables',
               title: 'Tables',
               description: 'List of tables.',
-              buttonText: 'Create New Table',
+              buttonText: 'Add Table',
               view,
               loading,
               openNewModal,
@@ -161,7 +174,7 @@ export default function DashboardComponent() {
                     .slice(0, 5)
                     ?.map((table) => (
                       <li key={table.id} className='text-black dark:text-white'>
-                        Table #{table.number}
+                        Table #{table.number} - Capacity - {table.capacity}
                       </li>
                     ))
                 : restaurantTables
@@ -169,23 +182,28 @@ export default function DashboardComponent() {
                     .map((table) => (
                       <li
                         key={table.id}
-                        className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                        className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded'
                       >
                         <p className='text-black dark:text-white'>
                           Table #{table.number} - Capacity - {table.capacity}
                         </p>
                         <div className='flex flex-row items-center'>
                           <EditIcon
-                            className='h-6 w-6 mr-4 ml-6'
-                            setEditSelectedItem={setEditSelectedItem}
-                            selected={table}
-                            category='tables'
+                            action={() =>
+                              setEditSelectedItem({
+                                ...table,
+                                category: 'tables',
+                              })
+                            }
+                            className='h-5 w-5 mr-4 ml-6'
                           />
                           <DeleteIcon
-                            category='tables'
-                            data={table}
-                            index={null}
-                            getRestaurantsData={getRestaurantsData}
+                            action={() =>
+                              setDeleteSelectedItem({
+                                category: 'tables',
+                                data: table,
+                              })
+                            }
                           />
                         </div>
                       </li>
@@ -197,7 +215,7 @@ export default function DashboardComponent() {
               type: 'orders',
               title: 'Orders',
               description: 'List of current orders.',
-              buttonText: 'Add New Order',
+              buttonText: 'Add Order',
               view,
               loading,
               openNewModal,
@@ -215,8 +233,12 @@ export default function DashboardComponent() {
                     ?.sort((a, b) => a.number - b.number)
                     .slice(0, 5)
                     ?.map((order) => (
-                      <li key={order.id} className='text-black dark:text-white'>
-                        Order #{order.number}: {order.items?.join(', ')}
+                      <li
+                        key={order.id}
+                        className='flex flex-col text-black dark:text-white'
+                      >
+                        <p className='font-bold'>Order #{order.number}:</p>
+                        {order.items?.join(', ')}
                       </li>
                     ))
                 : restaurantOrders
@@ -224,7 +246,7 @@ export default function DashboardComponent() {
                     ?.map((order) => (
                       <li
                         key={order.id}
-                        className='flex flex-col md:flex-row 2xl:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg'
+                        className='flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded'
                       >
                         <button
                           className='flex justify-end md:mx-2 md:-mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
@@ -248,23 +270,104 @@ export default function DashboardComponent() {
                               </p>
                               <div className='flex flex-row items-center mx-2'>
                                 <EditIcon
-                                  className='h-6 w-6 mr-2'
-                                  setEditSelectedItem={setEditSelectedItem}
-                                  selected={order}
-                                  category='orders'
-                                  item={item}
-                                  index={index}
+                                  action={() =>
+                                    setEditSelectedItem({
+                                      ...order,
+                                      category: 'orders',
+                                      item,
+                                      index,
+                                    })
+                                  }
+                                  className='h-5 w-5 mr-2'
                                 />
                                 <DeleteIcon
-                                  category='orders'
-                                  data={order}
-                                  index={index}
-                                  getRestaurantsData={getRestaurantsData}
+                                  action={() =>
+                                    setDeleteSelectedItem({
+                                      category: 'orders',
+                                      data: order,
+                                      index,
+                                    })
+                                  }
                                 />
                               </div>
                             </div>
                           ))}
                         </ul>
+                      </li>
+                    ))}
+            </ul>
+          </DashboardWrapper>
+          <DashboardWrapper
+            wrapperData={{
+              type: 'reservations',
+              title: 'Reservations',
+              description: 'List of current reservations.',
+              buttonText: 'Add Reservation',
+              view,
+              loading,
+              openNewModal,
+              modalData: {
+                category: 'Reservation',
+                restaurantId,
+                reservationNumbers: restaurantReservations
+                  ?.map((reservation) => reservation.number)
+                  .slice(0, 5),
+                tables: restaurantTables,
+              },
+            }}
+          >
+            <ul className={`${view ? 'space-y-4' : 'space-y-2'}`}>
+              {!view
+                ? restaurantReservations
+                    ?.sort((a, b) => a.number - b.number)
+                    .slice(0, 5)
+                    ?.map((reservation) => (
+                      <li
+                        key={reservation.id}
+                        className='flex flex-col text-black dark:text-white'
+                      >
+                        <p className='font-bold'>
+                          Reservation #{reservation.number} - Table #
+                          {reservation.table_number} - Status:{' '}
+                          {reservation.status} - Number of guests:{' '}
+                          {reservation.capacity}
+                        </p>
+                      </li>
+                    ))
+                : restaurantReservations
+                    ?.sort((a, b) => a.number - b.number)
+                    ?.map((reservation) => (
+                      <li
+                        key={reservation.id}
+                        className='flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded'
+                      >
+                        <div className='flex flex-row items-center justify-between w-full'>
+                          <span className='sm:-mt-8 mb-2 md:-mt-0 md:mb-0 text-black dark:text-white mr-2 min-w-28'>
+                            Reservation #{reservation.number} - Table #
+                            {reservation.table_number} - Status:{' '}
+                            {reservation.status} - Number of guests:{' '}
+                            {reservation.capacity}
+                          </span>
+                          <div className='flex flex-row items-center mx-2'>
+                            <EditIcon
+                              action={() =>
+                                setEditSelectedItem({
+                                  ...reservation,
+                                  category: 'reservations',
+                                })
+                              }
+                              className='h-5 w-5 mr-2'
+                            />
+                            <DeleteIcon
+                              action={() =>
+                                setDeleteSelectedItem({
+                                  category: 'reservations',
+                                  data: reservation,
+                                })
+                              }
+                            />
+                          </div>
+                        </div>
                       </li>
                     ))}
             </ul>
@@ -285,6 +388,13 @@ export default function DashboardComponent() {
           setShowEditModal={setShowEditModal}
           selected={selected}
           fetchRestaurantsData={getRestaurantsData}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          setShowDeleteModal={setShowDeleteModal}
+          selected={selected}
+          getRestaurantsData={getRestaurantsData}
         />
       )}
     </>

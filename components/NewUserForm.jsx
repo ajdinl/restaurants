@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 import { createUser } from '@/utils/supabaseMethods'
 import { useRouter } from 'next/navigation'
@@ -36,7 +34,7 @@ export default function NewUserForm() {
       <label className='block'>
         <span className='text-gray-700 dark:text-gray-400'>Email</span>
         <input
-          className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+          className='mt-1 p-1 block w-full rounded border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='email'
           name='email'
           id='email'
@@ -48,7 +46,7 @@ export default function NewUserForm() {
       <label className='block'>
         <span className='text-gray-700 dark:text-gray-400'>Password</span>
         <input
-          className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+          className='mt-1 p-1 block w-full rounded border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='password'
           name='password'
           id='password'
@@ -60,7 +58,7 @@ export default function NewUserForm() {
       <label className='block'>
         <span className='text-gray-700 dark:text-gray-400'>Full Name</span>
         <input
-          className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+          className='mt-1 p-1 block w-full rounded border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='text'
           name='full_name'
           id='full_name'

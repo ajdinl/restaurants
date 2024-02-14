@@ -32,7 +32,7 @@ export default function NewRestaurantForm() {
       <label className='block'>
         <span className='text-gray-700 dark:text-gray-400'>Name</span>
         <input
-          className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+          className='mt-1 p-1 block w-full rounded border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='text'
           name='name'
           id='name'
@@ -46,7 +46,7 @@ export default function NewRestaurantForm() {
       <label className='block'>
         <span className='text-gray-700 dark:text-gray-400'>Address</span>
         <input
-          className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+          className='mt-1 p-1 block w-full rounded border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='text'
           name='address'
           id='address'
@@ -60,7 +60,7 @@ export default function NewRestaurantForm() {
       <label className='block'>
         <span className='text-gray-700 dark:text-gray-400'>Phone Number</span>
         <input
-          className='mt-1 p-1 block w-full rounded-md border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+          className='mt-1 p-1 block w-full rounded border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
           type='tel'
           name='phone'
           id='phone'

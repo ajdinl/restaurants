@@ -42,14 +42,9 @@ export const handleDeleteItem = async (
 ) => {
   let selectedArray = selected.items
   let displayError
-  const text = `Are you sure you want to delete this item?`
 
   if (index) {
-    if (confirm(text) === true) {
-      selectedArray = selectedArray.filter((_, i) => i !== index)
-    } else {
-      return
-    }
+    selectedArray = selectedArray.filter((_, i) => i !== index)
 
     const { data, error } = await deleteArrayItem(
       category,
@@ -60,12 +55,8 @@ export const handleDeleteItem = async (
   }
 
   if (!index) {
-    if (confirm(text) === true) {
-      const { data, error } = await deleteItem(category, selected.id)
-      displayError = error
-    } else {
-      return
-    }
+    const { data, error } = await deleteItem(category, selected.id)
+    displayError = error
   }
 
   if (displayError) {

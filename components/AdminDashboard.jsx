@@ -14,9 +14,9 @@ import {
   NewModal,
   EditIcon,
   DeleteIcon,
-  fetchUserData,
-  fetchRestaurantsData,
+  DeleteModal,
 } from '@/components'
+import { fetchUserData, fetchRestaurantsData } from '@/utils/functions'
 
 export default function AdminDashboardComponent() {
   const [user, setUser] = useState(null)
@@ -24,6 +24,7 @@ export default function AdminDashboardComponent() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [selected, setSelected] = useState(null)
   const [showNewModal, setShowNewModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
 
@@ -38,6 +39,11 @@ export default function AdminDashboardComponent() {
   const setEditSelectedItem = (item) => {
     setSelected(item)
     setShowEditModal(true)
+  }
+
+  const setDeleteSelectedItem = (item) => {
+    setSelected(item)
+    setShowDeleteModal(true)
   }
 
   const openNewModal = (itemDetails) => {
@@ -88,7 +94,10 @@ export default function AdminDashboardComponent() {
                             openNewModal({
                               category: 'Menu',
                               restaurantId: restaurant.id,
-                              menuNumber: restaurant.menu.length + 1,
+                              menuNumber:
+                                restaurant.menu
+                                  .map((menu) => menu.number)
+                                  .pop() + 1,
                             })
                           }
                         >
@@ -119,17 +128,24 @@ export default function AdminDashboardComponent() {
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
                                     <EditIcon
-                                      setEditSelectedItem={setEditSelectedItem}
-                                      selected={menu}
-                                      category='menu'
-                                      item={item}
-                                      index={index}
+                                      action={() =>
+                                        setEditSelectedItem({
+                                          ...menu,
+                                          category: 'menu',
+                                          item,
+                                          index,
+                                        })
+                                      }
+                                      className='ml-2'
                                     />
                                     <DeleteIcon
-                                      category='menu'
-                                      data={menu}
-                                      index={index}
-                                      getRestaurantsData={getRestaurantsData}
+                                      action={() =>
+                                        setDeleteSelectedItem({
+                                          category: 'menu',
+                                          data: menu,
+                                          index,
+                                        })
+                                      }
                                       className='ml-2'
                                     />
                                   </div>
@@ -166,15 +182,20 @@ export default function AdminDashboardComponent() {
                             </p>
                             <div className='flex flex-row items-center'>
                               <EditIcon
-                                setEditSelectedItem={setEditSelectedItem}
-                                selected={table}
-                                category='tables'
+                                action={() =>
+                                  setEditSelectedItem({
+                                    ...table,
+                                    category: 'tables',
+                                  })
+                                }
                               />
                               <DeleteIcon
-                                category='tables'
-                                data={table}
-                                index={null}
-                                getRestaurantsData={getRestaurantsData}
+                                action={() =>
+                                  setDeleteSelectedItem({
+                                    category: 'tables',
+                                    data: table,
+                                  })
+                                }
                                 className='ml-2'
                               />
                             </div>
@@ -211,15 +232,20 @@ export default function AdminDashboardComponent() {
                             </div>
                             <div className='flex flex-row items-center'>
                               <EditIcon
-                                setEditSelectedItem={setEditSelectedItem}
-                                selected={reservation}
-                                category='reservations'
+                                action={() =>
+                                  setEditSelectedItem({
+                                    ...reservation,
+                                    category: 'reservations',
+                                  })
+                                }
                               />
                               <DeleteIcon
-                                category='reservations'
-                                data={reservation}
-                                index={null}
-                                getRestaurantsData={getRestaurantsData}
+                                action={() =>
+                                  setDeleteSelectedItem({
+                                    category: 'reservations',
+                                    data: reservation,
+                                  })
+                                }
                                 className='ml-2'
                               />
                             </div>
@@ -235,7 +261,9 @@ export default function AdminDashboardComponent() {
                             openNewModal({
                               category: 'Order',
                               restaurantId: restaurant.id,
-                              orderNumber: restaurant.orders.length + 1,
+                              orderNumbers: restaurant.orders.map(
+                                (order) => order.number
+                              ),
                             })
                           }
                         >
@@ -254,7 +282,10 @@ export default function AdminDashboardComponent() {
                               <button
                                 className='mx-3 -mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold'
                                 onClick={() =>
-                                  openNewModal({ category: 'Order Dish' })
+                                  openNewModal({
+                                    category: 'Order Dish',
+                                    order,
+                                  })
                                 }
                               >
                                 +
@@ -269,17 +300,23 @@ export default function AdminDashboardComponent() {
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
                                     <EditIcon
-                                      setEditSelectedItem={setEditSelectedItem}
-                                      selected={order}
-                                      category='orders'
-                                      item={item}
-                                      index={index}
+                                      action={() =>
+                                        setEditSelectedItem({
+                                          ...order,
+                                          category: 'orders',
+                                          item,
+                                          index,
+                                        })
+                                      }
                                     />
                                     <DeleteIcon
-                                      category='orders'
-                                      data={order}
-                                      index={index}
-                                      getRestaurantsData={getRestaurantsData}
+                                      action={() =>
+                                        setDeleteSelectedItem({
+                                          category: 'orders',
+                                          data: order,
+                                          index,
+                                        })
+                                      }
                                       className='ml-2'
                                     />
                                   </div>
@@ -331,6 +368,13 @@ export default function AdminDashboardComponent() {
           setShowEditModal={setShowEditModal}
           selected={selected}
           fetchRestaurantsData={getRestaurantsData}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          setShowDeleteModal={setShowDeleteModal}
+          selected={selected}
+          getRestaurantsData={getRestaurantsData}
         />
       )}
     </div>
