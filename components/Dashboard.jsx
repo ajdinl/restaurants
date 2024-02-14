@@ -8,6 +8,7 @@ import {
   DashboardWrapper,
   EditIcon,
   DeleteIcon,
+  DeleteModal,
 } from '@/components'
 import { fetchUserData, fetchRestaurantsData } from '@/utils/functions'
 
@@ -18,6 +19,7 @@ export default function DashboardComponent() {
   const [selected, setSelected] = useState(null)
   const [showNewModal, setShowNewModal] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
   const userId = user?.user?.id
@@ -30,6 +32,11 @@ export default function DashboardComponent() {
   const setEditSelectedItem = (item) => {
     setSelected(item)
     setShowEditModal(true)
+  }
+
+  const setDeleteSelectedItem = (item) => {
+    setSelected(item)
+    setShowDeleteModal(true)
   }
 
   const openNewModal = (itemDetails) => {
@@ -129,7 +136,8 @@ export default function DashboardComponent() {
                                 category='menu'
                                 data={menu}
                                 index={index}
-                                getRestaurantsData={getRestaurantsData}
+                                setDeleteSelectedItem={setDeleteSelectedItem}
+                                setShowDeleteModal={setShowDeleteModal}
                               />
                             </div>
                           </div>
@@ -185,7 +193,8 @@ export default function DashboardComponent() {
                             category='tables'
                             data={table}
                             index={null}
-                            getRestaurantsData={getRestaurantsData}
+                            setDeleteSelectedItem={setDeleteSelectedItem}
+                            setShowDeleteModal={setShowDeleteModal}
                           />
                         </div>
                       </li>
@@ -263,7 +272,8 @@ export default function DashboardComponent() {
                                   category='orders'
                                   data={order}
                                   index={index}
-                                  getRestaurantsData={getRestaurantsData}
+                                  setDeleteSelectedItem={setDeleteSelectedItem}
+                                  setShowDeleteModal={setShowDeleteModal}
                                 />
                               </div>
                             </div>
@@ -334,7 +344,8 @@ export default function DashboardComponent() {
                             <DeleteIcon
                               category='reservations'
                               data={reservation}
-                              getRestaurantsData={getRestaurantsData}
+                              setDeleteSelectedItem={setDeleteSelectedItem}
+                              setShowDeleteModal={setShowDeleteModal}
                             />
                           </div>
                         </div>
@@ -358,6 +369,13 @@ export default function DashboardComponent() {
           setShowEditModal={setShowEditModal}
           selected={selected}
           fetchRestaurantsData={getRestaurantsData}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          setShowDeleteModal={setShowDeleteModal}
+          selected={selected}
+          getRestaurantsData={getRestaurantsData}
         />
       )}
     </>

@@ -1,5 +1,3 @@
-import { handleDeleteItem } from '@/utils/functions'
-
 function MenuIcon(props) {
   return (
     <svg
@@ -63,13 +61,21 @@ function EditIcon({
   )
 }
 
-function DeleteIcon({ category, data, index, getRestaurantsData, className }) {
+function DeleteIcon({
+  category,
+  data,
+  index,
+  setDeleteSelectedItem,
+  setShowDeleteModal,
+  className,
+}) {
   return (
     <button
       className={`cursor-pointer text-red-400 hover:text-red-500 ${className}`}
-      onClick={() =>
-        handleDeleteItem(category, data, index, () => getRestaurantsData())
-      }
+      onClick={() => {
+        setDeleteSelectedItem({ category, data, index })
+        setShowDeleteModal(true)
+      }}
     >
       X
     </button>
