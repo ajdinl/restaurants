@@ -128,11 +128,15 @@ export default function AdminDashboardComponent() {
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
                                     <EditIcon
-                                      setEditSelectedItem={setEditSelectedItem}
-                                      selected={menu}
-                                      category='menu'
-                                      item={item}
-                                      index={index}
+                                      action={() =>
+                                        setEditSelectedItem({
+                                          ...menu,
+                                          category: 'menu',
+                                          item,
+                                          index,
+                                        })
+                                      }
+                                      className='ml-2'
                                     />
                                     <DeleteIcon
                                       action={() =>
@@ -178,9 +182,12 @@ export default function AdminDashboardComponent() {
                             </p>
                             <div className='flex flex-row items-center'>
                               <EditIcon
-                                setEditSelectedItem={setEditSelectedItem}
-                                selected={table}
-                                category='tables'
+                                action={() =>
+                                  setEditSelectedItem({
+                                    ...table,
+                                    category: 'tables',
+                                  })
+                                }
                               />
                               <DeleteIcon
                                 action={() =>
@@ -225,9 +232,12 @@ export default function AdminDashboardComponent() {
                             </div>
                             <div className='flex flex-row items-center'>
                               <EditIcon
-                                setEditSelectedItem={setEditSelectedItem}
-                                selected={reservation}
-                                category='reservations'
+                                action={() =>
+                                  setEditSelectedItem({
+                                    ...reservation,
+                                    category: 'reservations',
+                                  })
+                                }
                               />
                               <DeleteIcon
                                 action={() =>
@@ -288,11 +298,14 @@ export default function AdminDashboardComponent() {
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
                                     <EditIcon
-                                      setEditSelectedItem={setEditSelectedItem}
-                                      selected={order}
-                                      category='orders'
-                                      item={item}
-                                      index={index}
+                                      action={() =>
+                                        setEditSelectedItem({
+                                          ...order,
+                                          category: 'orders',
+                                          item,
+                                          index,
+                                        })
+                                      }
                                     />
                                     <DeleteIcon
                                       action={() =>
