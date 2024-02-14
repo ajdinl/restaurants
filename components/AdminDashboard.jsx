@@ -14,6 +14,7 @@ import {
   NewModal,
   EditIcon,
   DeleteIcon,
+  DeleteModal,
 } from '@/components'
 import { fetchUserData, fetchRestaurantsData } from '@/utils/functions'
 
@@ -23,6 +24,7 @@ export default function AdminDashboardComponent() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [selected, setSelected] = useState(null)
   const [showNewModal, setShowNewModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const searchParams = useSearchParams()
   const view = searchParams.get('view')
 
@@ -37,6 +39,11 @@ export default function AdminDashboardComponent() {
   const setEditSelectedItem = (item) => {
     setSelected(item)
     setShowEditModal(true)
+  }
+
+  const setDeleteSelectedItem = (item) => {
+    setSelected(item)
+    setShowDeleteModal(true)
   }
 
   const openNewModal = (itemDetails) => {
@@ -128,10 +135,13 @@ export default function AdminDashboardComponent() {
                                       index={index}
                                     />
                                     <DeleteIcon
-                                      category='menu'
-                                      data={menu}
-                                      index={index}
-                                      getRestaurantsData={getRestaurantsData}
+                                      action={() =>
+                                        setDeleteSelectedItem({
+                                          category: 'menu',
+                                          data: menu,
+                                          index,
+                                        })
+                                      }
                                       className='ml-2'
                                     />
                                   </div>
@@ -173,10 +183,12 @@ export default function AdminDashboardComponent() {
                                 category='tables'
                               />
                               <DeleteIcon
-                                category='tables'
-                                data={table}
-                                index={null}
-                                getRestaurantsData={getRestaurantsData}
+                                action={() =>
+                                  setDeleteSelectedItem({
+                                    category: 'tables',
+                                    data: table,
+                                  })
+                                }
                                 className='ml-2'
                               />
                             </div>
@@ -218,10 +230,12 @@ export default function AdminDashboardComponent() {
                                 category='reservations'
                               />
                               <DeleteIcon
-                                category='reservations'
-                                data={reservation}
-                                index={null}
-                                getRestaurantsData={getRestaurantsData}
+                                action={() =>
+                                  setDeleteSelectedItem({
+                                    category: 'reservations',
+                                    data: reservation,
+                                  })
+                                }
                                 className='ml-2'
                               />
                             </div>
@@ -281,10 +295,13 @@ export default function AdminDashboardComponent() {
                                       index={index}
                                     />
                                     <DeleteIcon
-                                      category='orders'
-                                      data={order}
-                                      index={index}
-                                      getRestaurantsData={getRestaurantsData}
+                                      action={() =>
+                                        setDeleteSelectedItem({
+                                          category: 'orders',
+                                          data: order,
+                                          index,
+                                        })
+                                      }
                                       className='ml-2'
                                     />
                                   </div>
@@ -336,6 +353,13 @@ export default function AdminDashboardComponent() {
           setShowEditModal={setShowEditModal}
           selected={selected}
           fetchRestaurantsData={getRestaurantsData}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          setShowDeleteModal={setShowDeleteModal}
+          selected={selected}
+          getRestaurantsData={getRestaurantsData}
         />
       )}
     </div>

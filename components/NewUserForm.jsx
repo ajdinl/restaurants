@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 import { createUser } from '@/utils/supabaseMethods'
 import { useRouter } from 'next/navigation'
