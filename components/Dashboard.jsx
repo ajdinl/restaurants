@@ -125,19 +125,24 @@ export default function DashboardComponent() {
                             <p className='text-black dark:text-white'>{item}</p>
                             <div className='flex flex-row items-center'>
                               <EditIcon
+                                action={() => {
+                                  setEditSelectedItem({
+                                    ...menu,
+                                    category: 'menu',
+                                    item,
+                                    index,
+                                  })
+                                }}
                                 className='h-5 w-5 mr-6'
-                                setEditSelectedItem={setEditSelectedItem}
-                                selected={menu}
-                                category='menu'
-                                item={item}
-                                index={index}
                               />
                               <DeleteIcon
-                                category='menu'
-                                data={menu}
-                                index={index}
-                                setDeleteSelectedItem={setDeleteSelectedItem}
-                                setShowDeleteModal={setShowDeleteModal}
+                                action={() =>
+                                  setDeleteSelectedItem({
+                                    category: 'menu',
+                                    data: menu,
+                                    index,
+                                  })
+                                }
                               />
                             </div>
                           </div>
@@ -190,11 +195,12 @@ export default function DashboardComponent() {
                             category='tables'
                           />
                           <DeleteIcon
-                            category='tables'
-                            data={table}
-                            index={null}
-                            setDeleteSelectedItem={setDeleteSelectedItem}
-                            setShowDeleteModal={setShowDeleteModal}
+                            action={() =>
+                              setDeleteSelectedItem({
+                                category: 'tables',
+                                data: table,
+                              })
+                            }
                           />
                         </div>
                       </li>
@@ -269,11 +275,13 @@ export default function DashboardComponent() {
                                   index={index}
                                 />
                                 <DeleteIcon
-                                  category='orders'
-                                  data={order}
-                                  index={index}
-                                  setDeleteSelectedItem={setDeleteSelectedItem}
-                                  setShowDeleteModal={setShowDeleteModal}
+                                  action={() =>
+                                    setDeleteSelectedItem({
+                                      category: 'orders',
+                                      data: order,
+                                      index,
+                                    })
+                                  }
                                 />
                               </div>
                             </div>
@@ -342,10 +350,12 @@ export default function DashboardComponent() {
                               category='reservations'
                             />
                             <DeleteIcon
-                              category='reservations'
-                              data={reservation}
-                              setDeleteSelectedItem={setDeleteSelectedItem}
-                              setShowDeleteModal={setShowDeleteModal}
+                              action={() =>
+                                setDeleteSelectedItem({
+                                  category: 'reservations',
+                                  data: reservation,
+                                })
+                              }
                             />
                           </div>
                         </div>
