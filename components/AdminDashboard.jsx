@@ -261,7 +261,9 @@ export default function AdminDashboardComponent() {
                             openNewModal({
                               category: 'Order',
                               restaurantId: restaurant.id,
-                              orderNumber: restaurant.orders.length + 1,
+                              orderNumbers: restaurant.orders.map(
+                                (order) => order.number
+                              ),
                             })
                           }
                         >
