@@ -70,14 +70,6 @@ const updateArrayItem = async (category, id, array) => {
   return { data, error }
 }
 
-const updateTable = async (category, id, capacity) => {
-  const { data: item, error } = await supabase
-    .from(category)
-    .update({ capacity })
-    .eq('id', id)
-  return { item, error }
-}
-
 const addNewTable = async (data) => {
   const { data: item, error } = await supabase.from('tables').insert(data)
   return { item, error }
@@ -104,10 +96,10 @@ const addNewReservation = async (data) => {
   return { item, error }
 }
 
-const updateReservation = async (category, id, reservation) => {
+const updateItem = async (category, id, name, value) => {
   const { data: item, error } = await supabase
     .from(category)
-    .update({ status: reservation })
+    .update({ [name]: value })
     .eq('id', id)
   return { item, error }
 }
@@ -120,11 +112,10 @@ export {
   createRestaurant,
   deleteArrayItem,
   deleteItem,
-  updateTable,
   updateArrayItem,
   addNewTable,
   addNewMenu,
   addNewOrder,
   addNewReservation,
-  updateReservation,
+  updateItem,
 }

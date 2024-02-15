@@ -1,11 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  updateTable,
-  updateArrayItem,
-  updateReservation,
-} from '@/utils/supabaseMethods'
+import { updateArrayItem, updateItem } from '@/utils/supabaseMethods'
 import { Button } from '@/components'
 
 export default function EditModal({
@@ -19,11 +15,13 @@ export default function EditModal({
   const [openDropdown, setOpenDropdown] = useState(false)
 
   const handleUpdateTable = async (category, selected, tableCapacity) => {
-    const { data, error } = await updateTable(
+    const { data, error } = await updateItem(
       category,
       selected.id,
+      'capacity',
       tableCapacity
     )
+
     if (error) {
       console.error('Error updating item:', error)
       return
@@ -33,18 +31,17 @@ export default function EditModal({
   }
 
   const handleUpdateReservation = async (category, selected, reservation) => {
-    const { data, error } = await updateReservation(
+    const { data, error } = await updateItem(
       category,
       selected.id,
-      reservation,
-      status
+      'status',
+      reservation
     )
 
     if (error) {
       console.error('Error updating item:', error)
       return
     } else {
-      fetchRestaurantsData()
     }
   }
 
