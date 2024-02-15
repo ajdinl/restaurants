@@ -2,11 +2,10 @@
 
 import { useState } from 'react'
 import {
-  addNewTable,
   updateArrayItem,
   addNewMenu,
   addNewOrder,
-  addNewReservation,
+  addItem,
 } from '@/utils/supabaseMethods'
 import {
   Card,
@@ -73,7 +72,7 @@ export default function NewModal({
       table.number = newTableNumber
     }
 
-    const { data, error } = await addNewTable(table)
+    const { data, error } = await addItem('tables', table)
     if (error) {
       console.error('Error adding item:', error)
       return
@@ -186,7 +185,7 @@ export default function NewModal({
       setError('Please select field')
       return
     }
-    const { data, error } = await addNewReservation(table)
+    const { data, error } = await addItem('reservations', table)
     if (error) {
       console.error('Error adding item:', error)
       return
