@@ -1,12 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  updateArrayItem,
-  addNewMenu,
-  addNewOrder,
-  addItem,
-} from '@/utils/supabaseMethods'
+import { updateArrayItem, addItem } from '@/utils/supabaseMethods'
 import {
   Card,
   CardHeader,
@@ -110,7 +105,11 @@ export default function NewModal({
   const handleMenuSave = async () => {
     const { restaurantId, menuNumber } = selected
 
-    const { data, error } = await addNewMenu(restaurantId, menuNumber)
+    const { data, error } = await addItem('menu', {
+      restaurant_id: restaurantId,
+      number: menuNumber,
+    })
+
     if (error) {
       console.error('Error adding item:', error)
       return
@@ -130,11 +129,11 @@ export default function NewModal({
       return
     }
 
-    const { data, error } = await addNewOrder(
-      restaurantId,
-      tableNumber,
-      orderNumber
-    )
+    const { data, error } = await addItem('orders', {
+      restaurant_id: restaurantId,
+      table_number: tableNumber,
+      number: orderNumber,
+    })
     if (error) {
       console.error('Error adding item:', error)
       return

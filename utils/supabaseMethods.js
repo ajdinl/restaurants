@@ -70,22 +70,6 @@ const updateArrayItem = async (category, id, array) => {
   return { data, error }
 }
 
-const addNewMenu = async (restaurantId, menuNumber) => {
-  const { data: item, error } = await supabase
-    .from('menu')
-    .insert({ restaurant_id: restaurantId, number: menuNumber })
-  return { item, error }
-}
-
-const addNewOrder = async (restaurantId, tableNumber, orderNumber) => {
-  const { data: item, error } = await supabase.from('orders').insert({
-    restaurant_id: restaurantId,
-    table_number: tableNumber,
-    number: orderNumber,
-  })
-  return { item, error }
-}
-
 const addItem = async (category, data) => {
   const { data: item, error } = await supabase.from(category).insert(data)
   return { item, error }
@@ -108,8 +92,6 @@ export {
   deleteArrayItem,
   deleteItem,
   updateArrayItem,
-  addNewMenu,
-  addNewOrder,
   addItem,
   updateItem,
 }
