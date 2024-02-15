@@ -33,7 +33,7 @@ export default function NewModal({
     } else if (selected.category === 'Order') {
       handleOrderSave()
     } else if (selected.category === 'Order Dish') {
-      handeOrderDishSave()
+      handleDishSave()
     } else if (selected.category === 'Reservation') {
       handleReservationSave()
     }
@@ -68,31 +68,6 @@ export default function NewModal({
     }
 
     const { data, error } = await addItem('tables', table)
-    if (error) {
-      console.error('Error adding item:', error)
-      return
-    } else {
-      fetchRestaurantsData()
-      setShowNewModal(false)
-    }
-  }
-
-  const handleDishSave = async () => {
-    if (!dish) {
-      setError('Please fill name of the dish')
-      return
-    }
-
-    const selectedArray = Array.isArray(selected.menu.items)
-      ? [...selected.menu.items]
-      : []
-    selectedArray.push(dish)
-
-    const { data, error } = await updateOrDeleteArrayItem(
-      'menu',
-      selected.menu.id,
-      selectedArray
-    )
     if (error) {
       console.error('Error adding item:', error)
       return
@@ -143,19 +118,21 @@ export default function NewModal({
     }
   }
 
-  const handeOrderDishSave = async () => {
+  const handleDishSave = async () => {
     if (!dish) {
       setError('Please fill name of the dish')
       return
     }
-    const selectedArray = Array.isArray(selected.order.items)
-      ? [...selected.order.items]
+    const selectedCategory = selected.category === 'Dish' ? 'menu' : 'orders'
+    const selectedItem = selected.category === 'Dish' ? 'menu' : 'order'
+    const selectedArray = Array.isArray(selected[selectedItem].items)
+      ? [...selected[selectedItem].items]
       : []
     selectedArray.push(dish)
 
     const { data, error } = await updateOrDeleteArrayItem(
-      'orders',
-      selected.order.id,
+      selectedCategory,
+      selected[selectedItem].id,
       selectedArray
     )
     if (error) {

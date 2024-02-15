@@ -14,34 +14,18 @@ export default function EditModal({
   const [selectedItem, setSelectedItem] = useState(selected.item)
   const [openDropdown, setOpenDropdown] = useState(false)
 
-  const handleUpdateTable = async (category, selected, tableCapacity) => {
-    const { data, error } = await updateItem(
+  const handleUpdate = async (category, selected, name, value) => {
+    const { data: item, error } = await updateItem(
       category,
       selected.id,
-      'capacity',
-      tableCapacity
+      name,
+      value
     )
-
     if (error) {
       console.error('Error updating item:', error)
       return
     } else {
       fetchRestaurantsData()
-    }
-  }
-
-  const handleUpdateReservation = async (category, selected, reservation) => {
-    const { data, error } = await updateItem(
-      category,
-      selected.id,
-      'status',
-      reservation
-    )
-
-    if (error) {
-      console.error('Error updating item:', error)
-      return
-    } else {
     }
   }
 
@@ -74,11 +58,11 @@ export default function EditModal({
       handleUpdateArrayItem(selected.category, selected, selectedItem)
       return
     }
-    if (capacity) {
-      handleUpdateTable(selected.category, selected, capacity)
+    if (selected.capacity !== capacity) {
+      handleUpdate(selected.category, selected, 'capacity', capacity)
     }
     if (selected.status !== status) {
-      handleUpdateReservation(selected.category, selected, status)
+      handleUpdate(selected.category, selected, 'status', status)
     }
   }
 
