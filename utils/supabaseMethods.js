@@ -39,16 +39,7 @@ const fetchRestaurants = async (userId) => {
   return query
 }
 
-const createRestaurant = async (name, address, phone) => {
-  const { data, error } = await supabase.from('restaurants').insert({
-    name,
-    address,
-    phone,
-  })
-  return { data, error }
-}
-
-const deleteArrayItem = async (category, id, array) => {
+const updateOrDeleteArrayItem = async (category, id, array) => {
   const { data, error } = await supabase
     .from(category)
     .update({ items: array })
@@ -59,14 +50,6 @@ const deleteArrayItem = async (category, id, array) => {
 
 const deleteItem = async (category, id) => {
   const { data, error } = await supabase.from(category).delete().eq('id', id)
-  return { data, error }
-}
-
-const updateArrayItem = async (category, id, array) => {
-  const { data, error } = await supabase
-    .from(category)
-    .update({ items: array })
-    .eq('id', id)
   return { data, error }
 }
 
@@ -88,10 +71,8 @@ export {
   getUser,
   signInWithPassword,
   fetchRestaurants,
-  createRestaurant,
-  deleteArrayItem,
   deleteItem,
-  updateArrayItem,
   addItem,
   updateItem,
+  updateOrDeleteArrayItem,
 }

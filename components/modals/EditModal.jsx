@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { updateArrayItem, updateItem } from '@/utils/supabaseMethods'
+import { updateItem, updateOrDeleteArrayItem } from '@/utils/supabaseMethods'
 import { Button } from '@/components'
 
 export default function EditModal({
@@ -55,7 +55,7 @@ export default function EditModal({
       selectedArray[selected.index] = selectedItem
     }
 
-    const { data: item, error } = await updateArrayItem(
+    const { data: item, error } = await updateOrDeleteArrayItem(
       category,
       selected.id,
       selectedArray

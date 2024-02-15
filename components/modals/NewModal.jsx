@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { updateArrayItem, addItem } from '@/utils/supabaseMethods'
+import { updateOrDeleteArrayItem, addItem } from '@/utils/supabaseMethods'
 import {
   Card,
   CardHeader,
@@ -88,7 +88,7 @@ export default function NewModal({
       : []
     selectedArray.push(dish)
 
-    const { data, error } = await updateArrayItem(
+    const { data, error } = await updateOrDeleteArrayItem(
       'menu',
       selected.menu.id,
       selectedArray
@@ -153,7 +153,7 @@ export default function NewModal({
       : []
     selectedArray.push(dish)
 
-    const { data, error } = await updateArrayItem(
+    const { data, error } = await updateOrDeleteArrayItem(
       'orders',
       selected.order.id,
       selectedArray
