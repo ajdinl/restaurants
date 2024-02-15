@@ -39,10 +39,10 @@ const fetchRestaurants = async (userId) => {
   return query
 }
 
-const updateOrDeleteArrayItem = async (category, id, array) => {
+const updateOrDeleteArrayItem = async (category, id, items) => {
   const { data, error } = await supabase
     .from(category)
-    .update({ items: array })
+    .update({ items })
     .eq('id', id)
 
   return { data, error }
