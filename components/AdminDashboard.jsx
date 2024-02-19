@@ -81,9 +81,9 @@ export default function AdminDashboardComponent() {
                 restaurants.map((restaurant) => (
                   <div
                     key={restaurant.id}
-                    className='flex flex-col md:flex-row md:space-x-20 flex-wrap border-b-2 border-gray-600'
+                    className='flex flex-col md:flex-row md:space-x-5 flex-wrap'
                   >
-                    <p className='text-2xl min-w-20 w-auto max-w-44 flex flex-nowrap overflow-x-auto'>
+                    <p className='absolute text-2xl w-11/12 mx-auto text-center'>
                       {restaurant.name}
                     </p>
                     <CardContentHeader

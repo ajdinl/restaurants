@@ -1,7 +1,7 @@
 function Card({ className, children }) {
   return (
     <div
-      className={`border rounded shadow-lg bg-white dark:bg-gray-800 p-4 ${className}`}
+      className={`border border-gray-600 rounded shadow-lg bg-white dark:bg-gray-800 p-4 ${className}`}
     >
       {children}
     </div>
@@ -53,7 +53,7 @@ function CardContentHeader({
 }) {
   return (
     <ul
-      className={`md:border-l-2 border-gray-600 p-4 w-60 min-h-full ${className}`}
+      className={`p-4 w-72 mt-8 min-h-full max-h-96 overflow-y-auto bg-gray-200 dark:bg-gray-600 rounded ${className}`}
     >
       <div className={`flex ${subClassName ? 'flex-col' : 'flex-row'}`}>
         <p className='text-2xl'>{title}</p>
