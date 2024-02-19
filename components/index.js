@@ -4,6 +4,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  CardContentHeader,
 } from '@/components/Cards'
 import NewUserForm from '@/components/NewUserForm'
 import NewRestaurantForm from '@/components/NewRestaurantForm'
@@ -20,6 +21,7 @@ export {
   CardTitle,
   CardDescription,
   CardContent,
+  CardContentHeader,
   NewUserForm,
   NewRestaurantForm,
   Button,

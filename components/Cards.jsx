@@ -44,4 +44,34 @@ function CardContent({ view, children }) {
   )
 }
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent }
+function CardContentHeader({
+  title,
+  openNewModal,
+  className,
+  subClassName,
+  children,
+}) {
+  return (
+    <ul className={`md:border-l-2 border-gray-600 p-4 w-60 ${className}`}>
+      <div className={`flex ${subClassName ? 'flex-col' : 'flex-row'}`}>
+        <p className='text-2xl'>{title}</p>
+        <button
+          className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+          onClick={() => openNewModal}
+        >
+          +
+        </button>
+      </div>
+      {children}
+    </ul>
+  )
+}
+
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardContentHeader,
+}
