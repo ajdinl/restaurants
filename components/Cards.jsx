@@ -52,7 +52,9 @@ function CardContentHeader({
   children,
 }) {
   return (
-    <ul className={`md:border-l-2 border-gray-600 p-4 w-60 ${className}`}>
+    <ul
+      className={`md:border-l-2 border-gray-600 p-4 w-60 min-h-full ${className}`}
+    >
       <div className={`flex ${subClassName ? 'flex-col' : 'flex-row'}`}>
         <p className='text-2xl'>{title}</p>
         <button
