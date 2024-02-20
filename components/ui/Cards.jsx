@@ -1,7 +1,7 @@
 function Card({ className, children }) {
   return (
     <div
-      className={`border rounded shadow-lg bg-white dark:bg-gray-800 p-4 ${className}`}
+      className={`border border-gray-600 rounded shadow-lg bg-white dark:bg-gray-800 p-4 ${className}`}
     >
       {children}
     </div>
@@ -44,4 +44,36 @@ function CardContent({ view, children }) {
   )
 }
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent }
+function CardContentHeader({
+  title,
+  openNewModal,
+  className,
+  subClassName,
+  children,
+}) {
+  return (
+    <ul
+      className={`p-4 w-72 mt-8 min-h-full max-h-96 overflow-y-auto bg-gray-200 dark:bg-gray-600 rounded ${className}`}
+    >
+      <div className={`flex ${subClassName ? 'flex-col' : 'flex-row'}`}>
+        <p className='text-2xl'>{title}</p>
+        <button
+          className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+          onClick={() => openNewModal}
+        >
+          +
+        </button>
+      </div>
+      {children}
+    </ul>
+  )
+}
+
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardContentHeader,
+}

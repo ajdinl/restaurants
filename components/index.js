@@ -4,15 +4,22 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from '@/components/Cards'
-import NewUserForm from '@/components/NewUserForm'
-import NewRestaurantForm from '@/components/NewRestaurantForm'
-import { Button } from '@/components/Button'
-import { PencilIcon, MenuIcon, EditIcon, DeleteIcon } from '@/components/Icons'
+  CardContentHeader,
+} from '@/components/ui/Cards'
+import NewUserForm from '@/components/forms/NewUserForm'
+import NewRestaurantForm from '@/components/forms/NewRestaurantForm'
+import { Button } from '@/components/ui/Button'
+import {
+  PencilIcon,
+  MenuIcon,
+  EditIcon,
+  DeleteIcon,
+} from '@/components/ui/Icons'
 import NewModal from '@/components/modals/NewModal'
 import EditModal from '@/components/modals/EditModal'
 import DeleteModal from './modals/DeleteModal'
-import DashboardWrapper from '@/components/DashboardWrapper'
+import DashboardWrapper from '@/components/dashboard/DashboardWrapper'
+import RestaurantComponent from '@/components/Restaurant'
 
 export {
   Card,
@@ -20,6 +27,7 @@ export {
   CardTitle,
   CardDescription,
   CardContent,
+  CardContentHeader,
   NewUserForm,
   NewRestaurantForm,
   Button,
@@ -31,4 +39,5 @@ export {
   EditIcon,
   DeleteIcon,
   DeleteModal,
+  RestaurantComponent,
 }

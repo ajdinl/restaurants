@@ -37,22 +37,24 @@ export async function middleware(req) {
   } = await supabase.auth.getUser()
 
   const isAdmin = user?.user_metadata?.is_admin
+  const { pathname } = req.nextUrl
 
-  if (isAdmin && req.nextUrl.pathname === '/') {
+  if (isAdmin && pathname === '/') {
     return NextResponse.redirect(new URL('/admin-dashboard', req.url))
   }
 
-  if (!isAdmin && req.nextUrl.pathname === '/admin-dashboard') {
+  if (!isAdmin && pathname === '/admin-dashboard') {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
-  if (user && req.nextUrl.pathname === '/') {
+  if (user && pathname === '/') {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
-  if (!user && req.nextUrl.pathname !== '/') {
+  if (!user && pathname !== '/') {
     return NextResponse.redirect(new URL('/', req.url))
   }
+
   return res
 }
 

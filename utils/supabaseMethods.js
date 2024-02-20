@@ -39,19 +39,19 @@ const fetchRestaurants = async (userId) => {
   return query
 }
 
-const createRestaurant = async (name, address, phone) => {
-  const { data, error } = await supabase.from('restaurants').insert({
-    name,
-    address,
-    phone,
-  })
+const fetchRestaurant = async (id) => {
+  const { data, error } = await supabase
+    .from('restaurants')
+    .select('*, menu(*), tables(*)')
+    .eq('id', id)
+    .single()
   return { data, error }
 }
 
-const deleteArrayItem = async (category, id, array) => {
+const updateOrDeleteArrayItem = async (category, id, items) => {
   const { data, error } = await supabase
     .from(category)
-    .update({ items: array })
+    .update({ items })
     .eq('id', id)
 
   return { data, error }
@@ -62,52 +62,15 @@ const deleteItem = async (category, id) => {
   return { data, error }
 }
 
-const updateArrayItem = async (category, id, array) => {
-  const { data, error } = await supabase
-    .from(category)
-    .update({ items: array })
-    .eq('id', id)
-  return { data, error }
+const addItem = async (category, data) => {
+  const { data: item, error } = await supabase.from(category).insert(data)
+  return { item, error }
 }
 
-const updateTable = async (category, id, capacity) => {
+const updateItem = async (category, id, name, value) => {
   const { data: item, error } = await supabase
     .from(category)
-    .update({ capacity })
-    .eq('id', id)
-  return { item, error }
-}
-
-const addNewTable = async (data) => {
-  const { data: item, error } = await supabase.from('tables').insert(data)
-  return { item, error }
-}
-
-const addNewMenu = async (restaurantId, menuNumber) => {
-  const { data: item, error } = await supabase
-    .from('menu')
-    .insert({ restaurant_id: restaurantId, number: menuNumber })
-  return { item, error }
-}
-
-const addNewOrder = async (restaurantId, tableNumber, orderNumber) => {
-  const { data: item, error } = await supabase.from('orders').insert({
-    restaurant_id: restaurantId,
-    table_number: tableNumber,
-    number: orderNumber,
-  })
-  return { item, error }
-}
-
-const addNewReservation = async (data) => {
-  const { data: item, error } = await supabase.from('reservations').insert(data)
-  return { item, error }
-}
-
-const updateReservation = async (category, id, reservation) => {
-  const { data: item, error } = await supabase
-    .from(category)
-    .update({ status: reservation })
+    .update({ [name]: value })
     .eq('id', id)
   return { item, error }
 }
@@ -117,14 +80,9 @@ export {
   getUser,
   signInWithPassword,
   fetchRestaurants,
-  createRestaurant,
-  deleteArrayItem,
   deleteItem,
-  updateTable,
-  updateArrayItem,
-  addNewTable,
-  addNewMenu,
-  addNewOrder,
-  addNewReservation,
-  updateReservation,
+  addItem,
+  updateItem,
+  updateOrDeleteArrayItem,
+  fetchRestaurant,
 }

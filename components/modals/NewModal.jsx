@@ -1,13 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  addNewTable,
-  updateArrayItem,
-  addNewMenu,
-  addNewOrder,
-  addNewReservation,
-} from '@/utils/supabaseMethods'
+import { updateOrDeleteArrayItem, addItem } from '@/utils/supabaseMethods'
 import {
   Card,
   CardHeader,
@@ -39,7 +33,7 @@ export default function NewModal({
     } else if (selected.category === 'Order') {
       handleOrderSave()
     } else if (selected.category === 'Order Dish') {
-      handeOrderDishSave()
+      handleDishSave()
     } else if (selected.category === 'Reservation') {
       handleReservationSave()
     }
@@ -73,32 +67,7 @@ export default function NewModal({
       table.number = newTableNumber
     }
 
-    const { data, error } = await addNewTable(table)
-    if (error) {
-      console.error('Error adding item:', error)
-      return
-    } else {
-      fetchRestaurantsData()
-      setShowNewModal(false)
-    }
-  }
-
-  const handleDishSave = async () => {
-    if (!dish) {
-      setError('Please fill name of the dish')
-      return
-    }
-
-    const selectedArray = Array.isArray(selected.menu.items)
-      ? [...selected.menu.items]
-      : []
-    selectedArray.push(dish)
-
-    const { data, error } = await updateArrayItem(
-      'menu',
-      selected.menu.id,
-      selectedArray
-    )
+    const { data, error } = await addItem('tables', table)
     if (error) {
       console.error('Error adding item:', error)
       return
@@ -111,7 +80,11 @@ export default function NewModal({
   const handleMenuSave = async () => {
     const { restaurantId, menuNumber } = selected
 
-    const { data, error } = await addNewMenu(restaurantId, menuNumber)
+    const { data, error } = await addItem('menu', {
+      restaurant_id: restaurantId,
+      number: menuNumber,
+    })
+
     if (error) {
       console.error('Error adding item:', error)
       return
@@ -131,11 +104,11 @@ export default function NewModal({
       return
     }
 
-    const { data, error } = await addNewOrder(
-      restaurantId,
-      tableNumber,
-      orderNumber
-    )
+    const { data, error } = await addItem('orders', {
+      restaurant_id: restaurantId,
+      table_number: tableNumber,
+      number: orderNumber,
+    })
     if (error) {
       console.error('Error adding item:', error)
       return
@@ -145,19 +118,21 @@ export default function NewModal({
     }
   }
 
-  const handeOrderDishSave = async () => {
+  const handleDishSave = async () => {
     if (!dish) {
       setError('Please fill name of the dish')
       return
     }
-    const selectedArray = Array.isArray(selected.order.items)
-      ? [...selected.order.items]
+    const selectedCategory = selected.category === 'Dish' ? 'menu' : 'orders'
+    const selectedItem = selected.category === 'Dish' ? 'menu' : 'order'
+    const selectedArray = Array.isArray(selected[selectedItem].items)
+      ? [...selected[selectedItem].items]
       : []
     selectedArray.push(dish)
 
-    const { data, error } = await updateArrayItem(
-      'orders',
-      selected.order.id,
+    const { data, error } = await updateOrDeleteArrayItem(
+      selectedCategory,
+      selected[selectedItem].id,
       selectedArray
     )
     if (error) {
@@ -186,7 +161,7 @@ export default function NewModal({
       setError('Please select field')
       return
     }
-    const { data, error } = await addNewReservation(table)
+    const { data, error } = await addItem('reservations', table)
     if (error) {
       console.error('Error adding item:', error)
       return

@@ -8,6 +8,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  CardContentHeader,
   NewUserForm,
   NewRestaurantForm,
   EditModal,
@@ -80,30 +81,23 @@ export default function AdminDashboardComponent() {
                 restaurants.map((restaurant) => (
                   <div
                     key={restaurant.id}
-                    className='flex flex-col md:flex-row justify-between space-x-20 border-b-2 border-gray-600'
+                    className='flex flex-col md:flex-row md:space-x-5 flex-wrap mb-5'
                   >
-                    <p className='text-2xl min-w-20 w-auto max-w-44 flex flex-nowrap overflow-x-auto'>
+                    <p className='absolute text-2xl w-11/12 mx-auto text-center'>
                       {restaurant.name}
                     </p>
-                    <ul className='border-l-2 border-gray-600 p-4 w-64'>
-                      <div className='flex flex-row'>
-                        <p className='text-2xl'>Menu</p>
-                        <button
-                          className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() =>
-                            openNewModal({
-                              category: 'Menu',
-                              restaurantId: restaurant.id,
-                              menuNumber:
-                                restaurant.menu
-                                  .map((menu) => menu.number)
-                                  .pop() + 1,
-                            })
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
+                    <CardContentHeader
+                      title='Menu'
+                      openNewModal={() => {
+                        openNewModal({
+                          category: 'Menu',
+                          restaurantId: restaurant.id,
+                          menuNumber:
+                            restaurant.menu.map((menu) => menu.number).pop() +
+                            1,
+                        })
+                      }}
+                    >
                       {restaurant.menu
                         .sort((a, b) => a.number - b.number)
                         .map((menu) => (
@@ -154,22 +148,16 @@ export default function AdminDashboardComponent() {
                             </ul>
                           </li>
                         ))}
-                    </ul>
-                    <ul className='border-l-2 border-gray-600 p-4 w-60'>
-                      <div className='flex flex-row'>
-                        <p className='text-2xl'>Tables</p>
-                        <button
-                          className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() =>
-                            openNewModal({
-                              category: 'Table',
-                              restaurantId: restaurant.id,
-                            })
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
+                    </CardContentHeader>
+                    <CardContentHeader
+                      title='Tables'
+                      openNewModal={() =>
+                        openNewModal({
+                          category: 'Table',
+                          restaurantId: restaurant.id,
+                        })
+                      }
+                    >
                       {restaurant.tables
                         .sort((a, b) => a.number - b.number)
                         .map((table) => (
@@ -201,22 +189,17 @@ export default function AdminDashboardComponent() {
                             </div>
                           </li>
                         ))}
-                    </ul>
-                    <ul className='border-l-2 border-gray-600 p-4 w-60 space-y-2'>
-                      <div className='flex flex-row'>
-                        <p className='text-2xl'>Reservations</p>
-                        <button
-                          className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
-                          onClick={() =>
-                            openNewModal({
-                              category: 'Reservation',
-                              restaurantId: restaurant.id,
-                            })
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
+                    </CardContentHeader>
+                    <CardContentHeader
+                      title='Reservations'
+                      openNewModal={() => {
+                        openNewModal({
+                          category: 'Reservation',
+                          restaurantId: restaurant.id,
+                        })
+                      }}
+                      className='space-y-2'
+                    >
                       {restaurant.reservations
                         .sort((a, b) => a.number - b.number)
                         .map((reservation) => (
@@ -251,25 +234,21 @@ export default function AdminDashboardComponent() {
                             </div>
                           </li>
                         ))}
-                    </ul>
-                    <ul className='flex flex-row flex-nowrap overflow-x-auto border-l-2 border-gray-600 p-4 w-1/2'>
-                      <div className='flex flex-col'>
-                        <p className='text-2xl mr-2'>Orders</p>
-                        <button
-                          className='mx-3 text-green-400 hover:text-green-500 text-3xl font-semibold'
-                          onClick={() =>
-                            openNewModal({
-                              category: 'Order',
-                              restaurantId: restaurant.id,
-                              orderNumbers: restaurant.orders.map(
-                                (order) => order.number
-                              ),
-                            })
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
+                    </CardContentHeader>
+                    <CardContentHeader
+                      title='Orders'
+                      openNewModal={() => {
+                        openNewModal({
+                          category: 'Order',
+                          restaurantId: restaurant.id,
+                          orderNumbers: restaurant.orders.map(
+                            (order) => order.number
+                          ),
+                        })
+                      }}
+                      className='flex flex-row flex-nowrap overflow-x-auto w-1/2 md:flex-1'
+                      subClassName={true}
+                    >
                       {restaurant.orders
                         .sort((a, b) => a.number - b.number)
                         .map((order) => (
@@ -325,7 +304,7 @@ export default function AdminDashboardComponent() {
                             </ul>
                           </li>
                         ))}
-                    </ul>
+                    </CardContentHeader>
                   </div>
                 ))}
             </CardContent>

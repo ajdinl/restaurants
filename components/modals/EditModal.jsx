@@ -1,11 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  updateTable,
-  updateArrayItem,
-  updateReservation,
-} from '@/utils/supabaseMethods'
+import { updateItem, updateOrDeleteArrayItem } from '@/utils/supabaseMethods'
 import { Button } from '@/components'
 
 export default function EditModal({
@@ -18,28 +14,13 @@ export default function EditModal({
   const [selectedItem, setSelectedItem] = useState(selected.item)
   const [openDropdown, setOpenDropdown] = useState(false)
 
-  const handleUpdateTable = async (category, selected, tableCapacity) => {
-    const { data, error } = await updateTable(
+  const handleUpdate = async (category, selected, name, value) => {
+    const { data: item, error } = await updateItem(
       category,
       selected.id,
-      tableCapacity
+      name,
+      value
     )
-    if (error) {
-      console.error('Error updating item:', error)
-      return
-    } else {
-      fetchRestaurantsData()
-    }
-  }
-
-  const handleUpdateReservation = async (category, selected, reservation) => {
-    const { data, error } = await updateReservation(
-      category,
-      selected.id,
-      reservation,
-      status
-    )
-
     if (error) {
       console.error('Error updating item:', error)
       return
@@ -58,7 +39,7 @@ export default function EditModal({
       selectedArray[selected.index] = selectedItem
     }
 
-    const { data: item, error } = await updateArrayItem(
+    const { data: item, error } = await updateOrDeleteArrayItem(
       category,
       selected.id,
       selectedArray
@@ -77,11 +58,11 @@ export default function EditModal({
       handleUpdateArrayItem(selected.category, selected, selectedItem)
       return
     }
-    if (capacity) {
-      handleUpdateTable(selected.category, selected, capacity)
+    if (selected.capacity !== capacity) {
+      handleUpdate(selected.category, selected, 'capacity', capacity)
     }
     if (selected.status !== status) {
-      handleUpdateReservation(selected.category, selected, status)
+      handleUpdate(selected.category, selected, 'status', status)
     }
   }
 

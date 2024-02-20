@@ -1,7 +1,7 @@
 import {
   getUser,
   fetchRestaurants,
-  deleteArrayItem,
+  updateOrDeleteArrayItem,
   deleteItem,
 } from '@/utils/supabaseMethods'
 
@@ -46,7 +46,7 @@ export const handleDeleteItem = async (
   if (index) {
     selectedArray = selectedArray.filter((_, i) => i !== index)
 
-    const { data, error } = await deleteArrayItem(
+    const { data, error } = await updateOrDeleteArrayItem(
       category,
       selected.id,
       selectedArray

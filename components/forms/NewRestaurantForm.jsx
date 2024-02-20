@@ -1,6 +1,8 @@
+'use client'
+
 import { useState } from 'react'
 import { Button } from '@/components'
-import { createRestaurant } from '@/utils/supabaseMethods'
+import { addItem } from '@/utils/supabaseMethods'
 
 export default function NewRestaurantForm() {
   const [newRestaurant, setNewRestaurant] = useState({})
@@ -13,7 +15,11 @@ export default function NewRestaurantForm() {
     const phone = newRestaurant.phone
 
     try {
-      const { data, error } = await createRestaurant(name, address, phone)
+      const { data, error } = await addItem('restaurants', {
+        name,
+        address,
+        phone,
+      })
 
       if (error) {
         console.error('Error creating restaurant:', error)
