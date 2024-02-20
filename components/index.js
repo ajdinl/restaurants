@@ -18,7 +18,7 @@ import {
 import NewModal from '@/components/modals/NewModal'
 import EditModal from '@/components/modals/EditModal'
 import DeleteModal from './modals/DeleteModal'
-import DashboardWrapper from '@/components/DashboardWrapper'
+import DashboardWrapper from '@/components/dashboard/DashboardWrapper'
 import RestaurantComponent from '@/components/Restaurant'
 
 export {
