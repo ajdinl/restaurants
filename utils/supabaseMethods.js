@@ -39,6 +39,15 @@ const fetchRestaurants = async (userId) => {
   return query
 }
 
+const fetchRestaurant = async (id) => {
+  const { data, error } = await supabase
+    .from('restaurants')
+    .select('*, menu(*), tables(*)')
+    .eq('id', id)
+    .single()
+  return { data, error }
+}
+
 const updateOrDeleteArrayItem = async (category, id, items) => {
   const { data, error } = await supabase
     .from(category)
@@ -75,4 +84,5 @@ export {
   addItem,
   updateItem,
   updateOrDeleteArrayItem,
+  fetchRestaurant,
 }
