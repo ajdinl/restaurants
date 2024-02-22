@@ -103,9 +103,9 @@ export default function AdminDashboardComponent() {
                         .map((menu) => (
                           <li key={menu.id}>
                             <div className='flex flex-row'>
-                              <p className='my-3'>Menu</p>
+                              <p className='my-3'>List of dishes</p>
                               <button
-                                className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+                                className='mx-2 -mt-1 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
                                 onClick={() =>
                                   openNewModal({ category: 'Dish', menu })
                                 }

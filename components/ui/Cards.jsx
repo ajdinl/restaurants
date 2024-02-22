@@ -59,7 +59,7 @@ function CardContentHeader({
         <p className='text-2xl'>{title}</p>
         {title !== 'Menu' && (
           <button
-            className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+            className='mx-3 -mt-1 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
             onClick={() => openNewModal()}
           >
             +
