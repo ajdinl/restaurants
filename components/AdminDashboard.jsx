@@ -103,7 +103,7 @@ export default function AdminDashboardComponent() {
                         .map((menu) => (
                           <li key={menu.id}>
                             <div className='flex flex-row'>
-                              <p className='my-3'>Menu #{menu.number}</p>
+                              <p className='my-3'>Menu</p>
                               <button
                                 className='mx-3 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
                                 onClick={() =>
@@ -117,32 +117,40 @@ export default function AdminDashboardComponent() {
                               {menu.items?.map((item, index) => (
                                 <li
                                   key={index}
-                                  className='flex flex-row justify-between border-b border-gray-600 w-60'
+                                  className='flex flex-col justify-between w-60 mb-3'
                                 >
-                                  <p>{item}</p>
-                                  <div className='flex flex-row items-center'>
-                                    <EditIcon
-                                      action={() =>
-                                        setEditSelectedItem({
-                                          ...menu,
-                                          category: 'menu',
-                                          item,
-                                          index,
-                                        })
-                                      }
-                                      className='ml-2'
-                                    />
-                                    <DeleteIcon
-                                      action={() =>
-                                        setDeleteSelectedItem({
-                                          category: 'menu',
-                                          data: menu,
-                                          index,
-                                        })
-                                      }
-                                      className='ml-2'
-                                    />
+                                  <div className='flex flex-row'>
+                                    <p className='text-lg'>{item.name}</p>
+                                    <div className='flex flex-row items-center ml-auto'>
+                                      <EditIcon
+                                        action={() =>
+                                          setEditSelectedItem({
+                                            ...menu,
+                                            category: 'menu',
+                                            item,
+                                            index,
+                                          })
+                                        }
+                                        className='ml-2'
+                                      />
+                                      <DeleteIcon
+                                        action={() =>
+                                          setDeleteSelectedItem({
+                                            category: 'menu',
+                                            data: menu,
+                                            index,
+                                          })
+                                        }
+                                        className='ml-2'
+                                      />
+                                    </div>
                                   </div>
+                                  <p className='text-sm'>
+                                    {item.ingredients?.join(', ')}
+                                  </p>
+                                  <span className='text-sm font-bold mt-1'>
+                                    ${item.price}
+                                  </span>
                                 </li>
                               ))}
                             </ul>
@@ -163,7 +171,7 @@ export default function AdminDashboardComponent() {
                         .map((table) => (
                           <li
                             key={table.id}
-                            className='flex flex-row justify-between border-b border-gray-600 w-60'
+                            className='flex flex-row justify-between mb-1 w-60'
                           >
                             <p>
                               Table #{table.number} - Capacity: {table.capacity}
@@ -205,7 +213,7 @@ export default function AdminDashboardComponent() {
                         .map((reservation) => (
                           <li
                             key={reservation.id}
-                            className='flex flex-row justify-between border-b border-gray-600 w-60'
+                            className='flex flex-row justify-between w-60'
                           >
                             <div className='flex flex-col'>
                               <p>Reservation #{reservation.number}</p>
@@ -274,7 +282,7 @@ export default function AdminDashboardComponent() {
                               {order.items?.map((item, index) => (
                                 <li
                                   key={index}
-                                  className='flex flex-row justify-between border-b border-gray-600 w-60'
+                                  className='flex flex-row justify-between mb-1 w-60'
                                 >
                                   <p>{item}</p>
                                   <div className='flex flex-row items-center'>
