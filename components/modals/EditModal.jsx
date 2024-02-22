@@ -114,12 +114,38 @@ export default function EditModal({
             {(selected.category === 'orders' ||
               selected.category === 'menu') && (
               <div className='relative p-6 flex-auto'>
-                <form className='w-full'>
+                <form className='w-full space-y-2'>
                   <input
                     type='text'
-                    value={selectedItem}
-                    onChange={(e) => setSelectedItem(e.target.value)}
+                    value={selectedItem.name}
+                    onChange={(e) =>
+                      setSelectedItem({ ...selectedItem, name: e.target.value })
+                    }
                     placeholder='Item'
+                    className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
+                  />
+                  <input
+                    type='text'
+                    value={selectedItem.ingredients.join(', ')}
+                    onChange={(e) =>
+                      setSelectedItem({
+                        ...selectedItem,
+                        ingredients: [e.target.value],
+                      })
+                    }
+                    placeholder='Ingredients'
+                    className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
+                  />
+                  <input
+                    type='number'
+                    value={selectedItem.price}
+                    onChange={(e) =>
+                      setSelectedItem({
+                        ...selectedItem,
+                        price: e.target.value,
+                      })
+                    }
+                    placeholder='Price'
                     className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
                   />
                 </form>
