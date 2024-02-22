@@ -121,33 +121,51 @@ export default function EditModal({
                     onChange={(e) =>
                       setSelectedItem({ ...selectedItem, name: e.target.value })
                     }
-                    placeholder='Item'
+                    placeholder='Name'
                     className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
                   />
-                  <input
-                    type='text'
-                    value={selectedItem.ingredients.join(', ')}
-                    onChange={(e) =>
-                      setSelectedItem({
-                        ...selectedItem,
-                        ingredients: [e.target.value],
-                      })
-                    }
-                    placeholder='Ingredients'
-                    className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
-                  />
-                  <input
-                    type='number'
-                    value={selectedItem.price}
-                    onChange={(e) =>
-                      setSelectedItem({
-                        ...selectedItem,
-                        price: e.target.value,
-                      })
-                    }
-                    placeholder='Price'
-                    className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
-                  />
+                  {selected.category === 'menu' && (
+                    <>
+                      <input
+                        type='text'
+                        value={selectedItem.ingredients?.join(', ')}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            ingredients: [e.target.value],
+                          })
+                        }
+                        placeholder='Ingredients'
+                        className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
+                      />
+                      <input
+                        type='number'
+                        value={selectedItem.price}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            price: e.target.value,
+                          })
+                        }
+                        placeholder='Price'
+                        className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
+                      />
+                    </>
+                  )}
+                  {selected.category === 'orders' && (
+                    <input
+                      type='number'
+                      value={selectedItem.quantity}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          quantity: e.target.value,
+                        })
+                      }
+                      placeholder='Quantity'
+                      className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
+                    />
+                  )}
                 </form>
               </div>
             )}

@@ -261,8 +261,8 @@ export default function AdminDashboardComponent() {
                         .sort((a, b) => a.number - b.number)
                         .map((order) => (
                           <li key={order.id}>
-                            <div className='flex flex-row items-center'>
-                              <p className='ml-2'>
+                            <div className='flex flex-row items-center ml-10'>
+                              <p>
                                 Order #{order.number} - Table #
                                 {order.table_number}:
                               </p>
@@ -284,7 +284,8 @@ export default function AdminDashboardComponent() {
                                   key={index}
                                   className='flex flex-row justify-between mb-1 w-60'
                                 >
-                                  <p>{item}</p>
+                                  <p className='text-sm'>{item.quantity} x</p>
+                                  <p>{item.name}</p>
                                   <div className='flex flex-row items-center'>
                                     <EditIcon
                                       action={() =>
