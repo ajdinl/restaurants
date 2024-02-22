@@ -83,7 +83,7 @@ export default function AdminDashboardComponent() {
                     key={restaurant.id}
                     className='flex flex-col md:flex-row md:space-x-5 flex-wrap mb-5'
                   >
-                    <p className='absolute text-2xl w-11/12 mx-auto text-center'>
+                    <p className='absolute text-2xl w-10/12 lg:w-11/12 text-center'>
                       {restaurant.name}
                     </p>
                     <CardContentHeader
