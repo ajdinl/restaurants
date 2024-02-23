@@ -42,7 +42,7 @@ const fetchRestaurants = async (userId) => {
 const fetchRestaurant = async (id) => {
   const { data, error } = await supabase
     .from('restaurants')
-    .select('*, menu(*), tables(*)')
+    .select('*, menu(*), tables(*), orders(*)')
     .eq('id', id)
     .single()
   return { data, error }
