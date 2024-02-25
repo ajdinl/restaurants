@@ -2,7 +2,14 @@
 
 import { useState } from 'react'
 import { updateItem, updateOrDeleteArrayItem } from '@/utils/supabaseMethods'
-import { Button } from '@/components'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Button,
+} from '@/components'
 
 export default function EditModal({
   setShowEditModal,
@@ -75,10 +82,19 @@ export default function EditModal({
     setOpenDropdown(false)
   }
 
+  function removeLastChar(str) {
+    if (str.charAt(str.length - 1) === 's') {
+      return str.slice(0, -1)
+    } else {
+      return str
+    }
+  }
+
   return (
     <>
-      <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
-        <div className='relative w-auto my-6 mx-auto max-w-3xl'>
+      <div className='fixed inset-0 z-40 bg-black opacity-80'></div>
+      <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none p-4'>
+        <div className='relative w-1/4 min-w-96 my-6 mx-auto max-w-3xl'>
           <div className='border-0 rounded shadow-lg relative flex flex-col w-full bg-white dark:bg-gray-800 dark:shadow-md dark:shadow-gray-500/50 outline-none focus:outline-none'>
             <div className='flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t'>
               <h3 className='text-3xl font-semibold dark:text-white'>
@@ -91,101 +107,181 @@ export default function EditModal({
                 X
               </button>
             </div>
-            {selected.category === 'tables' && (
-              <div className='relative p-6 flex-auto'>
-                <select
-                  className='mt-2 p-1 border border-gray-300 dark:bg-gray-400 rounded'
-                  defaultValue={capacity}
-                  onChange={(e) => setCapacity(e.target.value)}
-                >
-                  <option value='1'>1</option>
-                  <option value='2'>2</option>
-                  <option value='3'>3</option>
-                  <option value='4'>4</option>
-                  <option value='5'>5</option>
-                  <option value='6'>6</option>
-                  <option value='7'>7</option>
-                  <option value='8'>8</option>
-                  <option value='9'>9</option>
-                  <option value='10'>10</option>
-                </select>
-              </div>
-            )}
-            {(selected.category === 'orders' ||
-              selected.category === 'menu') && (
-              <div className='relative p-6 flex-auto'>
-                <form className='w-full'>
-                  <input
-                    type='text'
-                    value={selectedItem}
-                    onChange={(e) => setSelectedItem(e.target.value)}
-                    placeholder='Item'
-                    className='w-full p-2 border border-gray-300 dark:bg-gray-400 rounded'
-                  />
-                </form>
-              </div>
-            )}
-            {selected.category === 'reservations' && (
-              <div className='relative p-6 flex-auto'>
-                <form className='w-full'>
-                  <div className='dropdown'>
-                    <Button
-                      className={
-                        status === 'Available'
-                          ? 'bg-green-500 hover:bg-green-600 text-white'
-                          : 'bg-red-500 hover:bg-red-600 text-white'
-                      }
-                      onClick={handleOpen}
-                    >
-                      {status}
-                    </Button>
-                    {openDropdown && (
-                      <ul className='menu'>
-                        {status === 'Available' && (
-                          <li
-                            className='menu-item'
-                            onClick={() => setStatusValue('Reserved')}
-                          >
-                            <Button className='mt-4 bg-red-500 hover:bg-red-600 text-white'>
-                              Reserved
-                            </Button>
-                          </li>
+            <div className='relative p-6 flex-auto'>
+              <Card>
+                <CardHeader>
+                  <CardTitle>{selected.category.toUpperCase()}</CardTitle>
+                  <CardDescription>
+                    Edit the {removeLastChar(selected.category)}.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {selected.category === 'tables' && (
+                    <label className='block'>
+                      <span className='text-gray-700 dark:text-gray-400'>
+                        Maximum Capacity
+                      </span>
+                      <select
+                        className='mt-1 block w-full rounded border-gray-300 bg-gray-100 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                        defaultValue={capacity}
+                        onChange={(e) => setCapacity(e.target.value)}
+                      >
+                        <option value='1'>1</option>
+                        <option value='2'>2</option>
+                        <option value='3'>3</option>
+                        <option value='4'>4</option>
+                        <option value='5'>5</option>
+                        <option value='6'>6</option>
+                        <option value='7'>7</option>
+                        <option value='8'>8</option>
+                        <option value='9'>9</option>
+                        <option value='10'>10</option>
+                      </select>
+                    </label>
+                  )}
+                  {(selected.category === 'orders' ||
+                    selected.category === 'menu') && (
+                    <form className='w-full space-y-2'>
+                      <label className='block'>
+                        <span className='text-gray-700 dark:text-gray-400'>
+                          Name
+                        </span>
+                        <input
+                          type='text'
+                          value={selectedItem.name}
+                          onChange={(e) =>
+                            setSelectedItem({
+                              ...selectedItem,
+                              name: e.target.value,
+                            })
+                          }
+                          placeholder='Name'
+                          className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                        />
+                      </label>
+                      {selected.category === 'menu' && (
+                        <>
+                          <label className='block'>
+                            <span className='text-gray-700 dark:text-gray-400'>
+                              Ingredients
+                            </span>
+                            <input
+                              type='text'
+                              value={selectedItem.ingredients?.join(', ')}
+                              onChange={(e) =>
+                                setSelectedItem({
+                                  ...selectedItem,
+                                  ingredients: [e.target.value],
+                                })
+                              }
+                              placeholder='Ingredients'
+                              className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                            />
+                          </label>
+                          <label className='block'>
+                            <span className='text-gray-700 dark:text-gray-400'>
+                              Price
+                            </span>
+                            <input
+                              type='number'
+                              value={selectedItem.price}
+                              onChange={(e) =>
+                                setSelectedItem({
+                                  ...selectedItem,
+                                  price: e.target.value,
+                                })
+                              }
+                              placeholder='Price'
+                              className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                            />
+                          </label>
+                        </>
+                      )}
+                      {selected.category === 'orders' && (
+                        <label className='block'>
+                          <span className='text-gray-700 dark:text-gray-400'>
+                            Quantity
+                          </span>
+                          <input
+                            type='number'
+                            value={selectedItem.quantity}
+                            onChange={(e) =>
+                              setSelectedItem({
+                                ...selectedItem,
+                                quantity: e.target.value,
+                              })
+                            }
+                            placeholder='Quantity'
+                            className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          />
+                        </label>
+                      )}
+                    </form>
+                  )}
+                  {selected.category === 'reservations' && (
+                    <form className='w-full'>
+                      <div className='dropdown'>
+                        <Button
+                          className={
+                            status === 'Available'
+                              ? 'bg-green-500 hover:bg-green-600 text-white'
+                              : 'bg-red-500 hover:bg-red-600 text-white'
+                          }
+                          onClick={handleOpen}
+                        >
+                          {status}
+                        </Button>
+                        {openDropdown && (
+                          <ul className='menu'>
+                            {status === 'Available' && (
+                              <li
+                                className='menu-item'
+                                onClick={() => setStatusValue('Reserved')}
+                              >
+                                <Button className='mt-4 bg-red-500 hover:bg-red-600 text-white'>
+                                  Reserved
+                                </Button>
+                              </li>
+                            )}
+                            {status === 'Reserved' && (
+                              <li
+                                className='menu-item'
+                                onClick={() => setStatusValue('Available')}
+                              >
+                                <Button className='mt-4 bg-green-500 hover:bg-green-600 text-white'>
+                                  Available
+                                </Button>
+                              </li>
+                            )}
+                          </ul>
                         )}
-                        {status === 'Reserved' && (
-                          <li
-                            className='menu-item'
-                            onClick={() => setStatusValue('Available')}
-                          >
-                            <Button className='mt-4 bg-green-500 hover:bg-green-600 text-white'>
-                              Available
-                            </Button>
-                          </li>
-                        )}
-                      </ul>
-                    )}
-                  </div>
-                  <div className='flex flex-row items-center space-x-2'>
-                    <p className='text-gray-400'>Number of guests:</p>
-                    <select
-                      className='mt-2 p-1 border border-gray-300 dark:bg-gray-400 rounded'
-                      defaultValue={capacity}
-                      onChange={(e) => setCapacity(e.target.value)}
-                    >
-                      <option value='1'>1</option>
-                      <option value='2'>2</option>
-                      <option value='3'>3</option>
-                      <option value='4'>4</option>
-                      <option value='5'>5</option>
-                      <option value='6'>6</option>
-                      <option value='7'>7</option>
-                      <option value='8'>8</option>
-                      <option value='9'>9</option>
-                      <option value='10'>10</option>
-                    </select>
-                  </div>
-                </form>
-              </div>
-            )}
+                      </div>
+                      <div className='flex flex-col'>
+                        <span className='text-gray-700 dark:text-gray-400 my-2'>
+                          Number of Guests
+                        </span>
+                        <select
+                          className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          defaultValue={capacity}
+                          onChange={(e) => setCapacity(e.target.value)}
+                        >
+                          <option value='1'>1</option>
+                          <option value='2'>2</option>
+                          <option value='3'>3</option>
+                          <option value='4'>4</option>
+                          <option value='5'>5</option>
+                          <option value='6'>6</option>
+                          <option value='7'>7</option>
+                          <option value='8'>8</option>
+                          <option value='9'>9</option>
+                          <option value='10'>10</option>
+                        </select>
+                      </div>
+                    </form>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
             <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>
               <button
                 className='text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
@@ -205,7 +301,6 @@ export default function EditModal({
           </div>
         </div>
       </div>
-      <div className='opacity-25 fixed inset-0 z-40 bg-black'></div>
     </>
   )
 }

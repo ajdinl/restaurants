@@ -20,7 +20,7 @@ export default function NewModal({
   restaurants,
 }) {
   const [table, setTable] = useState({})
-  const [dish, setDish] = useState(null)
+  const [dish, setDish] = useState({})
   const [error, setError] = useState('')
 
   const handleSave = async () => {
@@ -173,6 +173,7 @@ export default function NewModal({
 
   return (
     <>
+      <div className='fixed inset-0 z-40 bg-black opacity-80'></div>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
         <div className='relative w-1/4 min-w-96 my-6 mx-auto max-w-3xl'>
           <div className='border-0 rounded shadow-lg relative flex flex-col w-full bg-white dark:bg-gray-800 dark:shadow-md dark:shadow-gray-500/50 outline-none focus:outline-none'>
@@ -405,14 +406,70 @@ export default function NewModal({
                           Name
                         </span>
                         <span className='text-red-500 ml-4 text-sm'>
-                          {!dish && error}
+                          {!dish.name && error}
                         </span>
                         <input
                           type='text'
-                          onChange={(e) => setDish(e.target.value)}
+                          onChange={(e) =>
+                            setDish({ ...dish, name: e.target.value })
+                          }
                           className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
                         />
                       </label>
+                      {selected.category === 'Dish' && (
+                        <>
+                          <label className='block'>
+                            <span className='text-gray-700 dark:text-gray-400'>
+                              Ingredients
+                            </span>
+                            <span className='text-red-500 ml-4 text-sm'>
+                              {!dish.ingredients && error}
+                            </span>
+                            <input
+                              type='text'
+                              onChange={(e) =>
+                                setDish({
+                                  ...dish,
+                                  ingredients: [e.target.value],
+                                })
+                              }
+                              className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                            />
+                          </label>
+                          <label className='block'>
+                            <span className='text-gray-700 dark:text-gray-400'>
+                              Price
+                            </span>
+                            <span className='text-red-500 ml-4 text-sm'>
+                              {!dish.price && error}
+                            </span>
+                            <input
+                              type='number'
+                              onChange={(e) =>
+                                setDish({ ...dish, price: e.target.value })
+                              }
+                              className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                            />
+                          </label>
+                        </>
+                      )}
+                      {selected.category === 'Order Dish' && (
+                        <label className='block'>
+                          <span className='text-gray-700 dark:text-gray-400'>
+                            Quantity
+                          </span>
+                          <span className='text-red-500 ml-4 text-sm'>
+                            {!dish.quantity && error}
+                          </span>
+                          <input
+                            type='number'
+                            onChange={(e) =>
+                              setDish({ ...dish, quantity: e.target.value })
+                            }
+                            className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                          />
+                        </label>
+                      )}
                     </form>
                   )}
                   {selected.category === 'Menu' && (
@@ -497,7 +554,6 @@ export default function NewModal({
           </div>
         </div>
       </div>
-      <div className='opacity-25 fixed inset-0 z-40 bg-black'></div>
     </>
   )
 }

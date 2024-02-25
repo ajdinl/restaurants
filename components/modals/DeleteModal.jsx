@@ -1,3 +1,4 @@
+import { useEffect, useCallback } from 'react'
 import { handleDeleteItem } from '@/utils/functions'
 
 export default function DeleteModal({
@@ -5,14 +6,32 @@ export default function DeleteModal({
   selected,
   getRestaurantsData,
 }) {
-  const confirmDelete = () => {
-    handleDeleteItem(selected.category, selected.data, selected.index, () =>
+  const confirmDelete = useCallback(() => {
+    handleDeleteItem(selected.category, selected.data, selected.index, () => {
       getRestaurantsData()
-    )
-    setShowDeleteModal(false)
-  }
+      setShowDeleteModal(false)
+    })
+  }, [selected, getRestaurantsData, setShowDeleteModal])
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        confirmDelete()
+      } else if (event.key === 'Escape') {
+        setShowDeleteModal(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [confirmDelete, setShowDeleteModal])
+
   return (
     <>
+      <div className='fixed inset-0 z-40 bg-black opacity-80'></div>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
         <div className='relative w-auto my-6 mx-auto max-w-3xl'>
           <div className='border-0 rounded shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
@@ -30,24 +49,23 @@ export default function DeleteModal({
             </div>
             <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>
               <button
-                className='text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                className='text-green-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                 type='button'
                 onClick={() => setShowDeleteModal(false)}
               >
                 Close
               </button>
               <button
-                className='bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                className='bg-red-500 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                 type='button'
                 onClick={() => confirmDelete()}
               >
-                Save Changes
+                Delete
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div className='opacity-25 fixed inset-0 z-40 bg-black'></div>
     </>
   )
 }

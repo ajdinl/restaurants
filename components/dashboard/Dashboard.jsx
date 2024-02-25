@@ -9,6 +9,7 @@ import {
   EditIcon,
   DeleteIcon,
   DeleteModal,
+  Button,
 } from '@/components'
 import { fetchUserData, fetchRestaurantsData } from '@/utils/functions'
 
@@ -61,7 +62,7 @@ export default function DashboardComponent() {
   return (
     <>
       {data && (
-        <main className='flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 bg-white dark:bg-gray-900'>
+        <main className='flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 sm:p-10 bg-white dark:bg-gray-900'>
           <DashboardWrapper
             wrapperData={{
               type: 'menu',
@@ -90,39 +91,46 @@ export default function DashboardComponent() {
                     }`}
                   >
                     <div className='flex flex-row'>
-                      <p
-                        className={`${
-                          view ? 'text-xl' : 'text-xl'
-                        } text-black dark:text-gray-300`}
-                      >
-                        Menu #{menu.number}
-                      </p>
                       {view && (
-                        <button
-                          className='mx-3 -mt-1 text-green-400 hover:text-green-500 text-3xl leading-none font-semibold'
+                        <Button
+                          className='bg-green-500 hover:bg-green-600 text-white absolute top-24 right-8 sm:top-28 sm:mt-2 sm:right-14 text-base'
                           onClick={() =>
                             openNewModal({ category: 'Dish', menu })
                           }
                         >
-                          +
-                        </button>
+                          Add Dish
+                        </Button>
                       )}
                     </div>
                     {!view
-                      ? menu.items?.slice(0, 5)?.map((item) => (
+                      ? menu.items?.slice(0, 5)?.map((item, index) => (
                           <div
-                            key={item}
+                            key={index}
                             className='text-black dark:text-white'
                           >
-                            {item}
+                            <p>{item.name}</p>
+                            <p className='text-gray-600 dark:text-gray-400 text-sm'>
+                              {item.ingredients?.join(', ')}
+                            </p>
+                            <p>${item.price}</p>
                           </div>
                         ))
                       : menu.items?.map((item, index) => (
                           <div
-                            key={item}
+                            key={index}
                             className='flex flex-row w-full items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded'
                           >
-                            <p className='text-black dark:text-white'>{item}</p>
+                            <div>
+                              <p className='text-black dark:text-white'>
+                                {item.name}
+                              </p>
+                              <p className='text-gray-600 dark:text-gray-400 text-sm'>
+                                {item.ingredients?.join(', ')}
+                              </p>
+                              <p className='text-black dark:text-white'>
+                                ${item.price}
+                              </p>
+                            </div>
                             <div className='flex flex-row items-center'>
                               <EditIcon
                                 action={() =>
@@ -133,7 +141,7 @@ export default function DashboardComponent() {
                                     index,
                                   })
                                 }
-                                className='h-5 w-5 mr-6'
+                                className='h-5 w-5 mr-4'
                               />
                               <DeleteIcon
                                 action={() =>
@@ -238,7 +246,14 @@ export default function DashboardComponent() {
                         className='flex flex-col text-black dark:text-white'
                       >
                         <p className='font-bold'>Order #{order.number}:</p>
-                        {order.items?.join(', ')}
+                        {order.items?.map((item, index) => (
+                          <p
+                            key={index}
+                            className='text-gray-600 dark:text-gray-400 text-sm'
+                          >
+                            {item.quantity}x {item.name}
+                          </p>
+                        ))}
                       </li>
                     ))
                 : restaurantOrders
@@ -266,7 +281,7 @@ export default function DashboardComponent() {
                               className='flex flex-row items-center justify-between mb-2 md:mb-0 md:mr-4'
                             >
                               <p className='text-black dark:text-white'>
-                                {item}
+                                {item.quantity}x {item.name}
                               </p>
                               <div className='flex flex-row items-center mx-2'>
                                 <EditIcon
