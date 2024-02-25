@@ -1,16 +1,30 @@
+import { useEffect, useCallback } from 'react'
 import { handleDeleteItem } from '@/utils/functions'
 
-export default function DeleteModal({
-  setShowDeleteModal,
-  selected,
-  getRestaurantsData,
-}) {
-  const confirmDelete = () => {
-    handleDeleteItem(selected.category, selected.data, selected.index, () =>
+const DeleteModal = ({ setShowDeleteModal, selected, getRestaurantsData }) => {
+  const confirmDelete = useCallback(() => {
+    handleDeleteItem(selected.category, selected.data, selected.index, () => {
       getRestaurantsData()
-    )
-    setShowDeleteModal(false)
-  }
+      setShowDeleteModal(false)
+    })
+  }, [selected, getRestaurantsData, setShowDeleteModal])
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        confirmDelete()
+      } else if (event.key === 'Escape') {
+        setShowDeleteModal(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [confirmDelete, setShowDeleteModal])
+
   return (
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
@@ -51,3 +65,5 @@ export default function DeleteModal({
     </>
   )
 }
+
+export default DeleteModal
