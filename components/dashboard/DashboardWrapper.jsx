@@ -15,7 +15,7 @@ export default function DashboardWrapper({ children, wrapperData }) {
           <CardHeader>
             <div className='flex flex-row items-center justify-between'>
               <CardTitle view={wrapperData.view}>{wrapperData.title}</CardTitle>
-              {wrapperData.view && (
+              {wrapperData.view && wrapperData.type !== 'menu' && (
                 <Button
                   className='bg-green-500 hover:bg-green-600 text-white'
                   onClick={() =>

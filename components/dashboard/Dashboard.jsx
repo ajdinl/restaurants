@@ -62,7 +62,7 @@ export default function DashboardComponent() {
   return (
     <>
       {data && (
-        <main className='flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 bg-white dark:bg-gray-900'>
+        <main className='flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 sm:p-10 bg-white dark:bg-gray-900'>
           <DashboardWrapper
             wrapperData={{
               type: 'menu',
@@ -93,7 +93,7 @@ export default function DashboardComponent() {
                     <div className='flex flex-row'>
                       {view && (
                         <Button
-                          className='bg-green-500 hover:bg-green-600 text-white'
+                          className='bg-green-500 hover:bg-green-600 text-white absolute top-24 right-8 sm:top-28 sm:mt-2 sm:right-14 text-base'
                           onClick={() =>
                             openNewModal({ category: 'Dish', menu })
                           }
@@ -141,7 +141,7 @@ export default function DashboardComponent() {
                                     index,
                                   })
                                 }
-                                className='h-5 w-5 mr-6'
+                                className='h-5 w-5 mr-4'
                               />
                               <DeleteIcon
                                 action={() =>
