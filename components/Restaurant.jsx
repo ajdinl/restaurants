@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   fetchRestaurant,
   addItem,
@@ -12,10 +13,12 @@ import { Button } from '@/components'
 export default function RestaurantComponent({ id }) {
   const [restaurant, setRestaurant] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [completed, setCompleted] = useState(false)
   const [order, setOrder] = useState({})
   const { name, address, phone, menu } = restaurant?.data ?? {}
   const searchParams = useSearchParams()
   const tableNumber = searchParams.get('table')
+  const router = useRouter()
 
   useEffect(() => {
     setLoading(true)
@@ -38,7 +41,7 @@ export default function RestaurantComponent({ id }) {
       allOrders
         .map((order) => order.number)
         .sort((a, b) => a - b)
-        .pop() + 1
+        .pop() + 1 || 1
 
     const { data, error } = await addItem('orders', {
       restaurant_id: id,
@@ -75,6 +78,12 @@ export default function RestaurantComponent({ id }) {
     if (error2) {
       console.error('Error adding item:', error2)
       return
+    } else {
+      setCompleted(true)
+      setTimeout(() => {
+        setCompleted(false)
+        router.push(`/restaurant/${id}?table=${tableNumber}`)
+      }, 3000)
     }
   }
 
@@ -85,7 +94,12 @@ export default function RestaurantComponent({ id }) {
           Loading...
         </div>
       )}
-      {!loading && restaurant && (
+      {completed && (
+        <div className='text-center text-xl font-bold mt-96 text-gray-500'>
+          Your Delicious Order Has Been Placed
+        </div>
+      )}
+      {!loading && !completed && restaurant && (
         <div className='flex flex-col'>
           <div className='flex flex-row items-center justify-between p-4 h-12 font-bold text-gray-600 bg-gray-300'>
             <p className='text-sm sm:text-base'>
