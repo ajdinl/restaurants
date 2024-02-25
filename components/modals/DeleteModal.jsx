@@ -1,7 +1,11 @@
 import { useEffect, useCallback } from 'react'
 import { handleDeleteItem } from '@/utils/functions'
 
-const DeleteModal = ({ setShowDeleteModal, selected, getRestaurantsData }) => {
+export default function DeleteModal({
+  setShowDeleteModal,
+  selected,
+  getRestaurantsData,
+}) {
   const confirmDelete = useCallback(() => {
     handleDeleteItem(selected.category, selected.data, selected.index, () => {
       getRestaurantsData()
@@ -27,6 +31,7 @@ const DeleteModal = ({ setShowDeleteModal, selected, getRestaurantsData }) => {
 
   return (
     <>
+      <div className='fixed inset-0 z-40 bg-black opacity-80'></div>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
         <div className='relative w-auto my-6 mx-auto max-w-3xl'>
           <div className='border-0 rounded shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
@@ -61,9 +66,6 @@ const DeleteModal = ({ setShowDeleteModal, selected, getRestaurantsData }) => {
           </div>
         </div>
       </div>
-      <div className='opacity-25 fixed inset-0 z-40 bg-black'></div>
     </>
   )
 }
-
-export default DeleteModal

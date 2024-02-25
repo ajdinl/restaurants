@@ -67,8 +67,6 @@ export default function RestaurantComponent({ id }) {
       }
     })
 
-    console.log(lastOrder)
-
     const { data: data2, error: error2 } = await updateOrDeleteArrayItem(
       'orders',
       lastOrder.id,
