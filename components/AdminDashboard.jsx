@@ -277,6 +277,15 @@ export default function AdminDashboardComponent() {
                               >
                                 +
                               </button>
+                              <DeleteIcon
+                                action={() =>
+                                  setDeleteSelectedItem({
+                                    category: 'orders',
+                                    data: order,
+                                  })
+                                }
+                                className='ml-1'
+                              />
                             </div>
                             <ul className='mr-2 p-2'>
                               {order.items?.map((item, index) => (
