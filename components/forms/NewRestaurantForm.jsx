@@ -1,15 +1,23 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useState } from 'react'
 import { Button } from '@/components'
 import { addItem } from '@/utils/supabaseMethods'
+import { fetchAllUsersData } from '@/utils/functions'
 
 export default function NewRestaurantForm() {
   const [newRestaurant, setNewRestaurant] = useState({})
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    fetchAllUsersData(setUsers)
+  }, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
 
+    const user_id = newRestaurant.user_id
     const name = newRestaurant.name
     const address = newRestaurant.address
     const phone = newRestaurant.phone
@@ -19,6 +27,7 @@ export default function NewRestaurantForm() {
         name,
         address,
         phone,
+        user_id,
       })
 
       if (error) {
@@ -35,6 +44,25 @@ export default function NewRestaurantForm() {
 
   return (
     <form className='space-y-4' onSubmit={(e) => handleSubmit(e)}>
+      <label className='block'>
+        <span className='text-gray-700 dark:text-gray-400'>User</span>
+        <select
+          className='mt-1 p-1 block w-full rounded border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+          name='user_id'
+          id='user_id'
+          required
+          onChange={(e) =>
+            setNewRestaurant({ ...newRestaurant, user_id: e.target.value })
+          }
+        >
+          <option disabled>Select</option>
+          {users.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.email}
+            </option>
+          ))}
+        </select>
+      </label>
       <label className='block'>
         <span className='text-gray-700 dark:text-gray-400'>Name</span>
         <input

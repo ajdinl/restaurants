@@ -328,7 +328,7 @@ export default function AdminDashboardComponent() {
             </CardContent>
           </Card>
         )}
-        {view === 'users' && (
+        {view === 'create' && (
           <>
             <Card>
               <CardHeader>

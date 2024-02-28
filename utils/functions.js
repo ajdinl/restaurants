@@ -3,6 +3,7 @@ import {
   fetchRestaurants,
   updateOrDeleteArrayItem,
   deleteItem,
+  getAllUsers,
 } from '@/utils/supabaseMethods'
 
 export const fetchUserData = async (setUser) => {
@@ -15,6 +16,19 @@ export const fetchUserData = async (setUser) => {
     setUser(data)
   } catch (error) {
     console.error('Error fetching user:', error)
+  }
+}
+
+export const fetchAllUsersData = async (setUsers) => {
+  try {
+    const { data, error } = await getAllUsers()
+    if (error) {
+      console.error('Error fetching users:', error)
+      return
+    }
+    setUsers(data)
+  } catch (error) {
+    console.error('Error fetching users:', error)
   }
 }
 

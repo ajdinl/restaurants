@@ -122,9 +122,9 @@ export default function Navbar({ isAdmin }) {
                 Restaurants
               </Link>
               <Link
-                href='?view=users'
+                href='?view=create'
                 className={
-                  view === 'users'
+                  view === 'create'
                     ? 'font-bold dark:text-white'
                     : 'text-gray-500 dark:text-gray-400'
                 }
