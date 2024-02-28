@@ -19,6 +19,12 @@ const getUser = async () => {
   return { data, error }
 }
 
+const getAllUsers = async () => {
+  const { data, error } = await supabase.from('profiles').select('*')
+
+  return { data, error }
+}
+
 const signInWithPassword = async (email, password) => {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
@@ -85,4 +91,5 @@ export {
   updateItem,
   updateOrDeleteArrayItem,
   fetchRestaurant,
+  getAllUsers,
 }
