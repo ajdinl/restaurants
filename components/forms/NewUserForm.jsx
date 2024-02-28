@@ -24,7 +24,7 @@ export default function NewUserForm() {
       } else {
         setNewUser({})
         e.target.reset()
-        router.push('/admin-dashboard?view=users')
+        router.push('/admin-dashboard?view=create')
       }
     } catch (error) {
       console.error('Error creating user:', error)
