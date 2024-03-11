@@ -9,6 +9,7 @@ import {
   CardDescription,
   CardContent,
   Button,
+  SelectInput,
 } from '@/components'
 
 export default function EditModal({
@@ -117,27 +118,11 @@ export default function EditModal({
                 </CardHeader>
                 <CardContent>
                   {selected.category === 'tables' && (
-                    <label className='block'>
-                      <span className='text-gray-700 dark:text-gray-400'>
-                        Maximum Capacity
-                      </span>
-                      <select
-                        className='mt-1 block w-full rounded border-gray-300 bg-gray-100 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-                        defaultValue={capacity}
-                        onChange={(e) => setCapacity(e.target.value)}
-                      >
-                        <option value='1'>1</option>
-                        <option value='2'>2</option>
-                        <option value='3'>3</option>
-                        <option value='4'>4</option>
-                        <option value='5'>5</option>
-                        <option value='6'>6</option>
-                        <option value='7'>7</option>
-                        <option value='8'>8</option>
-                        <option value='9'>9</option>
-                        <option value='10'>10</option>
-                      </select>
-                    </label>
+                    <SelectInput
+                      label='Maximum Capacity'
+                      value={capacity}
+                      onChange={(e) => setCapacity(e.target.value)}
+                    />
                   )}
                   {(selected.category === 'orders' ||
                     selected.category === 'menu') && (
@@ -256,27 +241,11 @@ export default function EditModal({
                           </ul>
                         )}
                       </div>
-                      <div className='flex flex-col'>
-                        <span className='text-gray-700 dark:text-gray-400 my-2'>
-                          Number of Guests
-                        </span>
-                        <select
-                          className='mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-                          defaultValue={capacity}
-                          onChange={(e) => setCapacity(e.target.value)}
-                        >
-                          <option value='1'>1</option>
-                          <option value='2'>2</option>
-                          <option value='3'>3</option>
-                          <option value='4'>4</option>
-                          <option value='5'>5</option>
-                          <option value='6'>6</option>
-                          <option value='7'>7</option>
-                          <option value='8'>8</option>
-                          <option value='9'>9</option>
-                          <option value='10'>10</option>
-                        </select>
-                      </div>
+                      <SelectInput
+                        label='Number of Guests'
+                        value={capacity}
+                        onChange={(e) => setCapacity(e.target.value)}
+                      />
                     </form>
                   )}
                 </CardContent>

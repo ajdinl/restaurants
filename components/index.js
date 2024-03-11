@@ -21,6 +21,7 @@ import DeleteModal from './modals/DeleteModal'
 import DashboardWrapper from '@/components/dashboard/DashboardWrapper'
 import RestaurantComponent from '@/components/Restaurant'
 import Restaurants from '@/components/admin-dashboard/Restaurants'
+import SelectInput from './modals/components/SelectInput'
 
 export {
   Card,
@@ -42,4 +43,5 @@ export {
   DeleteModal,
   RestaurantComponent,
   Restaurants,
+  SelectInput,
 }
