@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 function Card({ className, category, children }) {
   const router = useRouter()
   const handleRedirect = (query) => {
-    router.push(`/dashboard?view=${query}`)
+    if (query) router.push(`/dashboard?view=${query}`)
   }
 
   return (
