@@ -1,7 +1,15 @@
-function Card({ className, children }) {
+import { useRouter } from 'next/navigation'
+
+function Card({ className, category, children }) {
+  const router = useRouter()
+  const handleRedirect = (query) => {
+    router.push(`/dashboard?view=${query}`)
+  }
+
   return (
     <div
       className={`border border-gray-600 rounded shadow-lg bg-white dark:bg-gray-800 p-4 ${className}`}
+      onClick={() => handleRedirect(category)}
     >
       {children}
     </div>
