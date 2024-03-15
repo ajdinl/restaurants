@@ -133,9 +133,6 @@ export default function Navbar({ isAdmin }) {
               </Link>
             </>
           )}
-          {/* <Link className='text-gray-500 dark:text-gray-400' href='#'>
-          Reports
-        </Link> */}
         </nav>
         {loading && (
           <p className='text-gray-500 dark:text-gray-300 text-sm md:text-lg'>

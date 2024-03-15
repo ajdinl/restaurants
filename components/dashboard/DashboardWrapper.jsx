@@ -11,7 +11,10 @@ export default function DashboardWrapper({ children, wrapperData }) {
   return (
     <>
       {(!wrapperData.view || wrapperData.view === wrapperData.type) && (
-        <Card className={`${!wrapperData.view ? 'cursor-pointer' : ''}`}>
+        <Card
+          className={`${!wrapperData.view ? 'cursor-pointer' : ''}`}
+          category={wrapperData.type}
+        >
           <CardHeader>
             <div className='flex flex-row items-center justify-between'>
               <CardTitle view={wrapperData.view}>{wrapperData.title}</CardTitle>
