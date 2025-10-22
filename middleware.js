@@ -1,63 +1,38 @@
-import { NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-
-const handleCookies = (req, response, name, value, options = {}) => {
-  req.cookies.set({ name, value, ...options })
-
-  response.cookies.set({ name, value, ...options })
-
-  return NextResponse.next({
-    request: { headers: req.headers },
-  })
-}
+import { NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
 export async function middleware(req) {
-  const res = NextResponse.next()
+    const token = await getToken({
+        req,
+        secret: process.env.NEXTAUTH_SECRET,
+    });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        get(name) {
-          return req.cookies.get(name)?.value
-        },
-        set(name, value, options) {
-          return handleCookies(req, res, name, value, options)
-        },
-        remove(name, options) {
-          return handleCookies(req, res, name, '', options)
-        },
-      },
+    const isAdmin = token?.is_admin;
+    const { pathname } = req.nextUrl;
+
+    if (pathname.startsWith('/restaurant/')) {
+        return NextResponse.next();
     }
-  )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    if (isAdmin && pathname === '/') {
+        return NextResponse.redirect(new URL('/admin-dashboard', req.url));
+    }
 
-  const isAdmin = user?.user_metadata?.is_admin
-  const { pathname } = req.nextUrl
+    if (!isAdmin && pathname === '/admin-dashboard') {
+        return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
 
-  if (isAdmin && pathname === '/') {
-    return NextResponse.redirect(new URL('/admin-dashboard', req.url))
-  }
+    if (token && pathname === '/') {
+        return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
 
-  if (!isAdmin && pathname === '/admin-dashboard') {
-    return NextResponse.redirect(new URL('/dashboard', req.url))
-  }
+    if (!token && pathname !== '/') {
+        return NextResponse.redirect(new URL('/', req.url));
+    }
 
-  if (user && pathname === '/') {
-    return NextResponse.redirect(new URL('/dashboard', req.url))
-  }
-
-  if (!user && pathname !== '/') {
-    return NextResponse.redirect(new URL('/', req.url))
-  }
-
-  return res
+    return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/', '/dashboard', '/admin-dashboard'],
-}
+    matcher: ['/', '/dashboard', '/admin-dashboard', '/restaurant/:path*'],
+};

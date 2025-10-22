@@ -1,36 +1,195 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Restaurant Management System
 
-## Getting Started
+Full-stack restaurant management application with user authentication, menu management, table reservations, and order tracking. Built with modern architecture following SOLID principles and Command Pattern.
 
-First, run the development server:
+## Tech Stack
+
+-   **Frontend:** Next.js 14, React 18, Tailwind CSS
+-   **Backend:** Next.js API Routes, NextAuth.js
+-   **Database:** MongoDB with Mongoose
+-   **Authentication:** NextAuth.js (JWT)
+-   **Architecture:** Command Pattern, Custom Hooks, Modular Components
+
+## Features
+
+-   User authentication with admin/user roles
+-   Restaurant CRUD operations with validation
+-   Menu management with full CRUD
+-   Table management and capacity tracking
+-   Order tracking and management
+-   Reservation system with status management
+-   Dark mode support
+-   Comprehensive input validation (frontend & backend)
+-   Centralized error handling
+-   Modular and reusable components
+
+## Architecture Highlights
+
+### Custom Hooks
+
+-   `useAuth` - Authentication management
+-   `useRestaurants` - Restaurant data fetching
+-   `useModal` - Modal state management
+-   `useTheme` - Theme management
+
+### Commands Pattern
+
+-   Single Responsibility operations
+-   Consistent validation
+-   Testable business logic
+-   Commands for all entities (User, Restaurant, Menu, Table, Order, Reservation)
+
+### Validators
+
+-   Comprehensive input validation
+-   Reusable validation logic
+-   Frontend and backend validation
+-   Clear error messages
+
+For detailed architecture information, see [REFACTORING_GUIDE.md](./REFACTORING_GUIDE.md)
+
+## Installation
+
+### 1. Install MongoDB
+
+**macOS:**
+
+```bash
+brew install mongodb-community
+brew services start mongodb-community
+```
+
+**Linux:**
+
+```bash
+sudo apt-get install mongodb
+sudo systemctl start mongod
+```
+
+**Windows:**  
+Download from [mongodb.com](https://www.mongodb.com/try/download/community)
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Setup Environment
+
+Create `.env.local` file:
+
+```env
+MONGODB_URI=mongodb://localhost:27017/restaurants
+NEXTAUTH_SECRET=your-secret-key-here
+NEXTAUTH_URL=http://localhost:3000
+```
+
+Generate secret key:
+
+```bash
+openssl rand -base64 32
+```
+
+### 4. Create Admin User
+
+```bash
+# Default admin (admin@example.com / admin123)
+npm run create-admin
+
+# Custom admin
+npm run create-admin your@email.com password123 "Your Name"
+```
+
+## Run Application
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm start            # Start production server
+npm run create-admin # Create admin user
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+restaurants/
+├── hooks/                  # Custom React hooks
+├── commands/               # Command Pattern implementation
+├── lib/
+│   ├── validators/        # Input validation
+│   ├── error-handler.js   # Error handling
+│   └── constants.js       # Application constants
+├── components/
+│   ├── common/            # Reusable components
+│   ├── layout/            # Layout components
+│   ├── dashboard/         # Dashboard sections & cards
+│   └── modals/            # Modal components & forms
+├── app/api/               # API routes with Commands
+├── models/                # Mongoose models
+└── services/              # API services
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Database Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+-   **users** - User accounts (email, password, full_name, is_admin)
+-   **restaurants** - Restaurant information
+-   **menus** - Menu items with ingredients and prices
+-   **tables** - Restaurant tables with capacity
+-   **orders** - Customer orders
+-   **reservations** - Table reservations
 
-## Deploy on Vercel
+All models include validation and are managed through Commands for consistency.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Production Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### MongoDB Atlas
+
+1. Create free cluster at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
+2. Get connection string
+3. Update `MONGODB_URI` in environment variables
+
+### Vercel
+
+```bash
+vercel
+```
+
+Set environment variables in Vercel dashboard:
+
+-   `MONGODB_URI`
+-   `NEXTAUTH_SECRET`
+-   `NEXTAUTH_URL`
+
+## Development
+
+### Code Quality
+
+-   Follows SOLID principles
+-   Command Pattern for business logic
+-   Custom hooks for state management
+-   Comprehensive validation
+-   Centralized error handling
+-   Modular component architecture
+
+### Adding New Features
+
+1. Create validators in `lib/validators/`
+2. Create commands in `commands/`
+3. Update API routes to use commands
+4. Create reusable components in `components/common/`
+5. Use custom hooks for state management
+
+See [REFACTORING_GUIDE.md](./REFACTORING_GUIDE.md) for detailed guidelines.
+
+## License
+
+MIT
