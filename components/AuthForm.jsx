@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Button, ErrorMessage, LoadingSpinner } from '@/components';
 
@@ -42,8 +42,9 @@ export default function AuthForm() {
                 return;
             }
 
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            window.location.href = '/dashboard';
+            const session = await getSession();
+            const redirectUrl = session?.user?.is_admin ? '/admin-dashboard' : '/dashboard';
+            window.location.href = redirectUrl;
         } catch (err) {
             setError('An error occurred. Please try again.');
             setLoading(false);
@@ -51,31 +52,45 @@ export default function AuthForm() {
     }
 
     return (
-        <form onSubmit={handleLogin} className="space-y-6 w-full md:w-11/12 mx-auto text-center">
+        <form onSubmit={handleLogin} className="space-y-5 w-full md:w-11/12 mx-auto">
             {error && <ErrorMessage error={error} />}
 
-            <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={loading}
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                placeholder="Email"
-                required
-            />
-            <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={loading}
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                placeholder="Password"
-                required
-            />
+            <div className="space-y-2">
+                <label htmlFor="email" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                    Email Address
+                </label>
+                <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={loading}
+                    className="appearance-none rounded-lg relative block w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 placeholder-neutral-400 text-neutral-900 dark:text-neutral-50 bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-all"
+                    placeholder="Enter your email"
+                    required
+                />
+            </div>
+
+            <div className="space-y-2">
+                <label htmlFor="password" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                    Password
+                </label>
+                <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
+                    className="appearance-none rounded-lg relative block w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 placeholder-neutral-400 text-neutral-900 dark:text-neutral-50 bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-neutral-100 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-all"
+                    placeholder="Enter your password"
+                    required
+                />
+            </div>
+
             <Button
                 type="submit"
                 disabled={loading}
-                className="text-blue-500 hover:text-blue-600 border border-blue-500 hover:border-blue-600 disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed w-full flex items-center justify-center"
+                className="bg-primary-600 hover:bg-primary-700 text-white w-full flex items-center justify-center py-3 shadow-sm hover:shadow-md focus:ring-primary-500 transition-all"
             >
                 {loading ? (
                     <>

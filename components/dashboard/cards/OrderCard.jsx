@@ -3,10 +3,10 @@ import { EditIcon, DeleteIcon, Button } from '@/components';
 export const OrderCard = ({ order, onEdit, onDelete, onAddDish, isExpanded }) => {
     if (!isExpanded) {
         return (
-            <li className="flex flex-col text-black dark:text-white">
-                <p className="font-bold">Order #{order.number}:</p>
+            <li className="flex flex-col text-neutral-900 dark:text-neutral-50 py-2">
+                <p className="font-semibold">Order #{order.number}</p>
                 {order.items?.map((item, index) => (
-                    <p key={index} className="text-gray-600 dark:text-gray-400 text-sm">
+                    <p key={index} className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
                         {item.quantity}x {item.name}
                     </p>
                 ))}
@@ -15,23 +15,34 @@ export const OrderCard = ({ order, onEdit, onDelete, onAddDish, isExpanded }) =>
     }
 
     return (
-        <li className="flex flex-col md:flex-row md:items-center mb-4 bg-gray-100 dark:bg-gray-700 p-3 rounded">
-            <button
-                className="flex justify-end md:mx-2 md:-mt-1 text-green-400 hover:text-green-500 text-3xl font-semibold"
-                onClick={() => onAddDish({ category: 'Order Dish', order })}
-            >
-                +
-            </button>
-            <span className="-mt-8 mb-2 md:-mt-0 md:mb-0 text-black dark:text-white mr-2 min-w-28">
-                Order #{order.number}:
-            </span>
-            <ul className="flex flex-col lg:flex-row flex-wrap">
+        <li className="flex flex-col bg-white dark:bg-neutral-700 p-4 rounded-lg border border-neutral-200 dark:border-neutral-600 hover:border-primary-300 dark:hover:border-primary-700 transition-all mb-3">
+            <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 flex items-center justify-center font-semibold">
+                        {order.number}
+                    </div>
+                    <span className="text-neutral-900 dark:text-neutral-50 font-semibold">Order #{order.number}</span>
+                </div>
+                <button
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-xl font-semibold transition-all"
+                    onClick={() => onAddDish({ category: 'Order Dish', order })}
+                >
+                    +
+                </button>
+            </div>
+            <ul className="space-y-2">
                 {order.items?.map((item, index) => (
-                    <div key={index} className="flex flex-row items-center justify-between mb-2 md:mb-0 md:mr-4">
-                        <p className="text-black dark:text-white">
-                            {item.quantity}x {item.name}
+                    <li
+                        key={index}
+                        className="flex flex-row items-center justify-between p-2 bg-neutral-50 dark:bg-neutral-800 rounded-lg"
+                    >
+                        <p className="text-neutral-900 dark:text-neutral-50 font-medium">
+                            <span className="text-primary-600 dark:text-primary-400 font-semibold">
+                                {item.quantity}x
+                            </span>{' '}
+                            {item.name}
                         </p>
-                        <div className="flex flex-row items-center mx-2">
+                        <div className="flex flex-row items-center gap-3">
                             <EditIcon
                                 action={() =>
                                     onEdit({
@@ -41,7 +52,7 @@ export const OrderCard = ({ order, onEdit, onDelete, onAddDish, isExpanded }) =>
                                         index,
                                     })
                                 }
-                                className="h-5 w-5 mr-2"
+                                className="h-4 w-4 text-neutral-600 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 cursor-pointer transition-all"
                             />
                             <DeleteIcon
                                 action={() =>
@@ -51,9 +62,10 @@ export const OrderCard = ({ order, onEdit, onDelete, onAddDish, isExpanded }) =>
                                         index,
                                     })
                                 }
+                                className="h-4 w-4 font-semibold text-neutral-600 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400 cursor-pointer transition-all"
                             />
                         </div>
-                    </div>
+                    </li>
                 ))}
             </ul>
         </li>

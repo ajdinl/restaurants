@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { MenuIcon, Button, LoadingSpinner } from '@/components';
@@ -14,26 +14,41 @@ export default function Navbar({ isAdmin }) {
     const { user, loading, fullName } = useAuth();
     const searchParams = useSearchParams();
     const view = searchParams.get('view');
+    const menuRef = useRef(null);
 
     const handleUserMenu = () => {
         setShowUserMenu(!showUserMenu);
     };
 
     useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setShowUserMenu(false);
+            }
+        };
+
         if (showUserMenu) {
-            const timer = setTimeout(() => setShowUserMenu(false), 3000);
-            return () => clearTimeout(timer);
+            document.addEventListener('mousedown', handleClickOutside);
         }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
     }, [showUserMenu]);
 
     return (
         <ThemeProvider attribute="class">
-            <header className="flex items-center justify-between h-16 px-4 border-b shrink-0 md:px-6 bg-white dark:bg-gray-900">
-                <nav className="flex flex-row items-center gap-2 md:gap-6 text-sm md:text-lg font-medium">
-                    <Link href="/" className="flex items-center gap-2 text-lg font-semibold md:text-base">
+            <header className="flex items-center justify-between h-16 px-6 border-b border-neutral-200 dark:border-neutral-700 shrink-0 bg-white dark:bg-neutral-900 shadow-sm">
+                <nav className="flex flex-row items-center gap-6 md:gap-8 text-sm md:text-base font-medium">
+                    <Link href="/" className="flex items-center gap-3 text-lg font-bold">
                         <MenuIcon
-                            className={!view ? 'h-7 w-7 dark:text-white' : 'h-6 w-6 text-gray-500 dark:text-gray-400'}
+                            className={
+                                !view
+                                    ? 'h-7 w-7 text-primary-600 dark:text-primary-400'
+                                    : 'h-6 w-6 text-neutral-600 dark:text-neutral-400'
+                            }
                         />
+                        <span className="hidden md:inline text-neutral-900 dark:text-neutral-50">Restaurant Pro</span>
                         <span className="sr-only">Restaurant Dashboard</span>
                     </Link>
                     {!isAdmin && (
@@ -41,7 +56,9 @@ export default function Navbar({ isAdmin }) {
                             <Link
                                 href="?view=menu"
                                 className={
-                                    view === 'menu' ? 'font-bold dark:text-white' : 'text-gray-500 dark:text-gray-400'
+                                    view === 'menu'
+                                        ? 'font-semibold text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400 pb-1 transition-all'
+                                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-all'
                                 }
                             >
                                 Menu
@@ -49,7 +66,9 @@ export default function Navbar({ isAdmin }) {
                             <Link
                                 href="?view=tables"
                                 className={
-                                    view === 'tables' ? 'font-bold dark:text-white' : 'text-gray-500 dark:text-gray-400'
+                                    view === 'tables'
+                                        ? 'font-semibold text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400 pb-1 transition-all'
+                                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-all'
                                 }
                             >
                                 Tables
@@ -57,7 +76,9 @@ export default function Navbar({ isAdmin }) {
                             <Link
                                 href="?view=orders"
                                 className={
-                                    view === 'orders' ? 'font-bold dark:text-white' : 'text-gray-500 dark:text-gray-400'
+                                    view === 'orders'
+                                        ? 'font-semibold text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400 pb-1 transition-all'
+                                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-all'
                                 }
                             >
                                 Orders
@@ -66,8 +87,8 @@ export default function Navbar({ isAdmin }) {
                                 href="?view=reservations"
                                 className={
                                     view === 'reservations'
-                                        ? 'font-bold dark:text-white'
-                                        : 'text-gray-500 dark:text-gray-400'
+                                        ? 'font-semibold text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400 pb-1 transition-all'
+                                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-all'
                                 }
                             >
                                 Reservations
@@ -80,8 +101,8 @@ export default function Navbar({ isAdmin }) {
                                 href="?view=restaurants"
                                 className={
                                     view === 'restaurants'
-                                        ? 'font-bold dark:text-white'
-                                        : 'text-gray-500 dark:text-gray-400'
+                                        ? 'font-semibold text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400 pb-1 transition-all'
+                                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-all'
                                 }
                             >
                                 Restaurants
@@ -89,7 +110,9 @@ export default function Navbar({ isAdmin }) {
                             <Link
                                 href="?view=create"
                                 className={
-                                    view === 'create' ? 'font-bold dark:text-white' : 'text-gray-500 dark:text-gray-400'
+                                    view === 'create'
+                                        ? 'font-semibold text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400 pb-1 transition-all'
+                                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-all'
                                 }
                             >
                                 Create
@@ -99,23 +122,26 @@ export default function Navbar({ isAdmin }) {
                 </nav>
                 {loading && <LoadingSpinner size="sm" />}
                 {user && !loading && (
-                    <div>
-                        <p
-                            className="font-bold text-gray-500 dark:text-gray-300 text-sm md:text-lg cursor-pointer"
+                    <div className="relative" ref={menuRef}>
+                        <button
+                            className="flex items-center gap-2 font-medium text-neutral-700 dark:text-neutral-300 text-sm md:text-base hover:text-neutral-900 dark:hover:text-neutral-50 transition-all"
                             onClick={handleUserMenu}
                         >
-                            {fullName}
-                        </p>
+                            <div className="hidden md:flex w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 items-center justify-center font-semibold">
+                                {fullName?.charAt(0)?.toUpperCase()}
+                            </div>
+                            <span>{fullName}</span>
+                        </button>
                         {showUserMenu && (
-                            <>
+                            <div className="absolute right-0 top-12 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-medium p-2 min-w-[200px] z-50">
                                 <ThemeToggle />
                                 <Button
                                     onClick={() => signOut({ callbackUrl: '/' })}
-                                    className="absolute w-28 right-4 md:right-5 top-24 text-sm md:text-base bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-500 font-semibold hover:bg-gray-200 dark:hover:bg-gray-700"
+                                    className="w-full mt-2 text-sm bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-600 font-medium hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-all"
                                 >
                                     Sign Out
                                 </Button>
-                            </>
+                            </div>
                         )}
                     </div>
                 )}

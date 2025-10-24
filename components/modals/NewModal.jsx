@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { updateOrDeleteArrayItem, addItem } from '@/services/api.service';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, Button, SelectInput } from '@/components';
+import { Button, SelectInput } from '@/components';
 
 export default function NewModal({
     setShowNewModal,
@@ -169,298 +169,483 @@ export default function NewModal({
 
     return (
         <>
-            <div className="fixed inset-0 z-40 bg-black opacity-80"></div>
-            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                <div className="relative w-1/4 min-w-96 my-6 mx-auto max-w-3xl">
-                    <div className="border-0 rounded shadow-lg relative flex flex-col w-full bg-white dark:bg-gray-800 dark:shadow-md dark:shadow-gray-500/50 outline-none focus:outline-none">
-                        <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                            <h3 className="text-3xl font-semibold dark:text-white">New Modal</h3>
+            <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"></div>
+            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none p-4" onClick={() => setShowNewModal(false)}>
+                <div className="relative w-full max-w-2xl my-6 mx-auto" onClick={(e) => e.stopPropagation()}>
+                    <div className="border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-medium relative flex flex-col w-full bg-white dark:bg-neutral-800 outline-none focus:outline-none">
+                        <div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-neutral-700">
+                            <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-50">
+                                New {selected.category}
+                            </h3>
                             <button
-                                className="p-1 ml-auto bg-transparent border-0 text-red-500 opacity-80 float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                                className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-all"
                                 onClick={() => setShowNewModal(false)}
                             >
-                                X
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
                             </button>
                         </div>
-                        <div className="relative p-6 flex-auto">
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>New {selected.category}</CardTitle>
-                                    <CardDescription>Add a new {selected.category}.</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    {selected.category === 'Table' && (
-                                        <form className="space-y-4">
-                                            {isAdmin && (
-                                                <label className="block">
-                                                    <span className="text-gray-700 dark:text-gray-400">Restaurant</span>
-                                                    <span className="text-red-500 ml-4 text-sm">
-                                                        {!table.restaurant_id && error}
-                                                    </span>
-                                                    <select
-                                                        value={table.restaurant_id || selected.restaurantId || ''}
-                                                        onChange={(e) =>
-                                                            setTable({
-                                                                ...table,
-                                                                restaurant_id: e.target.value,
-                                                            })
-                                                        }
-                                                        className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        <div className="relative p-6 flex-auto max-h-[70vh] overflow-y-auto">
+                            {selected.category === 'Table' && (
+                                <form className="space-y-4">
+                                    {isAdmin && (
+                                        <div className="space-y-2">
+                                            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                                Restaurant
+                                            </label>
+                                            {!table.restaurant_id && error && (
+                                                <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                                                    <svg
+                                                        className="w-3 h-3"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
                                                     >
-                                                        <option value="">Select a restaurant</option>
-                                                        {restaurants.map((restaurant) => (
-                                                            <option key={restaurant.id} value={restaurant.id}>
-                                                                {restaurant.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </label>
-                                            )}
-                                            <SelectInput
-                                                label="Maximum Capacity"
-                                                value={table.capacity}
-                                                onChange={(e) => setTable({ ...table, capacity: e.target.value })}
-                                                error={!table.capacity && error}
-                                            />
-                                        </form>
-                                    )}
-                                    {selected.category === 'Reservation' && (
-                                        <form className="space-y-4">
-                                            {isAdmin && (
-                                                <label className="block">
-                                                    <span className="text-gray-700 dark:text-gray-400">Restaurant</span>
-                                                    <span className="text-red-500 ml-4 text-sm">
-                                                        {!table.restaurant_id && error}
-                                                    </span>
-                                                    <select
-                                                        value={table.restaurant_id || selected.restaurantId || ''}
-                                                        onChange={(e) =>
-                                                            setTable({
-                                                                ...table,
-                                                                restaurant_id: e.target.value,
-                                                            })
-                                                        }
-                                                        className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                                    >
-                                                        <option value="">Select a restaurant</option>
-                                                        {restaurants.map((restaurant) => (
-                                                            <option key={restaurant.id} value={restaurant.id}>
-                                                                {restaurant.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </label>
-                                            )}
-                                            <label className="block">
-                                                <span className="text-gray-700 dark:text-gray-400">Table Number</span>
-                                                <span className="text-red-500 ml-4 text-sm">
-                                                    {!table.table_number && error}
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        />
+                                                    </svg>
+                                                    {error}
                                                 </span>
+                                            )}
+                                            <div className="relative">
                                                 <select
+                                                    value={table.restaurant_id || selected.restaurantId || ''}
                                                     onChange={(e) =>
                                                         setTable({
                                                             ...table,
-                                                            table_number: e.target.value,
-                                                            table_id:
-                                                                e.target.options[e.target.selectedIndex].getAttribute(
-                                                                    'table_id'
-                                                                ),
-                                                            status: 'Reserved',
-                                                            capacity: '',
+                                                            restaurant_id: e.target.value,
                                                         })
                                                     }
-                                                    className="mt-1 block w-full rounded dark:bg-gray-400 border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                    className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
                                                 >
-                                                    <option></option>
-                                                    {!isAdmin &&
-                                                        selected.tables?.map((table) => (
-                                                            <option
-                                                                key={table.number}
-                                                                value={table.number}
-                                                                table_id={table.id}
-                                                            >
-                                                                {table.number}
-                                                            </option>
-                                                        ))}
-                                                    {isAdmin &&
-                                                        restaurants
-                                                            ?.filter(
-                                                                (restaurant) => restaurant.id === selected.restaurantId
-                                                            )
-                                                            .map((restaurant) =>
-                                                                restaurant.tables.map((table) => (
-                                                                    <option
-                                                                        key={table.id}
-                                                                        value={table.number}
-                                                                        table_id={table.id}
-                                                                    >
-                                                                        {table.number}
-                                                                    </option>
-                                                                ))
-                                                            )}
+                                                    <option value="">Select a restaurant</option>
+                                                    {restaurants.map((restaurant) => (
+                                                        <option key={restaurant.id} value={restaurant.id}>
+                                                            {restaurant.name}
+                                                        </option>
+                                                    ))}
                                                 </select>
+                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                    <svg
+                                                        className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M19 9l-7 7-7-7"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <SelectInput
+                                        label="Maximum Capacity"
+                                        value={table.capacity}
+                                        onChange={(e) => setTable({ ...table, capacity: e.target.value })}
+                                        error={!table.capacity && error}
+                                    />
+                                </form>
+                            )}
+                            {selected.category === 'Reservation' && (
+                                <form className="space-y-4">
+                                    {isAdmin && (
+                                        <div className="space-y-2">
+                                            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                                Restaurant
                                             </label>
-                                            {table.table_number && (
-                                                <>
-                                                    <label className="block">
-                                                        <span className="text-gray-700 dark:text-gray-400">Status</span>
-                                                        <span className="text-red-500 ml-4 text-sm">
-                                                            {!table.status && error}
-                                                        </span>
-                                                        <select
-                                                            value={table.status || 'Reserved'}
-                                                            onChange={(e) =>
-                                                                setTable({ ...table, status: e.target.value })
-                                                            }
-                                                            className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                            {!table.restaurant_id && error && (
+                                                <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                                                    <svg
+                                                        className="w-3 h-3"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        />
+                                                    </svg>
+                                                    {error}
+                                                </span>
+                                            )}
+                                            <div className="relative">
+                                                <select
+                                                    value={table.restaurant_id || selected.restaurantId || ''}
+                                                    onChange={(e) =>
+                                                        setTable({
+                                                            ...table,
+                                                            restaurant_id: e.target.value,
+                                                        })
+                                                    }
+                                                    className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
+                                                >
+                                                    <option value="">Select a restaurant</option>
+                                                    {restaurants.map((restaurant) => (
+                                                        <option key={restaurant.id} value={restaurant.id}>
+                                                            {restaurant.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                    <svg
+                                                        className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M19 9l-7 7-7-7"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                            Table Number
+                                        </label>
+                                        {!table.table_number && error && (
+                                            <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                                                <svg
+                                                    className="w-3 h-3"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                    />
+                                                </svg>
+                                                {error}
+                                            </span>
+                                        )}
+                                        <div className="relative">
+                                            <select
+                                                onChange={(e) =>
+                                                    setTable({
+                                                        ...table,
+                                                        table_number: e.target.value,
+                                                        table_id:
+                                                            e.target.options[e.target.selectedIndex].getAttribute(
+                                                                'table_id'
+                                                            ),
+                                                        status: 'Reserved',
+                                                        capacity: '',
+                                                    })
+                                                }
+                                                className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
+                                            >
+                                                <option></option>
+                                                {!isAdmin &&
+                                                    selected.tables?.map((table) => (
+                                                        <option
+                                                            key={table.number}
+                                                            value={table.number}
+                                                            table_id={table.id}
                                                         >
-                                                            <option value="Reserved">Reserved</option>
-                                                        </select>
-                                                    </label>
-                                                    <label className="block">
-                                                        <span className="text-gray-700 dark:text-gray-400">
-                                                            Number of Guests
-                                                        </span>
-                                                        <span className="text-red-500 ml-4 text-sm">
-                                                            {!table.capacity && error}
-                                                        </span>
-                                                        <select
-                                                            value={table.capacity || ''}
-                                                            onChange={(e) =>
-                                                                setTable({ ...table, capacity: e.target.value })
-                                                            }
-                                                            className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                            {table.number}
+                                                        </option>
+                                                    ))}
+                                                {isAdmin &&
+                                                    restaurants
+                                                        ?.filter(
+                                                            (restaurant) => restaurant.id === selected.restaurantId
+                                                        )
+                                                        .map((restaurant) =>
+                                                            restaurant.tables.map((table) => (
+                                                                <option
+                                                                    key={table.id}
+                                                                    value={table.number}
+                                                                    table_id={table.id}
+                                                                >
+                                                                    {table.number}
+                                                                </option>
+                                                            ))
+                                                        )}
+                                            </select>
+                                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                <svg
+                                                    className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M19 9l-7 7-7-7"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {table.table_number && (
+                                        <>
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                                    Status
+                                                </label>
+                                                {!table.status && error && (
+                                                    <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                                                        <svg
+                                                            className="w-3 h-3"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
                                                         >
-                                                            <option value="" disabled>
-                                                                Select number of guests
-                                                            </option>
-                                                            {!isAdmin &&
-                                                                selected.tables.map((ta) => {
-                                                                    if (ta.id == table.table_id) {
-                                                                        return Array.from(
-                                                                            { length: ta.capacity },
-                                                                            (_, index) => (
-                                                                                <option
-                                                                                    key={index + 1}
-                                                                                    value={index + 1}
-                                                                                >
-                                                                                    {index + 1}
-                                                                                </option>
-                                                                            )
-                                                                        );
-                                                                    }
-                                                                    return null;
-                                                                })}
-                                                            {isAdmin &&
-                                                                restaurants
-                                                                    ?.filter(
-                                                                        (restaurant) =>
-                                                                            restaurant.id === selected.restaurantId
-                                                                    )
-                                                                    .flatMap((restaurant) =>
-                                                                        restaurant.tables
-                                                                            .filter((t) => t.id === table.table_id)
-                                                                            .flatMap((t) =>
-                                                                                Array.from(
-                                                                                    { length: t.capacity },
-                                                                                    (_, index) => (
-                                                                                        <option
-                                                                                            key={index + 1}
-                                                                                            value={index + 1}
-                                                                                        >
-                                                                                            {index + 1}
-                                                                                        </option>
-                                                                                    )
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                            />
+                                                        </svg>
+                                                        {error}
+                                                    </span>
+                                                )}
+                                                <div className="relative">
+                                                    <select
+                                                        value={table.status || 'Reserved'}
+                                                        onChange={(e) => setTable({ ...table, status: e.target.value })}
+                                                        className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
+                                                    >
+                                                        <option value="Reserved">Reserved</option>
+                                                    </select>
+                                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                        <svg
+                                                            className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M19 9l-7 7-7-7"
+                                                            />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                                    Number of Guests
+                                                </label>
+                                                {!table.capacity && error && (
+                                                    <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                                                        <svg
+                                                            className="w-3 h-3"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                            />
+                                                        </svg>
+                                                        {error}
+                                                    </span>
+                                                )}
+                                                <div className="relative">
+                                                    <select
+                                                        value={table.capacity || ''}
+                                                        onChange={(e) =>
+                                                            setTable({ ...table, capacity: e.target.value })
+                                                        }
+                                                        className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
+                                                    >
+                                                        <option value="" disabled>
+                                                            Select number of guests
+                                                        </option>
+                                                        {!isAdmin &&
+                                                            selected.tables.map((ta) => {
+                                                                if (ta.id == table.table_id) {
+                                                                    return Array.from(
+                                                                        { length: ta.capacity },
+                                                                        (_, index) => (
+                                                                            <option key={index + 1} value={index + 1}>
+                                                                                {index + 1}
+                                                                            </option>
+                                                                        )
+                                                                    );
+                                                                }
+                                                                return null;
+                                                            })}
+                                                        {isAdmin &&
+                                                            restaurants
+                                                                ?.filter(
+                                                                    (restaurant) =>
+                                                                        restaurant.id === selected.restaurantId
+                                                                )
+                                                                .flatMap((restaurant) =>
+                                                                    restaurant.tables
+                                                                        .filter((t) => t.id === table.table_id)
+                                                                        .flatMap((t) =>
+                                                                            Array.from(
+                                                                                { length: t.capacity },
+                                                                                (_, index) => (
+                                                                                    <option
+                                                                                        key={index + 1}
+                                                                                        value={index + 1}
+                                                                                    >
+                                                                                        {index + 1}
+                                                                                    </option>
                                                                                 )
                                                                             )
-                                                                    )}
-                                                        </select>
-                                                    </label>
-                                                </>
-                                            )}
-                                        </form>
+                                                                        )
+                                                                )}
+                                                    </select>
+                                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                        <svg
+                                                            className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M19 9l-7 7-7-7"
+                                                            />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
                                     )}
-                                    {(selected.category === 'Dish' || selected.category === 'Order Dish') && (
-                                        <form className="space-y-4">
+                                </form>
+                            )}
+                            {(selected.category === 'Dish' || selected.category === 'Order Dish') && (
+                                <form className="space-y-4">
+                                    <label className="block">
+                                        <span className="text-neutral-700 dark:text-neutral-300">Name</span>
+                                        <span className="text-red-500 ml-4 text-sm">{!dish.name && error}</span>
+                                        <input
+                                            type="text"
+                                            onChange={(e) => setDish({ ...dish, name: e.target.value })}
+                                            className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                        />
+                                    </label>
+                                    {selected.category === 'Dish' && (
+                                        <>
                                             <label className="block">
-                                                <span className="text-gray-700 dark:text-gray-400">Name</span>
-                                                <span className="text-red-500 ml-4 text-sm">{!dish.name && error}</span>
+                                                <span className="text-neutral-700 dark:text-neutral-300">
+                                                    Ingredients
+                                                </span>
+                                                <span className="text-red-500 ml-4 text-sm">
+                                                    {!dish.ingredients && error}
+                                                </span>
                                                 <input
                                                     type="text"
-                                                    onChange={(e) => setDish({ ...dish, name: e.target.value })}
-                                                    className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                    onChange={(e) =>
+                                                        setDish({
+                                                            ...dish,
+                                                            ingredients: [e.target.value],
+                                                        })
+                                                    }
+                                                    className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                                                 />
                                             </label>
-                                            {selected.category === 'Dish' && (
-                                                <>
-                                                    <label className="block">
-                                                        <span className="text-gray-700 dark:text-gray-400">
-                                                            Ingredients
-                                                        </span>
-                                                        <span className="text-red-500 ml-4 text-sm">
-                                                            {!dish.ingredients && error}
-                                                        </span>
-                                                        <input
-                                                            type="text"
-                                                            onChange={(e) =>
-                                                                setDish({
-                                                                    ...dish,
-                                                                    ingredients: [e.target.value],
-                                                                })
-                                                            }
-                                                            className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                                        />
-                                                    </label>
-                                                    <label className="block">
-                                                        <span className="text-gray-700 dark:text-gray-400">Price</span>
-                                                        <span className="text-red-500 ml-4 text-sm">
-                                                            {!dish.price && error}
-                                                        </span>
-                                                        <input
-                                                            type="number"
-                                                            onChange={(e) =>
-                                                                setDish({ ...dish, price: e.target.value })
-                                                            }
-                                                            className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                                        />
-                                                    </label>
-                                                </>
-                                            )}
-                                            {selected.category === 'Order Dish' && (
-                                                <label className="block">
-                                                    <span className="text-gray-700 dark:text-gray-400">Quantity</span>
-                                                    <span className="text-red-500 ml-4 text-sm">
-                                                        {!dish.quantity && error}
-                                                    </span>
-                                                    <input
-                                                        type="number"
-                                                        onChange={(e) => setDish({ ...dish, quantity: e.target.value })}
-                                                        className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                            <label className="block">
+                                                <span className="text-neutral-700 dark:text-neutral-300">Price</span>
+                                                <span className="text-red-500 ml-4 text-sm">
+                                                    {!dish.price && error}
+                                                </span>
+                                                <input
+                                                    type="number"
+                                                    onChange={(e) => setDish({ ...dish, price: e.target.value })}
+                                                    className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                                />
+                                            </label>
+                                        </>
+                                    )}
+                                    {selected.category === 'Order Dish' && (
+                                        <label className="block">
+                                            <span className="text-neutral-700 dark:text-neutral-300">Quantity</span>
+                                            <span className="text-red-500 ml-4 text-sm">{!dish.quantity && error}</span>
+                                            <input
+                                                type="number"
+                                                onChange={(e) => setDish({ ...dish, quantity: e.target.value })}
+                                                className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                            />
+                                        </label>
+                                    )}
+                                </form>
+                            )}
+                            {selected.category === 'Menu' && (
+                                <form className="space-y-4">
+                                    <Button
+                                        className="bg-primary-600 hover:bg-primary-700 text-white shadow-sm hover:shadow-md focus:ring-primary-500"
+                                        onClick={() => handleMenuSave()}
+                                    >
+                                        Add
+                                    </Button>
+                                </form>
+                            )}
+                            {selected.category === 'Order' && (
+                                <form className="flex flex-col space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                            Table Number
+                                        </label>
+                                        {error && (
+                                            <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                                                <svg
+                                                    className="w-3 h-3"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                                     />
-                                                </label>
-                                            )}
-                                        </form>
-                                    )}
-                                    {selected.category === 'Menu' && (
-                                        <form className="space-y-4">
-                                            <Button
-                                                className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                                onClick={() => handleMenuSave()}
-                                            >
-                                                Add
-                                            </Button>
-                                        </form>
-                                    )}
-                                    {selected.category === 'Order' && (
-                                        <form className="flex flex-col space-y-4">
+                                                </svg>
+                                                {error}
+                                            </span>
+                                        )}
+                                        <div className="relative">
                                             {isAdmin && (
                                                 <select
                                                     onChange={(e) =>
                                                         setTable({ ...table, table_number: e.target.value })
                                                     }
-                                                    className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                    className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
                                                 >
-                                                    <option></option>
+                                                    <option value="">Select a table</option>
                                                     {restaurants
                                                         ?.filter(
                                                             (restaurant) => restaurant.id === selected.restaurantId
@@ -476,12 +661,12 @@ export default function NewModal({
                                             )}
                                             {!isAdmin && (
                                                 <select
-                                                    className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                    className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
                                                     onChange={(e) =>
                                                         setTable({ ...table, table_number: e.target.value })
                                                     }
                                                 >
-                                                    <option></option>
+                                                    <option value="">Select a table</option>
                                                     {selected.tables?.map((table) => (
                                                         <option key={table.id} value={table.number}>
                                                             Table #{table.number}
@@ -489,32 +674,46 @@ export default function NewModal({
                                                     ))}
                                                 </select>
                                             )}
-                                            <span className="text-red-500 text-sm">{error}</span>
-                                            <Button
-                                                className="w-20 bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                                onClick={() => handleOrderSave()}
-                                            >
-                                                Add
-                                            </Button>
-                                        </form>
-                                    )}
-                                </CardContent>
-                            </Card>
+                                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                <svg
+                                                    className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M19 9l-7 7-7-7"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Button
+                                        className="w-20 bg-primary-600 hover:bg-primary-700 text-white shadow-sm hover:shadow-md focus:ring-primary-500"
+                                        onClick={() => handleOrderSave()}
+                                    >
+                                        + Add
+                                    </Button>
+                                </form>
+                            )}
                         </div>
-                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                        <div className="flex items-center justify-end gap-3 p-6 border-t border-neutral-200 dark:border-neutral-700">
                             <Button
-                                className="text-red-500 background-transparent font-bold uppercase px-6 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                className="bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600 border border-neutral-300 dark:border-neutral-600 focus:ring-neutral-500"
                                 type="button"
                                 onClick={() => setShowNewModal(false)}
                             >
-                                Close
+                                Cancel
                             </Button>
                             <Button
-                                className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                className="bg-primary-600 hover:bg-primary-700 text-white shadow-sm hover:shadow-md focus:ring-primary-500"
                                 type="button"
                                 onClick={() => handleSave()}
                             >
-                                {selected.category === 'Menu' || selected.category === 'Order' ? 'Add' : 'Save'}
+                                Save
                             </Button>
                         </div>
                     </div>
