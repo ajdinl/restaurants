@@ -3,11 +3,21 @@ import { EditIcon, DeleteIcon } from '@/components';
 export const TableCard = ({ table, onEdit, onDelete, isExpanded }) => {
     if (!isExpanded) {
         return (
-            <li className="text-neutral-900 dark:text-neutral-50 py-2">
-                <span className="font-medium">Table #{table.number}</span>
-                <span className="text-neutral-600 dark:text-neutral-400 text-sm ml-2">
-                    · Capacity: {table.capacity}
-                </span>
+            <li className="flex items-center justify-between p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all border border-transparent hover:border-neutral-200 dark:hover:border-neutral-600">
+                <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 flex items-center justify-center font-bold text-sm">
+                        {table.number}
+                    </div>
+                    <div>
+                        <p className="font-semibold text-neutral-900 dark:text-neutral-50">Table #{table.number}</p>
+                        <p className="text-neutral-600 dark:text-neutral-400 text-xs">Seats {table.capacity}</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="px-2 py-1 rounded-md text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                        Available
+                    </span>
+                </div>
             </li>
         );
     }

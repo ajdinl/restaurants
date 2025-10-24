@@ -23,18 +23,25 @@ export default function NewModal({
     }, [selected.restaurantId]);
 
     const handleSave = async () => {
-        if (selected.category === 'Table') {
-            handleTableSave();
-        } else if (selected.category === 'Dish') {
-            handleDishSave();
-        } else if (selected.category === 'Menu') {
-            handleMenuSave();
-        } else if (selected.category === 'Order') {
-            handleOrderSave();
-        } else if (selected.category === 'Order Dish') {
-            handleDishSave();
-        } else if (selected.category === 'Reservation') {
-            handleReservationSave();
+        switch (selected.category) {
+            case 'Table':
+                handleTableSave();
+                break;
+            case 'Dish':
+            case 'Order Dish':
+                handleDishSave();
+                break;
+            case 'Menu':
+                handleMenuSave();
+                break;
+            case 'Order':
+                handleOrderSave();
+                break;
+            case 'Reservation':
+                handleReservationSave();
+                break;
+            default:
+                break;
         }
     };
 
@@ -97,7 +104,7 @@ export default function NewModal({
     const handleOrderSave = async () => {
         const { restaurantId, orderNumbers } = selected;
         const tableNumber = table.table_number;
-        const orderNumber = orderNumbers ? orderNumbers.pop() + 1 : 1;
+        const orderNumber = orderNumbers && orderNumbers.length > 0 ? Math.max(...orderNumbers) + 1 : 1;
 
         if (!tableNumber) {
             setError('Please select table');
@@ -106,8 +113,8 @@ export default function NewModal({
 
         const { data, error } = await addItem('orders', {
             restaurant_id: restaurantId,
-            table_number: tableNumber,
-            number: orderNumber,
+            table_number: parseInt(tableNumber),
+            number: parseInt(orderNumber),
         });
         if (error) {
             console.error('Error adding item:', error);
@@ -170,7 +177,10 @@ export default function NewModal({
     return (
         <>
             <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"></div>
-            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none p-4" onClick={() => setShowNewModal(false)}>
+            <div
+                className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none p-4"
+                onClick={() => setShowNewModal(false)}
+            >
                 <div className="relative w-full max-w-2xl my-6 mx-auto" onClick={(e) => e.stopPropagation()}>
                     <div className="border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-medium relative flex flex-col w-full bg-white dark:bg-neutral-800 outline-none focus:outline-none">
                         <div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-neutral-700">
@@ -691,12 +701,6 @@ export default function NewModal({
                                             </div>
                                         </div>
                                     </div>
-                                    <Button
-                                        className="w-20 bg-primary-600 hover:bg-primary-700 text-white shadow-sm hover:shadow-md focus:ring-primary-500"
-                                        onClick={() => handleOrderSave()}
-                                    >
-                                        + Add
-                                    </Button>
                                 </form>
                             )}
                         </div>

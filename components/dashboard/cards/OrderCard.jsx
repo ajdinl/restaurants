@@ -2,29 +2,52 @@ import { EditIcon, DeleteIcon, Button } from '@/components';
 
 export const OrderCard = ({ order, onEdit, onDelete, onAddDish, isExpanded }) => {
     if (!isExpanded) {
+        const totalItems = order.items?.reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
         return (
-            <li className="flex flex-col text-neutral-900 dark:text-neutral-50 py-2">
-                <p className="font-semibold">Order #{order.number}</p>
-                {order.items?.map((item, index) => (
-                    <p key={index} className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
-                        {item.quantity}x {item.name}
-                    </p>
-                ))}
+            <li className="flex items-start justify-between p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all border border-transparent hover:border-neutral-200 dark:hover:border-neutral-600">
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                    <div className="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        {order.number}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-neutral-900 dark:text-neutral-50">Order #{order.number}</p>
+                        <div className="mt-1 space-y-0.5">
+                            {order.items?.slice(0, 2).map((item, index) => (
+                                <p key={index} className="text-neutral-600 dark:text-neutral-400 text-xs truncate">
+                                    <span className="font-medium text-green-600 dark:text-green-400">
+                                        {item.quantity}x
+                                    </span>{' '}
+                                    {item.name}
+                                </p>
+                            ))}
+                            {order.items?.length > 2 && (
+                                <p className="text-neutral-500 dark:text-neutral-500 text-xs">
+                                    +{order.items.length - 2} more items
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2 ml-3 flex-shrink-0">
+                    <span className="px-2 py-1 rounded-md text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                        {totalItems} items
+                    </span>
+                </div>
             </li>
         );
     }
 
     return (
-        <li className="flex flex-col bg-white dark:bg-neutral-700 p-4 rounded-lg border border-neutral-200 dark:border-neutral-600 hover:border-primary-300 dark:hover:border-primary-700 transition-all mb-3">
+        <li className="flex flex-col bg-white dark:bg-neutral-700 p-4 rounded-lg border border-neutral-200 dark:border-neutral-600 hover:border-green-300 dark:hover:border-green-700 transition-all mb-3">
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 flex items-center justify-center font-semibold">
+                    <div className="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 flex items-center justify-center font-semibold">
                         {order.number}
                     </div>
                     <span className="text-neutral-900 dark:text-neutral-50 font-semibold">Order #{order.number}</span>
                 </div>
                 <button
-                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-xl font-semibold transition-all"
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-600 hover:bg-green-700 text-white text-xl font-semibold transition-all shadow-sm"
                     onClick={() => onAddDish({ category: 'Order Dish', order })}
                 >
                     +
@@ -37,9 +60,7 @@ export const OrderCard = ({ order, onEdit, onDelete, onAddDish, isExpanded }) =>
                         className="flex flex-row items-center justify-between p-2 bg-neutral-50 dark:bg-neutral-800 rounded-lg"
                     >
                         <p className="text-neutral-900 dark:text-neutral-50 font-medium">
-                            <span className="text-primary-600 dark:text-primary-400 font-semibold">
-                                {item.quantity}x
-                            </span>{' '}
+                            <span className="text-green-600 dark:text-green-400 font-semibold">{item.quantity}x</span>{' '}
                             {item.name}
                         </p>
                         <div className="flex flex-row items-center gap-3">
@@ -52,7 +73,7 @@ export const OrderCard = ({ order, onEdit, onDelete, onAddDish, isExpanded }) =>
                                         index,
                                     })
                                 }
-                                className="h-4 w-4 text-neutral-600 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 cursor-pointer transition-all"
+                                className="h-4 w-4 text-neutral-600 hover:text-green-600 dark:text-neutral-400 dark:hover:text-green-400 cursor-pointer transition-all"
                             />
                             <DeleteIcon
                                 action={() =>

@@ -79,18 +79,13 @@ export default function EditModal({ setShowEditModal, selected, fetchRestaurants
         setOpenDropdown(false);
     };
 
-    function removeLastChar(str) {
-        if (str.charAt(str.length - 1) === 's') {
-            return str.slice(0, -1);
-        } else {
-            return str;
-        }
-    }
-
     return (
         <>
             <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"></div>
-            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none p-4" onClick={() => setShowEditModal(false)}>
+            <div
+                className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none p-4"
+                onClick={() => setShowEditModal(false)}
+            >
                 <div className="relative w-full max-w-2xl my-6 mx-auto" onClick={(e) => e.stopPropagation()}>
                     <div className="border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-medium relative flex flex-col w-full bg-white dark:bg-neutral-800 outline-none focus:outline-none">
                         <div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-neutral-700">

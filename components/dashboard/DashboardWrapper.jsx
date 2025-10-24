@@ -18,19 +18,6 @@ export default function DashboardWrapper({ children, wrapperData }) {
                                     className="bg-primary-600 hover:bg-primary-700 text-white shadow-sm hover:shadow-md focus:ring-primary-500 transition-all"
                                     onClick={() => wrapperData.openNewModal(wrapperData.modalData)}
                                 >
-                                    <svg
-                                        className="w-4 h-4 mr-1.5"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M12 4v16m8-8H4"
-                                        />
-                                    </svg>
                                     {wrapperData.buttonText}
                                 </Button>
                             )}

@@ -41,10 +41,10 @@ function PencilIcon(props) {
 function EditIcon({ action, className }) {
     return (
         <button
-            className={`p-1.5 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-all cursor-pointer ${className}`}
+            className={`rounded-lg w-5 h-5 flex items-center justify-center hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-all cursor-pointer ${className}`}
             onClick={action}
         >
-            <PencilIcon className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+            <PencilIcon className="h-4 w-4 text-neutral-600 dark:text-neutral-400" />
         </button>
     );
 }
@@ -52,11 +52,11 @@ function EditIcon({ action, className }) {
 function DeleteIcon({ action, className }) {
     return (
         <button
-            className={`p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-all cursor-pointer ${className}`}
+            className={`rounded-lg w-5 h-5 flex items-center justify-center hover:bg-red-100 dark:hover:bg-red-900/30 transition-all cursor-pointer ${className}`}
             onClick={action}
         >
             <svg
-                className="h-5 w-5 text-red-600 dark:text-red-400"
+                className="h-4.5 w-4.5 text-red-600 dark:text-red-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

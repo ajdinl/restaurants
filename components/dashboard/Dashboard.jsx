@@ -49,8 +49,8 @@ export default function DashboardComponent() {
     }
 
     return (
-        <>
-            <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-6 p-6 md:gap-8 md:p-8 bg-neutral-50 dark:bg-neutral-900">
+        <div>
+            <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-6 p-6 md:gap-8 md:p-8 bg-neutral-50 dark:bg-neutral-900">
                 {error && <ErrorMessage error={error} />}
 
                 <MenuSection
@@ -97,7 +97,6 @@ export default function DashboardComponent() {
                     onAddReservation={openNewModal}
                 />
             </main>
-
             {isNewModalOpen && (
                 <NewModal
                     setShowNewModal={closeNewModal}
@@ -116,6 +115,6 @@ export default function DashboardComponent() {
                     getRestaurantsData={refetch}
                 />
             )}
-        </>
+        </div>
     );
 }
