@@ -37,9 +37,6 @@ async function createAdminUser() {
         });
 
         console.log('Admin user created successfully!');
-        console.log('Email:', adminUser.email);
-        console.log('Password:', password);
-        console.log('Full Name:', adminUser.full_name);
 
         await mongoose.connection.close();
     } catch (error) {
