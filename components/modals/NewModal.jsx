@@ -50,7 +50,7 @@ export default function NewModal({
                 result = await handleMenuSave(selected.restaurantId, selected.menuNumber);
                 break;
             case 'Order':
-                result = await handleOrderSave(selected.restaurantId, selected.orderNumbers, formData.table_number);
+                result = await handleOrderSave(selected.restaurantId, selected.orderNumbers, formData.table_id);
                 break;
             case 'Reservation':
                 result = await handleReservationSave(formData, restaurantId, restaurants, selected.reservationNumbers);

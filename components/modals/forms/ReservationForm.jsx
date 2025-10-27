@@ -67,7 +67,7 @@ export const ReservationForm = ({
             )}
             <div className="space-y-2">
                 <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Table Number</label>
-                {!formData.table_number && error && (
+                {!formData.table_id && error && (
                     <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
@@ -83,11 +83,9 @@ export const ReservationForm = ({
                 <div className="relative">
                     <select
                         onChange={(e) => {
-                            const option = e.target.options[e.target.selectedIndex];
                             onChange({
                                 ...formData,
-                                table_number: e.target.value,
-                                table_id: option.getAttribute('table_id'),
+                                table_id: e.target.value,
                                 status: 'Reserved',
                                 capacity: '',
                             });
@@ -97,8 +95,8 @@ export const ReservationForm = ({
                         <option></option>
                         {!isAdmin &&
                             tables?.map((table) => (
-                                <option key={table.number} value={table.number} table_id={table.id}>
-                                    {table.number}
+                                <option key={table.id} value={table.id}>
+                                    Table #{table.number}
                                 </option>
                             ))}
                         {isAdmin &&
@@ -106,8 +104,8 @@ export const ReservationForm = ({
                                 ?.filter((restaurant) => restaurant.id === selectedRestaurantId)
                                 .map((restaurant) =>
                                     restaurant.tables.map((table) => (
-                                        <option key={table.id} value={table.number} table_id={table.id}>
-                                            {table.number}
+                                        <option key={table.id} value={table.id}>
+                                            Table #{table.number}
                                         </option>
                                     ))
                                 )}
@@ -124,7 +122,7 @@ export const ReservationForm = ({
                     </div>
                 </div>
             </div>
-            {formData.table_number && (
+            {formData.table_id && (
                 <>
                     <div className="space-y-2">
                         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">

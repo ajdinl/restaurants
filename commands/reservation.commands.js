@@ -20,7 +20,7 @@ export class CreateReservationCommand {
         const reservation = await reservationModel.create({
             restaurant_id: this.data.restaurant_id,
             number: Number(this.data.number),
-            table_number: Number(this.data.table_number),
+            table_id: this.data.table_id,
             status: this.data.status,
             capacity: Number(this.data.capacity),
         });
@@ -29,7 +29,7 @@ export class CreateReservationCommand {
             id: reservation._id.toString(),
             restaurant_id: reservation.restaurant_id.toString(),
             number: reservation.number,
-            table_number: reservation.table_number,
+            table_id: reservation.table_id.toString(),
             status: reservation.status,
             capacity: reservation.capacity,
         };
@@ -59,7 +59,7 @@ export class UpdateReservationCommand {
         const updateData = {};
         if (this.data.status !== undefined) updateData.status = this.data.status;
         if (this.data.capacity !== undefined) updateData.capacity = Number(this.data.capacity);
-        if (this.data.table_number !== undefined) updateData.table_number = Number(this.data.table_number);
+        if (this.data.table_id !== undefined) updateData.table_id = this.data.table_id;
 
         const reservation = await reservationModel.findByIdAndUpdate(this.id, updateData, {
             new: true,
@@ -74,7 +74,7 @@ export class UpdateReservationCommand {
             id: reservation._id.toString(),
             restaurant_id: reservation.restaurant_id.toString(),
             number: reservation.number,
-            table_number: reservation.table_number,
+            table_id: reservation.table_id.toString(),
             status: reservation.status,
             capacity: reservation.capacity,
         };

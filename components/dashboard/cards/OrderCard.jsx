@@ -1,7 +1,9 @@
 import { EditIcon, DeleteIcon, Button } from '@/components';
 
-export const OrderCard = ({ order, menu, onEdit, onDelete, onAddDish, isExpanded }) => {
+export const OrderCard = ({ order, menu, tables, onEdit, onDelete, onAddDish, isExpanded }) => {
     const menuItems = menu?.[0]?.items || [];
+    const table = tables?.find((t) => t.id === order.table_id);
+    const tableNumber = table?.number || order.table_number || 'N/A';
 
     const calculateTotal = () => {
         if (!order.items || menuItems.length === 0) {
@@ -29,9 +31,7 @@ export const OrderCard = ({ order, menu, onEdit, onDelete, onAddDish, isExpanded
                     </div>
                     <div className="flex-1 min-w-0">
                         <p className="font-semibold text-neutral-900 dark:text-neutral-50">Order #{order.number}</p>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                            Table #{order.table_number}
-                        </p>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Table #{tableNumber}</p>
                         <div className="mt-1 space-y-0.5">
                             {order.items?.slice(0, 2).map((item, index) => (
                                 <p key={index} className="text-neutral-600 dark:text-neutral-400 text-xs truncate">
@@ -76,7 +76,7 @@ export const OrderCard = ({ order, menu, onEdit, onDelete, onAddDish, isExpanded
                         <span className="text-neutral-900 dark:text-neutral-50 font-semibold">
                             Order #{order.number}
                         </span>
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400">Table #{order.table_number}</p>
+                        <p className="text-sm text-neutral-500 dark:text-neutral-400">Table #{tableNumber}</p>
                     </div>
                 </div>
                 <button

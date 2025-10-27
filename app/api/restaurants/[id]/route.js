@@ -49,7 +49,8 @@ export async function GET(request, { params }) {
                 orders: orders.map((o) => ({
                     id: o._id.toString(),
                     number: o.number,
-                    table_number: o.table_number,
+                    table_id: o.table_id?.toString() || null,
+                    table_number: o.table_number || null,
                     items: o.items || [],
                 })),
             },

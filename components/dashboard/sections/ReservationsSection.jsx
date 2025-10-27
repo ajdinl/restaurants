@@ -101,6 +101,7 @@ export const ReservationsSection = ({
                               <ReservationCard
                                   key={reservation.id}
                                   reservation={reservation}
+                                  tables={tables}
                                   onEdit={onEdit}
                                   onDelete={onDelete}
                                   isExpanded={false}
@@ -112,6 +113,7 @@ export const ReservationsSection = ({
                               <ReservationCard
                                   key={reservation.id}
                                   reservation={reservation}
+                                  tables={tables}
                                   onEdit={onEdit}
                                   onDelete={onDelete}
                                   isExpanded={true}

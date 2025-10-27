@@ -1,6 +1,14 @@
 import { CardContentHeader, EditIcon, DeleteIcon } from '@/components';
 
 export default function Restaurants({ restaurants, openNewModal, setEditSelectedItem, setDeleteSelectedItem }) {
+    const getTableNumber = (tables, tableId, fallbackNumber) => {
+        if (tableId) {
+            const table = tables?.find((t) => t.id === tableId);
+            return table?.number || fallbackNumber || 'N/A';
+        }
+        return fallbackNumber || 'N/A';
+    };
+
     return (
         <div className="space-y-8">
             {restaurants &&
@@ -231,7 +239,12 @@ export default function Restaurants({ restaurants, openNewModal, setEditSelected
                                                                     d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
                                                                 />
                                                             </svg>
-                                                            Table #{reservation.table_number}
+                                                            Table #
+                                                            {getTableNumber(
+                                                                restaurant.tables,
+                                                                reservation.table_id,
+                                                                reservation.table_number
+                                                            )}
                                                         </p>
                                                         <p className="flex items-center gap-1.5">
                                                             <svg
@@ -313,7 +326,12 @@ export default function Restaurants({ restaurants, openNewModal, setEditSelected
                                                             Order #{order.number}
                                                         </p>
                                                         <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                                                            Table #{order.table_number}
+                                                            Table #
+                                                            {getTableNumber(
+                                                                restaurant.tables,
+                                                                order.table_id,
+                                                                order.table_number
+                                                            )}
                                                         </p>
                                                     </div>
                                                 </div>

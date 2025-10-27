@@ -32,6 +32,12 @@ export default function RestaurantComponent({ id }) {
         });
 
         const allOrders = restaurant.data.orders;
+        const table = restaurant.data.tables.find((t) => t.number === parseInt(tableNumber));
+
+        if (!table) {
+            console.error('Table not found');
+            return;
+        }
 
         const orderNumber =
             allOrders
@@ -41,7 +47,7 @@ export default function RestaurantComponent({ id }) {
 
         const { data, error } = await addItem('orders', {
             restaurant_id: id,
-            table_number: tableNumber,
+            table_id: table.id,
             number: orderNumber,
         });
 

@@ -1,32 +1,31 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const OrderSchema = new mongoose.Schema(
-  {
-    restaurant_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Restaurant',
-      required: true,
+    {
+        restaurant_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Restaurant',
+            required: true,
+        },
+        number: {
+            type: Number,
+            required: true,
+        },
+        table_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Table',
+            required: true,
+        },
+        items: [
+            {
+                name: String,
+                quantity: Number,
+            },
+        ],
     },
-    number: {
-      type: Number,
-      required: true,
-    },
-    table_number: {
-      type: Number,
-      required: true,
-    },
-    items: [
-      {
-        name: String,
-        quantity: Number,
-      },
-    ],
-  },
-  {
-    timestamps: true,
-  }
-)
+    {
+        timestamps: true,
+    }
+);
 
-export default mongoose.models.Order || mongoose.model('Order', OrderSchema)
-
-
+export default mongoose.models.Order || mongoose.model('Order', OrderSchema);

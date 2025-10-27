@@ -27,7 +27,7 @@ export const OrderForm = ({
                 <div className="relative">
                     {isAdmin && (
                         <select
-                            onChange={(e) => onChange({ ...formData, table_number: e.target.value })}
+                            onChange={(e) => onChange({ ...formData, table_id: e.target.value })}
                             className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
                         >
                             <option value="">Select a table</option>
@@ -35,7 +35,7 @@ export const OrderForm = ({
                                 ?.filter((restaurant) => restaurant.id === selectedRestaurantId)
                                 .map((restaurant) =>
                                     restaurant.tables.map((table) => (
-                                        <option key={table.id} value={table.number}>
+                                        <option key={table.id} value={table.id}>
                                             Table #{table.number}
                                         </option>
                                     ))
@@ -45,11 +45,11 @@ export const OrderForm = ({
                     {!isAdmin && (
                         <select
                             className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
-                            onChange={(e) => onChange({ ...formData, table_number: e.target.value })}
+                            onChange={(e) => onChange({ ...formData, table_id: e.target.value })}
                         >
                             <option value="">Select a table</option>
                             {tables?.map((table) => (
-                                <option key={table.id} value={table.number}>
+                                <option key={table.id} value={table.id}>
                                     Table #{table.number}
                                 </option>
                             ))}

@@ -1,6 +1,9 @@
 import { EditIcon, DeleteIcon } from '@/components';
 
-export const ReservationCard = ({ reservation, onEdit, onDelete, isExpanded }) => {
+export const ReservationCard = ({ reservation, tables, onEdit, onDelete, isExpanded }) => {
+    const table = tables?.find((t) => t.id === reservation.table_id);
+    const tableNumber = table?.number || reservation.table_number || 'N/A';
+
     const getStatusColor = (status) => {
         switch (status?.toLowerCase()) {
             case 'confirmed':
@@ -28,7 +31,7 @@ export const ReservationCard = ({ reservation, onEdit, onDelete, isExpanded }) =
                             Reservation #{reservation.number}
                         </p>
                         <p className="text-neutral-600 dark:text-neutral-400 text-xs mt-0.5">
-                            Table #{reservation.table_number} · {reservation.capacity} guests
+                            Table #{tableNumber} · {reservation.capacity} guests
                         </p>
                     </div>
                 </div>
@@ -53,9 +56,7 @@ export const ReservationCard = ({ reservation, onEdit, onDelete, isExpanded }) =
                             <p className="text-neutral-900 dark:text-neutral-50 font-semibold">
                                 Reservation #{reservation.number}
                             </p>
-                            <p className="text-neutral-600 dark:text-neutral-400 text-sm">
-                                Table #{reservation.table_number}
-                            </p>
+                            <p className="text-neutral-600 dark:text-neutral-400 text-sm">Table #{tableNumber}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 mt-2">

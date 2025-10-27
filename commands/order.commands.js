@@ -20,7 +20,7 @@ export class CreateOrderCommand {
         const order = await orderModel.create({
             restaurant_id: this.data.restaurant_id,
             number: Number(this.data.number),
-            table_number: Number(this.data.table_number),
+            table_id: this.data.table_id,
             items: this.data.items || [],
         });
 
@@ -28,7 +28,7 @@ export class CreateOrderCommand {
             id: order._id.toString(),
             restaurant_id: order.restaurant_id.toString(),
             number: order.number,
-            table_number: order.table_number,
+            table_id: order.table_id.toString(),
             items: order.items,
         };
     }
@@ -68,7 +68,7 @@ export class AddDishToOrderCommand {
             id: order._id.toString(),
             restaurant_id: order.restaurant_id.toString(),
             number: order.number,
-            table_number: order.table_number,
+            table_id: order.table_id.toString(),
             items: order.items,
         };
     }
@@ -108,7 +108,7 @@ export class UpdateOrderDishCommand {
             id: order._id.toString(),
             restaurant_id: order.restaurant_id.toString(),
             number: order.number,
-            table_number: order.table_number,
+            table_id: order.table_id.toString(),
             items: order.items,
         };
     }
@@ -133,7 +133,7 @@ export class DeleteOrderDishCommand {
             id: order._id.toString(),
             restaurant_id: order.restaurant_id.toString(),
             number: order.number,
-            table_number: order.table_number,
+            table_id: order.table_id.toString(),
             items: order.items,
         };
     }
