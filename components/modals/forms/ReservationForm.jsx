@@ -1,24 +1,12 @@
-import { useState } from 'react';
-
 export const ReservationForm = ({
+    formData,
+    onChange,
     tables = [],
     restaurants = [],
     isAdmin = false,
     error,
-    selectedRestaurantId = null,
+    selectedRestaurantId,
 }) => {
-    const [formData, setFormData] = useState({
-        restaurant_id: selectedRestaurantId || '',
-        table_number: '',
-        table_id: '',
-        status: '',
-        capacity: '',
-    });
-
-    const handleChange = (field, value, extraData = {}) => {
-        setFormData((prev) => ({ ...prev, [field]: value, ...extraData }));
-    };
-
     const getTableCapacity = (tableId) => {
         if (isAdmin) {
             const restaurant = restaurants.find((r) => r.id === formData.restaurant_id);
@@ -34,83 +22,203 @@ export const ReservationForm = ({
     return (
         <form className="space-y-4">
             {isAdmin && (
-                <label className="block">
-                    <span className="text-gray-700 dark:text-gray-400">Restaurant</span>
-                    <span className="text-red-500 ml-4 text-sm">{!formData.restaurant_id && error}</span>
-                    <select
-                        value={formData.restaurant_id}
-                        onChange={(e) => handleChange('restaurant_id', e.target.value)}
-                        className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    >
-                        <option value=""></option>
-                        {restaurants.map((restaurant) => (
-                            <option key={restaurant.id} value={restaurant.id}>
-                                {restaurant.name}
-                            </option>
-                        ))}
-                    </select>
-                </label>
+                <div className="space-y-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                        Restaurant
+                    </label>
+                    {!formData.restaurant_id && error && (
+                        <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            {error}
+                        </span>
+                    )}
+                    <div className="relative">
+                        <select
+                            value={formData.restaurant_id || selectedRestaurantId || ''}
+                            onChange={(e) => onChange({ ...formData, restaurant_id: e.target.value })}
+                            className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
+                        >
+                            <option value="">Select a restaurant</option>
+                            {restaurants.map((restaurant) => (
+                                <option key={restaurant.id} value={restaurant.id}>
+                                    {restaurant.name}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                            <svg
+                                className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
             )}
-            <label className="block">
-                <span className="text-gray-700 dark:text-gray-400">Table Number</span>
-                <span className="text-red-500 ml-4 text-sm">{!formData.table_number && error}</span>
-                <select
-                    value={formData.table_number}
-                    onChange={(e) => {
-                        const option = e.target.options[e.target.selectedIndex];
-                        handleChange('table_number', e.target.value, {
-                            table_id: option.getAttribute('table_id'),
-                        });
-                    }}
-                    className="mt-1 block w-full rounded dark:bg-gray-400 border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                >
-                    <option value=""></option>
-                    {!isAdmin &&
-                        tables?.map((table) => (
-                            <option key={table.number} value={table.number} table_id={table.id}>
-                                {table.number}
-                            </option>
-                        ))}
-                    {isAdmin &&
-                        restaurants
-                            ?.filter((restaurant) => restaurant.id === formData.restaurant_id)
-                            .map((restaurant) =>
-                                restaurant.tables.map((table) => (
-                                    <option key={table.id} value={table.number} table_id={table.id}>
-                                        {table.number}
+            <div className="space-y-2">
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Table Number</label>
+                {!formData.table_number && error && (
+                    <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        {error}
+                    </span>
+                )}
+                <div className="relative">
+                    <select
+                        onChange={(e) => {
+                            const option = e.target.options[e.target.selectedIndex];
+                            onChange({
+                                ...formData,
+                                table_number: e.target.value,
+                                table_id: option.getAttribute('table_id'),
+                                status: 'Reserved',
+                                capacity: '',
+                            });
+                        }}
+                        className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
+                    >
+                        <option></option>
+                        {!isAdmin &&
+                            tables?.map((table) => (
+                                <option key={table.number} value={table.number} table_id={table.id}>
+                                    {table.number}
+                                </option>
+                            ))}
+                        {isAdmin &&
+                            restaurants
+                                ?.filter((restaurant) => restaurant.id === selectedRestaurantId)
+                                .map((restaurant) =>
+                                    restaurant.tables.map((table) => (
+                                        <option key={table.id} value={table.number} table_id={table.id}>
+                                            {table.number}
+                                        </option>
+                                    ))
+                                )}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <svg
+                            className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            {formData.table_number && (
+                <>
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                            Status
+                        </label>
+                        {!formData.status && error && (
+                            <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                                {error}
+                            </span>
+                        )}
+                        <div className="relative">
+                            <select
+                                value={formData.status || 'Reserved'}
+                                onChange={(e) => onChange({ ...formData, status: e.target.value })}
+                                className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
+                            >
+                                <option value="Reserved">Reserved</option>
+                            </select>
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <svg
+                                    className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M19 9l-7 7-7-7"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                            Number of Guests
+                        </label>
+                        {!formData.capacity && error && (
+                            <span className="text-red-600 dark:text-red-400 text-xs font-medium flex items-center gap-1">
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                                {error}
+                            </span>
+                        )}
+                        <div className="relative">
+                            <select
+                                value={formData.capacity || ''}
+                                onChange={(e) => onChange({ ...formData, capacity: e.target.value })}
+                                className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
+                            >
+                                <option value="" disabled>
+                                    Select number of guests
+                                </option>
+                                {Array.from({ length: tableCapacity }, (_, index) => (
+                                    <option key={index + 1} value={index + 1}>
+                                        {index + 1}
                                     </option>
-                                ))
-                            )}
-                </select>
-            </label>
-            <label className="block">
-                <span className="text-gray-700 dark:text-gray-400">Status</span>
-                <span className="text-red-500 ml-4 text-sm">{!formData.status && error}</span>
-                <select
-                    value={formData.status}
-                    onChange={(e) => handleChange('status', e.target.value)}
-                    className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                >
-                    <option value=""></option>
-                    <option value="Reserved">Reserved</option>
-                </select>
-            </label>
-            <label className="block">
-                <span className="text-gray-700 dark:text-gray-400">Number of Guests</span>
-                <span className="text-red-500 ml-4 text-sm">{!formData.capacity && error}</span>
-                <select
-                    value={formData.capacity}
-                    onChange={(e) => handleChange('capacity', e.target.value)}
-                    className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                >
-                    <option value=""></option>
-                    {Array.from({ length: tableCapacity }, (_, index) => (
-                        <option key={index + 1} value={index + 1}>
-                            {index + 1}
-                        </option>
-                    ))}
-                </select>
-            </label>
+                                ))}
+                            </select>
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <svg
+                                    className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M19 9l-7 7-7-7"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
         </form>
     );
 };

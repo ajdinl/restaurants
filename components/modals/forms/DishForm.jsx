@@ -1,65 +1,33 @@
-import { useState } from 'react';
-
-export const DishForm = ({ initialData = {}, isOrderDish = false, error }) => {
-    const [formData, setFormData] = useState({
-        name: initialData.name || '',
-        ingredients: initialData.ingredients?.join(', ') || '',
-        price: initialData.price || '',
-        quantity: initialData.quantity || '',
-    });
-
-    const handleChange = (field, value) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-    };
-
+export const DishForm = ({ formData, onChange, error }) => {
     return (
         <form className="space-y-4">
             <label className="block">
-                <span className="text-gray-700 dark:text-gray-400">Name</span>
+                <span className="text-neutral-700 dark:text-neutral-300">Name</span>
                 <span className="text-red-500 ml-4 text-sm">{!formData.name && error}</span>
                 <input
                     type="text"
-                    value={formData.name}
-                    onChange={(e) => handleChange('name', e.target.value)}
-                    className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    onChange={(e) => onChange({ ...formData, name: e.target.value })}
+                    className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 />
             </label>
-            {!isOrderDish && (
-                <>
-                    <label className="block">
-                        <span className="text-gray-700 dark:text-gray-400">Ingredients</span>
-                        <span className="text-red-500 ml-4 text-sm">{!formData.ingredients && error}</span>
-                        <input
-                            type="text"
-                            value={formData.ingredients}
-                            onChange={(e) => handleChange('ingredients', e.target.value)}
-                            className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        />
-                    </label>
-                    <label className="block">
-                        <span className="text-gray-700 dark:text-gray-400">Price</span>
-                        <span className="text-red-500 ml-4 text-sm">{!formData.price && error}</span>
-                        <input
-                            type="number"
-                            value={formData.price}
-                            onChange={(e) => handleChange('price', e.target.value)}
-                            className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        />
-                    </label>
-                </>
-            )}
-            {isOrderDish && (
-                <label className="block">
-                    <span className="text-gray-700 dark:text-gray-400">Quantity</span>
-                    <span className="text-red-500 ml-4 text-sm">{!formData.quantity && error}</span>
-                    <input
-                        type="number"
-                        value={formData.quantity}
-                        onChange={(e) => handleChange('quantity', e.target.value)}
-                        className="mt-1 block w-full rounded border-gray-300 dark:bg-gray-400 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    />
-                </label>
-            )}
+            <label className="block">
+                <span className="text-neutral-700 dark:text-neutral-300">Ingredients</span>
+                <span className="text-red-500 ml-4 text-sm">{!formData.ingredients && error}</span>
+                <input
+                    type="text"
+                    onChange={(e) => onChange({ ...formData, ingredients: [e.target.value] })}
+                    className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                />
+            </label>
+            <label className="block">
+                <span className="text-neutral-700 dark:text-neutral-300">Price</span>
+                <span className="text-red-500 ml-4 text-sm">{!formData.price && error}</span>
+                <input
+                    type="number"
+                    onChange={(e) => onChange({ ...formData, price: e.target.value })}
+                    className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                />
+            </label>
         </form>
     );
 };
