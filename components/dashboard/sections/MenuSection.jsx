@@ -1,4 +1,4 @@
-import { Button } from '@/components';
+import { Button, DeleteIcon } from '@/components';
 import { MenuItemCard } from '../cards/MenuItemCard';
 import DashboardWrapper from '../DashboardWrapper';
 
@@ -27,7 +27,7 @@ export const MenuSection = ({ menu, view, loading, restaurantId, onEdit, onDelet
                 <div className="flex items-center gap-4 mb-4 p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800">
                     <div className="flex items-center gap-2 text-sm">
                         <svg
-                            className="w-4 h-4 text-orange-600 dark:text-orange-400"
+                            className="w-4 h-4 text-primary-600 dark:text-primary-400"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -53,7 +53,7 @@ export const MenuSection = ({ menu, view, loading, restaurantId, onEdit, onDelet
                             {view && (
                                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-neutral-200 dark:border-neutral-600">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
                                             <svg
                                                 className="w-6 h-6 text-white"
                                                 fill="none"
@@ -77,25 +77,39 @@ export const MenuSection = ({ menu, view, loading, restaurantId, onEdit, onDelet
                                             </p>
                                         </div>
                                     </div>
-                                    <Button
-                                        className="bg-orange-600 hover:bg-orange-700 text-white shadow-sm hover:shadow-md focus:ring-orange-500 transition-all"
-                                        onClick={() => onAddDish({ category: 'Dish', menu: menuItem })}
-                                    >
-                                        <svg
-                                            className="w-4 h-4 mr-1.5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            className="bg-primary-600 hover:bg-primary-700 text-white shadow-sm hover:shadow-md focus:ring-primary-500 transition-all"
+                                            onClick={() => onAddDish({ category: 'Dish', menu: menuItem })}
                                         >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M12 4v16m8-8H4"
-                                            />
-                                        </svg>
-                                        Add Dish
-                                    </Button>
+                                            <svg
+                                                className="w-4 h-4 mr-1.5"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M12 4v16m8-8H4"
+                                                />
+                                            </svg>
+                                            Add Dish
+                                        </Button>
+                                        <button
+                                            className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-all group"
+                                            onClick={() =>
+                                                onDelete({
+                                                    category: 'menu',
+                                                    data: menuItem,
+                                                })
+                                            }
+                                            title="Delete Menu"
+                                        >
+                                            <DeleteIcon className="h-5 w-5 text-neutral-600 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400 cursor-pointer transition-all" />
+                                        </button>
+                                    </div>
                                 </div>
                             )}
                             <div className={`grid gap-2 ${view ? 'grid-cols-1' : ''}`}>

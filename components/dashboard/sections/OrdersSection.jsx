@@ -4,6 +4,7 @@ import DashboardWrapper from '../DashboardWrapper';
 export const OrdersSection = ({
     orders,
     tables,
+    menu,
     view,
     loading,
     restaurantId,
@@ -82,6 +83,7 @@ export const OrdersSection = ({
                               <OrderCard
                                   key={order.id}
                                   order={order}
+                                  menu={menu}
                                   onEdit={onEdit}
                                   onDelete={onDelete}
                                   onAddDish={onAddDish}
@@ -94,6 +96,7 @@ export const OrdersSection = ({
                               <OrderCard
                                   key={order.id}
                                   order={order}
+                                  menu={menu}
                                   onEdit={onEdit}
                                   onDelete={onDelete}
                                   onAddDish={onAddDish}

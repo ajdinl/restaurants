@@ -13,7 +13,7 @@ export default function DashboardWrapper({ children, wrapperData }) {
                     <CardHeader>
                         <div className="flex flex-row items-center justify-between gap-4">
                             <CardTitle view={wrapperData.view}>{wrapperData.title}</CardTitle>
-                            {wrapperData.view && wrapperData.type !== 'menu' && (
+                            {wrapperData.view && (
                                 <Button
                                     className="bg-primary-600 hover:bg-primary-700 text-white shadow-sm hover:shadow-md focus:ring-primary-500 transition-all"
                                     onClick={() => wrapperData.openNewModal(wrapperData.modalData)}

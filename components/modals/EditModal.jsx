@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { updateItem, updateOrDeleteArrayItem, deleteItem } from '@/services/api.service';
 import { Button, SelectInput } from '@/components';
 
-export default function EditModal({ setShowEditModal, selected, fetchRestaurantsData }) {
+export default function EditModal({ setShowEditModal, selected, fetchRestaurantsData, menu }) {
     const [status, setStatus] = useState(selected.status);
     const [capacity, setCapacity] = useState(selected.capacity);
     const [selectedItem, setSelectedItem] = useState(selected.item);
@@ -125,7 +125,7 @@ export default function EditModal({ setShowEditModal, selected, fetchRestaurants
                                     onChange={(e) => setCapacity(e.target.value)}
                                 />
                             )}
-                            {(selected.category === 'orders' || selected.category === 'menu') && (
+                            {selected.category === 'menu' && (
                                 <form className="w-full space-y-2">
                                     <label className="block">
                                         <span className="text-neutral-700 dark:text-neutral-300">Name</span>
@@ -142,58 +142,122 @@ export default function EditModal({ setShowEditModal, selected, fetchRestaurants
                                             className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                                         />
                                     </label>
-                                    {selected.category === 'menu' && (
-                                        <>
-                                            <label className="block">
-                                                <span className="text-neutral-700 dark:text-neutral-300">
-                                                    Ingredients
-                                                </span>
-                                                <input
-                                                    type="text"
-                                                    value={selectedItem.ingredients?.join(', ')}
-                                                    onChange={(e) =>
-                                                        setSelectedItem({
-                                                            ...selectedItem,
-                                                            ingredients: [e.target.value],
-                                                        })
-                                                    }
-                                                    placeholder="Ingredients"
-                                                    className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                    <label className="block">
+                                        <span className="text-neutral-700 dark:text-neutral-300">Ingredients</span>
+                                        <input
+                                            type="text"
+                                            value={selectedItem.ingredients?.join(', ')}
+                                            onChange={(e) =>
+                                                setSelectedItem({
+                                                    ...selectedItem,
+                                                    ingredients: [e.target.value],
+                                                })
+                                            }
+                                            placeholder="Ingredients"
+                                            className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                        />
+                                    </label>
+                                    <label className="block">
+                                        <span className="text-neutral-700 dark:text-neutral-300">Price</span>
+                                        <input
+                                            type="number"
+                                            value={selectedItem.price}
+                                            onChange={(e) =>
+                                                setSelectedItem({
+                                                    ...selectedItem,
+                                                    price: e.target.value,
+                                                })
+                                            }
+                                            placeholder="Price"
+                                            className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                        />
+                                    </label>
+                                </form>
+                            )}
+                            {selected.category === 'orders' && (
+                                <form className="w-full space-y-2">
+                                    {!menu || menu.length === 0 || !menu.some((m) => m.items?.length > 0) ? (
+                                        <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4 text-center">
+                                            <svg
+                                                className="w-10 h-10 text-orange-600 dark:text-orange-400 mx-auto mb-2"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                                                 />
-                                            </label>
+                                            </svg>
+                                            <p className="text-sm font-medium text-orange-800 dark:text-orange-300">
+                                                No menu items available
+                                            </p>
+                                            <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
+                                                Please add dishes to the menu first
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                                    Select Dish from Menu
+                                                </label>
+                                                <div className="relative">
+                                                    <select
+                                                        value={selectedItem.name}
+                                                        onChange={(e) =>
+                                                            setSelectedItem({
+                                                                ...selectedItem,
+                                                                name: e.target.value,
+                                                            })
+                                                        }
+                                                        className="block w-full rounded-lg px-4 py-3 pr-10 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none"
+                                                    >
+                                                        <option value="">Select a dish</option>
+                                                        {menu
+                                                            ?.flatMap((m) => m.items)
+                                                            .map((item, index) => (
+                                                                <option key={index} value={item.name}>
+                                                                    {item.name} - ${item.price}
+                                                                </option>
+                                                            ))}
+                                                    </select>
+                                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                        <svg
+                                                            className="w-4 h-4 text-neutral-500 dark:text-neutral-400"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M19 9l-7 7-7-7"
+                                                            />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <label className="block">
-                                                <span className="text-neutral-700 dark:text-neutral-300">Price</span>
+                                                <span className="text-neutral-700 dark:text-neutral-300">Quantity</span>
                                                 <input
                                                     type="number"
-                                                    value={selectedItem.price}
+                                                    min="1"
+                                                    value={selectedItem.quantity}
                                                     onChange={(e) =>
                                                         setSelectedItem({
                                                             ...selectedItem,
-                                                            price: e.target.value,
+                                                            quantity: e.target.value,
                                                         })
                                                     }
-                                                    placeholder="Price"
+                                                    placeholder="Quantity"
                                                     className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                                                 />
                                             </label>
                                         </>
-                                    )}
-                                    {selected.category === 'orders' && (
-                                        <label className="block">
-                                            <span className="text-neutral-700 dark:text-neutral-300">Quantity</span>
-                                            <input
-                                                type="number"
-                                                value={selectedItem.quantity}
-                                                onChange={(e) =>
-                                                    setSelectedItem({
-                                                        ...selectedItem,
-                                                        quantity: e.target.value,
-                                                    })
-                                                }
-                                                placeholder="Quantity"
-                                                className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                                            />
-                                        </label>
                                     )}
                                 </form>
                             )}

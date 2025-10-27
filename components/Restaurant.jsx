@@ -11,7 +11,7 @@ export default function RestaurantComponent({ id }) {
     const [loading, setLoading] = useState(false);
     const [completed, setCompleted] = useState(false);
     const [order, setOrder] = useState({});
-    const { name, address, phone, menu } = restaurant?.data ?? {};
+    const { name, address, phone, menu = [] } = restaurant?.data ?? {};
     const searchParams = useSearchParams();
     const tableNumber = searchParams.get('table');
     const router = useRouter();
@@ -130,101 +130,129 @@ export default function RestaurantComponent({ id }) {
                             <h2 className="text-3xl font-bold text-neutral-900 dark:text-neutral-50 mb-6 text-center">
                                 Our Menu
                             </h2>
-                            <div className="space-y-4 mb-8">
-                                {menu[0].items.map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 hover:shadow-medium transition-all"
+                            {menu.length === 0 || !menu[0]?.items || menu[0].items.length === 0 ? (
+                                <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8 text-center">
+                                    <svg
+                                        className="w-16 h-16 text-neutral-400 dark:text-neutral-600 mx-auto mb-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
                                     >
-                                        <div className="flex flex-col sm:flex-row gap-4">
-                                            <div className="flex-1">
-                                                <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-50 mb-1">
-                                                    {item.name}
-                                                </h3>
-                                                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
-                                                    {item.ingredients?.join(', ')}
-                                                </p>
-                                                <p className="text-xl font-bold text-primary-600 dark:text-primary-400">
-                                                    ${item.price}
-                                                </p>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                                                    Qty:
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    defaultValue={0}
-                                                    min={0}
-                                                    onChange={(e) =>
-                                                        setOrder({
-                                                            ...order,
-                                                            [item.name]: e.target.value,
-                                                        })
-                                                    }
-                                                    className="w-16 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-50 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {Object.keys(order).some((key) => order[key] !== '0') && (
-                                <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-medium">
-                                    <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
-                                        Your Order
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                                        />
+                                    </svg>
+                                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-50 mb-2">
+                                        No Menu Available
                                     </h3>
-                                    <div className="space-y-3 mb-4">
-                                        {Object.keys(order).map(
-                                            (key, index) =>
-                                                order[key] !== '0' && (
-                                                    <div
-                                                        key={index}
-                                                        className="flex justify-between items-center py-2 border-b border-neutral-200 dark:border-neutral-700 last:border-0"
-                                                    >
-                                                        <div className="flex items-center gap-3">
-                                                            <span className="w-8 h-8 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-lg flex items-center justify-center font-semibold text-sm">
-                                                                {order[key]}x
-                                                            </span>
-                                                            <span className="text-neutral-900 dark:text-neutral-50 font-medium">
-                                                                {key}
-                                                            </span>
-                                                        </div>
-                                                        <span className="text-neutral-900 dark:text-neutral-50 font-semibold">
-                                                            $
-                                                            {order[key] *
-                                                                menu[0].items.find((item) => item.name === key).price}
-                                                        </span>
-                                                    </div>
-                                                )
-                                        )}
-                                    </div>
-                                    <div className="flex justify-between items-center pt-4 border-t-2 border-neutral-300 dark:border-neutral-600">
-                                        <span className="text-lg font-bold text-neutral-900 dark:text-neutral-50">
-                                            Total
-                                        </span>
-                                        <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                                            $
-                                            {Object.keys(order).reduce((total, key) => {
-                                                if (order[key] !== '0') {
-                                                    return (
-                                                        total +
-                                                        order[key] *
-                                                            menu[0].items.find((item) => item.name === key).price
-                                                    );
-                                                }
-                                                return total;
-                                            }, 0)}
-                                        </span>
-                                    </div>
-                                    <Button
-                                        className="w-full mt-6 bg-primary-600 hover:bg-primary-700 text-white py-3 shadow-sm hover:shadow-md focus:ring-primary-500"
-                                        onClick={() => handleOrder(order)}
-                                    >
-                                        Place Order
-                                    </Button>
+                                    <p className="text-neutral-600 dark:text-neutral-400">
+                                        This restaurant hasn't added any menu items yet. Please check back later!
+                                    </p>
                                 </div>
+                            ) : (
+                                <>
+                                    <div className="space-y-4 mb-8">
+                                        {menu[0].items.map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 hover:shadow-medium transition-all"
+                                            >
+                                                <div className="flex flex-col sm:flex-row gap-4">
+                                                    <div className="flex-1">
+                                                        <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-50 mb-1">
+                                                            {item.name}
+                                                        </h3>
+                                                        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
+                                                            {item.ingredients?.join(', ')}
+                                                        </p>
+                                                        <p className="text-xl font-bold text-primary-600 dark:text-primary-400">
+                                                            ${item.price}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                                            Qty:
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            defaultValue={0}
+                                                            min={0}
+                                                            onChange={(e) =>
+                                                                setOrder({
+                                                                    ...order,
+                                                                    [item.name]: e.target.value,
+                                                                })
+                                                            }
+                                                            className="w-16 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-50 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {Object.keys(order).some((key) => order[key] !== '0') && (
+                                        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-medium">
+                                            <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
+                                                Your Order
+                                            </h3>
+                                            <div className="space-y-3 mb-4">
+                                                {Object.keys(order).map(
+                                                    (key, index) =>
+                                                        order[key] !== '0' && (
+                                                            <div
+                                                                key={index}
+                                                                className="flex justify-between items-center py-2 border-b border-neutral-200 dark:border-neutral-700 last:border-0"
+                                                            >
+                                                                <div className="flex items-center gap-3">
+                                                                    <span className="w-8 h-8 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-lg flex items-center justify-center font-semibold text-sm">
+                                                                        {order[key]}x
+                                                                    </span>
+                                                                    <span className="text-neutral-900 dark:text-neutral-50 font-medium">
+                                                                        {key}
+                                                                    </span>
+                                                                </div>
+                                                                <span className="text-neutral-900 dark:text-neutral-50 font-semibold">
+                                                                    $
+                                                                    {order[key] *
+                                                                        menu[0].items.find((item) => item.name === key)
+                                                                            .price}
+                                                                </span>
+                                                            </div>
+                                                        )
+                                                )}
+                                            </div>
+                                            <div className="flex justify-between items-center pt-4 border-t-2 border-neutral-300 dark:border-neutral-600">
+                                                <span className="text-lg font-bold text-neutral-900 dark:text-neutral-50">
+                                                    Total
+                                                </span>
+                                                <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                                                    $
+                                                    {Object.keys(order).reduce((total, key) => {
+                                                        if (order[key] !== '0') {
+                                                            return (
+                                                                total +
+                                                                order[key] *
+                                                                    menu[0].items.find((item) => item.name === key)
+                                                                        .price
+                                                            );
+                                                        }
+                                                        return total;
+                                                    }, 0)}
+                                                </span>
+                                            </div>
+                                            <Button
+                                                className="w-full mt-6 bg-primary-600 hover:bg-primary-700 text-white py-3 shadow-sm hover:shadow-md focus:ring-primary-500"
+                                                onClick={() => handleOrder(order)}
+                                            >
+                                                Place Order
+                                            </Button>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     </main>

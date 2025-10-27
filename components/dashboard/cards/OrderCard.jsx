@@ -1,6 +1,6 @@
 import { EditIcon, DeleteIcon, Button } from '@/components';
 
-export const OrderCard = ({ order, onEdit, onDelete, onAddDish, isExpanded }) => {
+export const OrderCard = ({ order, menu, onEdit, onDelete, onAddDish, isExpanded }) => {
     if (!isExpanded) {
         const totalItems = order.items?.reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
         return (
@@ -48,7 +48,7 @@ export const OrderCard = ({ order, onEdit, onDelete, onAddDish, isExpanded }) =>
                 </div>
                 <button
                     className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-600 hover:bg-green-700 text-white text-xl font-semibold transition-all shadow-sm"
-                    onClick={() => onAddDish({ category: 'Order Dish', order })}
+                    onClick={() => onAddDish({ category: 'Order Dish', order, menu })}
                 >
                     +
                 </button>

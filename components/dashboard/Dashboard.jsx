@@ -77,6 +77,7 @@ export default function DashboardComponent() {
                 <OrdersSection
                     orders={restaurantOrders}
                     tables={restaurantTables}
+                    menu={restaurantMenu}
                     view={view}
                     loading={loading}
                     restaurantId={restaurantId}
@@ -106,7 +107,12 @@ export default function DashboardComponent() {
                 />
             )}
             {isEditModalOpen && (
-                <EditModal setShowEditModal={closeEditModal} selected={selectedItem} fetchRestaurantsData={refetch} />
+                <EditModal
+                    setShowEditModal={closeEditModal}
+                    selected={selectedItem}
+                    fetchRestaurantsData={refetch}
+                    menu={restaurantMenu}
+                />
             )}
             {isDeleteModalOpen && (
                 <DeleteModal
