@@ -1,6 +1,6 @@
 import { EditIcon, DeleteIcon, Button } from '@/components';
 
-export const OrderCard = ({ order, menu, tables, onEdit, onDelete, onAddDish, isExpanded }) => {
+export const OrderCard = ({ order, menu, tables, onEdit, onDelete, onDeleteOrder, onAddDish, isExpanded }) => {
     const menuItems = menu?.[0]?.items || [];
     const table = tables?.find((t) => t.id === order.table_id);
     const tableNumber = table?.number || order.table_number || 'N/A';
@@ -79,12 +79,22 @@ export const OrderCard = ({ order, menu, tables, onEdit, onDelete, onAddDish, is
                         <p className="text-sm text-neutral-500 dark:text-neutral-400">Table #{tableNumber}</p>
                     </div>
                 </div>
-                <button
-                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-600 hover:bg-green-700 text-white text-xl font-semibold transition-all shadow-sm"
-                    onClick={() => onAddDish({ category: 'Order Dish', order, menu })}
-                >
-                    +
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-600 hover:bg-green-700 text-white text-xl font-semibold transition-all shadow-sm"
+                        onClick={() => onAddDish({ category: 'Order Dish', order, menu })}
+                        title="Add dish"
+                    >
+                        +
+                    </button>
+                    <button
+                        className="w-8 h-8 flex items-center justify-center rounded-lg text-white transition-all shadow-sm"
+                        onClick={() => onDeleteOrder({ category: 'orders', data: order })}
+                        title="Delete order"
+                    >
+                        <DeleteIcon className="h-4 w-4 text-white" />
+                    </button>
+                </div>
             </div>
             <ul className="space-y-2">
                 {order.items?.map((item, index) => {

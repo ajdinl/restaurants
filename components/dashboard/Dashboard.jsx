@@ -83,6 +83,7 @@ export default function DashboardComponent() {
                     restaurantId={restaurantId}
                     onEdit={openEditModal}
                     onDelete={openDeleteModal}
+                    onDeleteOrder={openDeleteModal}
                     onAddOrder={openNewModal}
                     onAddDish={openNewModal}
                 />

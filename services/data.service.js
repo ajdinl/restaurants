@@ -46,14 +46,12 @@ export const handleDeleteItem = async (category, selected, index, fetchRestauran
     let selectedArray = selected.items;
     let displayError;
 
-    if (index) {
+    if (index !== undefined && index !== null) {
         selectedArray = selectedArray.filter((_, i) => i !== index);
 
         const { data, error } = await updateOrDeleteArrayItem(category, selected.id, selectedArray);
         displayError = error;
-    }
-
-    if (!index) {
+    } else {
         const { data, error } = await deleteItem(category, selected.id);
         displayError = error;
     }

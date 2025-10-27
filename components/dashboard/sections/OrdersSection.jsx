@@ -10,6 +10,7 @@ export const OrdersSection = ({
     restaurantId,
     onEdit,
     onDelete,
+    onDeleteOrder,
     onAddOrder,
     onAddDish,
 }) => {
@@ -87,6 +88,7 @@ export const OrdersSection = ({
                                   tables={tables}
                                   onEdit={onEdit}
                                   onDelete={onDelete}
+                                  onDeleteOrder={onDeleteOrder}
                                   onAddDish={onAddDish}
                                   isExpanded={false}
                               />
@@ -101,6 +103,7 @@ export const OrdersSection = ({
                                   tables={tables}
                                   onEdit={onEdit}
                                   onDelete={onDelete}
+                                  onDeleteOrder={onDeleteOrder}
                                   onAddDish={onAddDish}
                                   isExpanded={true}
                               />
