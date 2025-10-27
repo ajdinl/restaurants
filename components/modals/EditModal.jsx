@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { updateItem, updateOrDeleteArrayItem } from '@/services/api.service';
+import { updateItem, updateOrDeleteArrayItem, deleteItem } from '@/services/api.service';
 import { Button, SelectInput } from '@/components';
 
 export default function EditModal({ setShowEditModal, selected, fetchRestaurantsData }) {
@@ -40,12 +40,23 @@ export default function EditModal({ setShowEditModal, selected, fetchRestaurants
         }
     };
 
-    const handleEditSave = () => {
+    const handleEditSave = async () => {
         setShowEditModal(false);
         if (selectedItem) {
             handleUpdateArrayItem(selected.category, selected, selectedItem);
             return;
         }
+
+        if (selected.category === 'reservations' && status === 'Available' && selected.status !== status) {
+            const { error } = await deleteItem('reservations', selected.id);
+            if (error) {
+                console.error('Error deleting reservation:', error);
+                return;
+            }
+            fetchRestaurantsData();
+            return;
+        }
+
         if (selected.capacity !== capacity) {
             handleUpdate(selected.category, selected, 'capacity', capacity);
         }
