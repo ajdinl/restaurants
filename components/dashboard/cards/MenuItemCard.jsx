@@ -18,15 +18,8 @@ export const MenuItemCard = ({ item, index, menu, onEdit, onDelete, isExpanded }
     }
 
     return (
-        <div className="flex flex-row w-full items-center justify-between bg-white dark:bg-neutral-700 p-4 rounded-lg border border-neutral-200 dark:border-neutral-600 hover:border-orange-300 dark:hover:border-orange-700 transition-all">
-            <div className="flex-1">
-                <p className="text-neutral-900 dark:text-neutral-50 font-medium">{item.name}</p>
-                <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">{item.ingredients?.join(', ')}</p>
-                <div className="flex items-center gap-2 mt-2">
-                    <span className="text-lg font-bold text-orange-600 dark:text-orange-400">${item.price}</span>
-                </div>
-            </div>
-            <div className="flex flex-row items-center gap-3 ml-4">
+        <div className="relative flex flex-col w-full bg-white dark:bg-neutral-700 p-4 rounded-lg border border-neutral-200 dark:border-neutral-600 hover:border-orange-300 dark:hover:border-orange-700 transition-all">
+            <div className="absolute top-4 right-4 flex flex-row items-center gap-3">
                 <EditIcon
                     action={() =>
                         onEdit({
@@ -48,6 +41,11 @@ export const MenuItemCard = ({ item, index, menu, onEdit, onDelete, isExpanded }
                     }
                     className="h-5 w-5 font-semibold text-neutral-600 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400 cursor-pointer transition-all"
                 />
+            </div>
+            <p className="text-neutral-900 dark:text-neutral-50 font-medium">{item.name}</p>
+            <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">{item.ingredients?.join(', ')}</p>
+            <div className="flex items-center gap-2 mt-2">
+                <span className="text-lg font-bold text-orange-600 dark:text-orange-400">${item.price}</span>
             </div>
         </div>
     );

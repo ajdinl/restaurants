@@ -186,7 +186,7 @@ export const OrderCard = ({
                         );
                     })}
                     {total > 0 && (
-                        <li className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border-t-2 border-green-200 dark:border-green-800 mt-2">
+                        <li className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 mt-2">
                             <span className="text-neutral-900 dark:text-neutral-50 font-bold">Total</span>
                             <span className="text-green-600 dark:text-green-400 font-bold text-lg">
                                 ${total.toFixed(2)}
