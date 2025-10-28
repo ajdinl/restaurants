@@ -4,6 +4,16 @@ export const ReservationCard = ({ reservation, tables, onEdit, onDelete, isExpan
     const table = tables?.find((t) => t.id === reservation.table_id);
     const tableNumber = table?.number || reservation.table_number || 'N/A';
 
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+        });
+    };
+
     const getStatusColor = (status) => {
         switch (status?.toLowerCase()) {
             case 'confirmed':
@@ -32,6 +42,29 @@ export const ReservationCard = ({ reservation, tables, onEdit, onDelete, isExpan
                         </p>
                         <p className="text-neutral-600 dark:text-neutral-400 text-xs mt-0.5">
                             Table #{tableNumber} · {reservation.capacity} guests
+                        </p>
+                        <p className="text-neutral-500 dark:text-neutral-500 text-xs mt-1 flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                            </svg>
+                            <span className="font-medium">
+                                {reservation.date ? formatDate(reservation.date) : 'No date'}
+                            </span>
+                            <span>·</span>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            <span className="font-medium">{reservation.time || 'No time'}</span>
                         </p>
                     </div>
                 </div>
@@ -68,6 +101,51 @@ export const ReservationCard = ({ reservation, tables, onEdit, onDelete, isExpan
                         <span className="text-neutral-600 dark:text-neutral-400 text-sm">
                             {reservation.capacity} guests
                         </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-3 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-600">
+                        <div className="flex items-center gap-2 flex-1">
+                            <svg
+                                className="w-5 h-5 text-purple-600 dark:text-purple-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                            </svg>
+                            <div className="flex flex-col">
+                                <span className="text-xs text-neutral-500 dark:text-neutral-400">Date</span>
+                                <span className="font-semibold text-neutral-900 dark:text-neutral-50">
+                                    {reservation.date ? formatDate(reservation.date) : 'Not set'}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="w-px h-10 bg-neutral-300 dark:bg-neutral-600"></div>
+                        <div className="flex items-center gap-2 flex-1">
+                            <svg
+                                className="w-5 h-5 text-purple-600 dark:text-purple-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            <div className="flex flex-col">
+                                <span className="text-xs text-neutral-500 dark:text-neutral-400">Time</span>
+                                <span className="font-semibold text-neutral-900 dark:text-neutral-50">
+                                    {reservation.time || 'Not set'}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="flex flex-row items-center gap-3">

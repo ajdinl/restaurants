@@ -123,7 +123,14 @@ const updateOrDeleteArrayItem = async (category, id, items) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            return { data: null, error: { message: errorData.error } };
+            let errorMessage = errorData.error || 'An error occurred';
+
+            if (errorData.errors) {
+                const firstError = Object.values(errorData.errors)[0];
+                errorMessage = firstError || errorMessage;
+            }
+
+            return { data: null, error: { message: errorMessage } };
         }
 
         const result = await response.json();
@@ -163,7 +170,14 @@ const addItem = async (category, itemData) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            return { item: null, error: { message: errorData.error } };
+            let errorMessage = errorData.error || 'An error occurred';
+
+            if (errorData.errors) {
+                const firstError = Object.values(errorData.errors)[0];
+                errorMessage = firstError || errorMessage;
+            }
+
+            return { item: null, error: { message: errorMessage } };
         }
 
         const result = await response.json();
@@ -185,7 +199,14 @@ const updateItem = async (category, id, name, value) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            return { item: null, error: { message: errorData.error } };
+            let errorMessage = errorData.error || 'An error occurred';
+
+            if (errorData.errors) {
+                const firstError = Object.values(errorData.errors)[0];
+                errorMessage = firstError || errorMessage;
+            }
+
+            return { item: null, error: { message: errorMessage } };
         }
 
         const result = await response.json();

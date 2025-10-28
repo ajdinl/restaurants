@@ -59,14 +59,28 @@ export async function GET(request) {
                     table_number: o.table_number || null,
                     items: o.items || [],
                 })),
-                reservations: reservations.map((r) => ({
-                    id: r._id.toString(),
-                    number: r.number,
-                    table_id: r.table_id?.toString() || null,
-                    table_number: r.table_number || null,
-                    status: r.status,
-                    capacity: r.capacity,
-                })),
+                reservations: reservations.map((r) => {
+                    let formattedDate = null;
+                    if (r.date) {
+                        try {
+                            const date = new Date(r.date);
+                            formattedDate = date.toISOString().split('T')[0];
+                        } catch (e) {
+                            formattedDate = null;
+                        }
+                    }
+
+                    return {
+                        id: r._id.toString(),
+                        number: r.number,
+                        table_id: r.table_id?.toString() || null,
+                        table_number: r.table_number || null,
+                        status: r.status,
+                        capacity: r.capacity,
+                        date: formattedDate,
+                        time: r.time || null,
+                    };
+                }),
             };
 
             return ApiResponse.success(restaurantData);
@@ -105,14 +119,28 @@ export async function GET(request) {
                             table_number: o.table_number || null,
                             items: o.items || [],
                         })),
-                        reservations: reservations.map((r) => ({
-                            id: r._id.toString(),
-                            number: r.number,
-                            table_id: r.table_id?.toString() || null,
-                            table_number: r.table_number || null,
-                            status: r.status,
-                            capacity: r.capacity,
-                        })),
+                        reservations: reservations.map((r) => {
+                            let formattedDate = null;
+                            if (r.date) {
+                                try {
+                                    const date = new Date(r.date);
+                                    formattedDate = date.toISOString().split('T')[0];
+                                } catch (e) {
+                                    console.error('Error formatting date:', e);
+                                }
+                            }
+
+                            return {
+                                id: r._id.toString(),
+                                number: r.number,
+                                table_id: r.table_id?.toString() || null,
+                                table_number: r.table_number || null,
+                                status: r.status,
+                                capacity: r.capacity,
+                                date: formattedDate,
+                                time: r.time || null,
+                            };
+                        }),
                     };
                 })
             );

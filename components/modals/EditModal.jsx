@@ -7,18 +7,26 @@ import { Button, SelectInput } from '@/components';
 export default function EditModal({ setShowEditModal, selected, fetchRestaurantsData, menu }) {
     const [status, setStatus] = useState(selected.status);
     const [capacity, setCapacity] = useState(selected.capacity);
+    const [date, setDate] = useState(selected.date || '');
+    const [time, setTime] = useState(selected.time || '');
     const [selectedItem, setSelectedItem] = useState(selected.item);
     const [openDropdown, setOpenDropdown] = useState(false);
     const dropdownRef = useRef(null);
 
+    const getTodayDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     const handleUpdate = async (category, selected, name, value) => {
         const { data: item, error } = await updateItem(category, selected.id, name, value);
         if (error) {
-            console.error('Error updating item:', error);
             return;
-        } else {
-            fetchRestaurantsData();
         }
+        fetchRestaurantsData();
     };
 
     const handleUpdateArrayItem = async (category, selected, selectedItem) => {
@@ -33,11 +41,9 @@ export default function EditModal({ setShowEditModal, selected, fetchRestaurants
 
         const { data: item, error } = await updateOrDeleteArrayItem(category, selected.id, selectedArray);
         if (error) {
-            console.error('Error updating item:', error);
             return;
-        } else {
-            fetchRestaurantsData();
         }
+        fetchRestaurantsData();
     };
 
     const handleEditSave = async () => {
@@ -50,7 +56,6 @@ export default function EditModal({ setShowEditModal, selected, fetchRestaurants
         if (selected.category === 'reservations' && status === 'Available' && selected.status !== status) {
             const { error } = await deleteItem('reservations', selected.id);
             if (error) {
-                console.error('Error deleting reservation:', error);
                 return;
             }
             fetchRestaurantsData();
@@ -62,6 +67,14 @@ export default function EditModal({ setShowEditModal, selected, fetchRestaurants
         }
         if (selected.status !== status) {
             handleUpdate(selected.category, selected, 'status', status);
+        }
+        if (selected.category === 'reservations') {
+            if (selected.date !== date) {
+                handleUpdate(selected.category, selected, 'date', date);
+            }
+            if (selected.time !== time) {
+                handleUpdate(selected.category, selected, 'time', time);
+            }
         }
     };
 
@@ -320,6 +333,29 @@ export default function EditModal({ setShowEditModal, selected, fetchRestaurants
                                         value={capacity}
                                         onChange={(e) => setCapacity(e.target.value)}
                                     />
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                            Date
+                                        </label>
+                                        <input
+                                            type="date"
+                                            value={date}
+                                            min={getTodayDate()}
+                                            onChange={(e) => setDate(e.target.value)}
+                                            className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                            Time
+                                        </label>
+                                        <input
+                                            type="time"
+                                            value={time}
+                                            onChange={(e) => setTime(e.target.value)}
+                                            className="block w-full rounded-lg px-4 py-3 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                                        />
+                                    </div>
                                 </form>
                             )}
                         </div>

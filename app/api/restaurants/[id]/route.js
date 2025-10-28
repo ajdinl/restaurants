@@ -23,10 +23,11 @@ export async function GET(request, { params }) {
             return NextResponse.json({ error: 'Restaurant not found' }, { status: 404 });
         }
 
-        const [menu, tables, orders] = await Promise.all([
+        const [menu, tables, orders, reservations] = await Promise.all([
             Menu.find({ restaurant_id: restaurant._id }),
             Table.find({ restaurant_id: restaurant._id }),
             Order.find({ restaurant_id: restaurant._id }),
+            Reservation.find({ restaurant_id: restaurant._id }),
         ]);
 
         return NextResponse.json({
@@ -53,6 +54,28 @@ export async function GET(request, { params }) {
                     table_number: o.table_number || null,
                     items: o.items || [],
                 })),
+                reservations: reservations.map((r) => {
+                    let formattedDate = null;
+                    if (r.date) {
+                        try {
+                            const date = new Date(r.date);
+                            formattedDate = date.toISOString().split('T')[0];
+                        } catch (e) {
+                            formattedDate = null;
+                        }
+                    }
+
+                    return {
+                        id: r._id.toString(),
+                        number: r.number,
+                        table_id: r.table_id?.toString() || null,
+                        table_number: r.table_number || null,
+                        status: r.status,
+                        capacity: r.capacity,
+                        date: formattedDate,
+                        time: r.time || null,
+                    };
+                }),
             },
         });
     } catch (error) {
