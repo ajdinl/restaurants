@@ -202,7 +202,6 @@ export const OrderCard = ({
                     order={order}
                     onDone={handleOrderDone}
                     total={total}
-                    totalItems={totalItems}
                     menuItems={menuItems}
                     tableNumber={tableNumber}
                 />
