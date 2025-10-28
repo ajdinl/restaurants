@@ -86,6 +86,7 @@ export default function DashboardComponent() {
                     onDeleteOrder={openDeleteModal}
                     onAddOrder={openNewModal}
                     onAddDish={openNewModal}
+                    refetchData={refetch}
                 />
 
                 <ReservationsSection

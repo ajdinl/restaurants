@@ -13,6 +13,7 @@ export const OrdersSection = ({
     onDeleteOrder,
     onAddOrder,
     onAddDish,
+    refetchData,
 }) => {
     const orderNumbers = orders?.map((order) => order.number) || [];
     const totalOrders = orders?.length || 0;
@@ -105,6 +106,7 @@ export const OrdersSection = ({
                                   onDelete={onDelete}
                                   onDeleteOrder={onDeleteOrder}
                                   onAddDish={onAddDish}
+                                  refetchData={refetchData}
                                   isExpanded={true}
                               />
                           ))}

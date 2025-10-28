@@ -1,6 +1,37 @@
-import { EditIcon, DeleteIcon, Button } from '@/components';
+import { useState } from 'react';
+import { EditIcon, DeleteIcon, OrderDetailsModal } from '@/components';
+import { deleteItem } from '@/services/api.service';
 
-export const OrderCard = ({ order, menu, tables, onEdit, onDelete, onDeleteOrder, onAddDish, isExpanded }) => {
+export const OrderCard = ({
+    order,
+    menu,
+    tables,
+    onEdit,
+    onDelete,
+    onDeleteOrder,
+    onAddDish,
+    isExpanded,
+    refetchData,
+}) => {
+    const [isOrderDetailsModalOpen, setIsOrderDetailsModalOpen] = useState(false);
+
+    const handleViewOrderDetails = () => {
+        setIsOrderDetailsModalOpen(true);
+    };
+
+    const handleCloseOrderDetails = () => {
+        setIsOrderDetailsModalOpen(false);
+    };
+
+    const handleOrderDone = async () => {
+        try {
+            await deleteItem('orders', order.id);
+            await refetchData();
+            handleCloseOrderDetails();
+        } catch (error) {
+            console.error('Error completing order:', error);
+        }
+    };
     const menuItems = menu?.[0]?.items || [];
     const table = tables?.find((t) => t.id === order.table_id);
     const tableNumber = table?.number || order.table_number || 'N/A';
@@ -19,10 +50,10 @@ export const OrderCard = ({ order, menu, tables, onEdit, onDelete, onDeleteOrder
         return total;
     };
 
-    if (!isExpanded) {
-        const totalItems = order.items?.reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
-        const total = calculateTotal();
+    const total = calculateTotal();
+    const totalItems = order.items?.reduce((acc, item) => acc + (item.quantity || 0), 0) || 0;
 
+    if (!isExpanded) {
         return (
             <li className="flex items-start justify-between p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all border border-transparent hover:border-neutral-200 dark:hover:border-neutral-600">
                 <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -63,96 +94,119 @@ export const OrderCard = ({ order, menu, tables, onEdit, onDelete, onDeleteOrder
         );
     }
 
-    const total = calculateTotal();
-
     return (
-        <li className="flex flex-col bg-white dark:bg-neutral-700 p-4 rounded-lg border border-neutral-200 dark:border-neutral-600 hover:border-green-300 dark:hover:border-green-700 transition-all mb-3">
-            <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 flex items-center justify-center font-semibold">
-                        {order.number}
+        <>
+            <li
+                className="flex flex-col bg-white dark:bg-neutral-700 p-4 rounded-lg border border-neutral-200 dark:border-neutral-600 hover:border-green-300 dark:hover:border-green-700 transition-all mb-3 cursor-pointer"
+                onClick={handleViewOrderDetails}
+            >
+                <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 flex items-center justify-center font-semibold">
+                            {order.number}
+                        </div>
+                        <div>
+                            <span className="text-neutral-900 dark:text-neutral-50 font-semibold">
+                                Order #{order.number}
+                            </span>
+                            <p className="text-sm text-neutral-500 dark:text-neutral-400">Table #{tableNumber}</p>
+                        </div>
                     </div>
-                    <div>
-                        <span className="text-neutral-900 dark:text-neutral-50 font-semibold">
-                            Order #{order.number}
-                        </span>
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400">Table #{tableNumber}</p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2">
-                    <button
-                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-600 hover:bg-green-700 text-white text-xl font-semibold transition-all shadow-sm"
-                        onClick={() => onAddDish({ category: 'Order Dish', order, menu })}
-                        title="Add dish"
-                    >
-                        +
-                    </button>
-                    <button
-                        className="w-8 h-8 flex items-center justify-center rounded-lg text-white transition-all shadow-sm"
-                        onClick={() => onDeleteOrder({ category: 'orders', data: order })}
-                        title="Delete order"
-                    >
-                        <DeleteIcon className="h-4 w-4 text-white" />
-                    </button>
-                </div>
-            </div>
-            <ul className="space-y-2">
-                {order.items?.map((item, index) => {
-                    const menuItem = menuItems.find((m) => m.name === item.name);
-                    const price = menuItem?.price || 0;
-                    const itemTotal = price * (item.quantity || 0);
-
-                    return (
-                        <li
-                            key={index}
-                            className="flex flex-row items-center justify-between p-2 bg-neutral-50 dark:bg-neutral-800 rounded-lg"
+                    <div className="flex items-center gap-2">
+                        <button
+                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-600 hover:bg-green-700 text-white text-xl font-semibold transition-all shadow-sm"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onAddDish({ category: 'Order Dish', order, menu });
+                            }}
+                            title="Add dish"
                         >
-                            <p className="text-neutral-900 dark:text-neutral-50 font-medium">
-                                <span className="text-green-600 dark:text-green-400 font-semibold">
-                                    {item.quantity}x
-                                </span>{' '}
-                                {item.name}
-                                {price > 0 && (
-                                    <span className="text-neutral-600 dark:text-neutral-400 text-sm ml-2">
-                                        (${itemTotal.toFixed(2)})
-                                    </span>
-                                )}
-                            </p>
-                            <div className="flex flex-row items-center gap-3">
-                                <EditIcon
-                                    action={() =>
-                                        onEdit({
-                                            ...order,
-                                            category: 'orders',
-                                            item,
-                                            index,
-                                        })
-                                    }
-                                    className="h-4 w-4 text-neutral-600 hover:text-green-600 dark:text-neutral-400 dark:hover:text-green-400 cursor-pointer transition-all"
-                                />
-                                <DeleteIcon
-                                    action={() =>
-                                        onDelete({
-                                            category: 'orders',
-                                            data: order,
-                                            index,
-                                        })
-                                    }
-                                    className="h-4 w-4 font-semibold text-neutral-600 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400 cursor-pointer transition-all"
-                                />
-                            </div>
+                            +
+                        </button>
+                        <button
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-white transition-all shadow-sm"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDeleteOrder({ category: 'orders', data: order });
+                            }}
+                            title="Delete order"
+                        >
+                            <DeleteIcon className="h-4 w-4 text-white" />
+                        </button>
+                    </div>
+                </div>
+                <ul className="space-y-2">
+                    {order.items?.map((item, index) => {
+                        const menuItem = menuItems.find((m) => m.name === item.name);
+                        const price = menuItem?.price || 0;
+                        const itemTotal = price * (item.quantity || 0);
+
+                        return (
+                            <li
+                                key={index}
+                                className="flex flex-row items-center justify-between p-2 bg-neutral-50 dark:bg-neutral-800 rounded-lg"
+                            >
+                                <p className="text-neutral-900 dark:text-neutral-50 font-medium">
+                                    <span className="text-green-600 dark:text-green-400 font-semibold">
+                                        {item.quantity}x
+                                    </span>{' '}
+                                    {item.name}
+                                    {price > 0 && (
+                                        <span className="text-neutral-600 dark:text-neutral-400 text-sm ml-2">
+                                            (${itemTotal.toFixed(2)})
+                                        </span>
+                                    )}
+                                </p>
+                                <div className="flex flex-row items-center gap-3">
+                                    <EditIcon
+                                        action={(e) => {
+                                            e?.stopPropagation();
+                                            onEdit({
+                                                ...order,
+                                                category: 'orders',
+                                                item,
+                                                index,
+                                            });
+                                        }}
+                                        className="h-4 w-4 text-neutral-600 hover:text-green-600 dark:text-neutral-400 dark:hover:text-green-400 cursor-pointer transition-all"
+                                    />
+                                    <DeleteIcon
+                                        action={(e) => {
+                                            e?.stopPropagation();
+                                            onDelete({
+                                                category: 'orders',
+                                                data: order,
+                                                index,
+                                            });
+                                        }}
+                                        className="h-4 w-4 font-semibold text-neutral-600 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400 cursor-pointer transition-all"
+                                    />
+                                </div>
+                            </li>
+                        );
+                    })}
+                    {total > 0 && (
+                        <li className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border-t-2 border-green-200 dark:border-green-800 mt-2">
+                            <span className="text-neutral-900 dark:text-neutral-50 font-bold">Total</span>
+                            <span className="text-green-600 dark:text-green-400 font-bold text-lg">
+                                ${total.toFixed(2)}
+                            </span>
                         </li>
-                    );
-                })}
-                {total > 0 && (
-                    <li className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border-t-2 border-green-200 dark:border-green-800 mt-2">
-                        <span className="text-neutral-900 dark:text-neutral-50 font-bold">Total</span>
-                        <span className="text-green-600 dark:text-green-400 font-bold text-lg">
-                            ${total.toFixed(2)}
-                        </span>
-                    </li>
-                )}
-            </ul>
-        </li>
+                    )}
+                </ul>
+            </li>
+            {isOrderDetailsModalOpen && (
+                <OrderDetailsModal
+                    isOpen={isOrderDetailsModalOpen}
+                    onClose={handleCloseOrderDetails}
+                    order={order}
+                    onDone={handleOrderDone}
+                    total={total}
+                    totalItems={totalItems}
+                    menuItems={menuItems}
+                    tableNumber={tableNumber}
+                />
+            )}
+        </>
     );
 };

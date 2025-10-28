@@ -21,6 +21,7 @@ import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { ErrorMessage } from '@/components/common/ErrorMessage';
 import { BaseModal } from '@/components/common/BaseModal';
+import { OrderDetailsModal } from '@/components/modals/OrderDetailsModal';
 
 export {
     Card,
@@ -47,4 +48,5 @@ export {
     LoadingSpinner,
     ErrorMessage,
     BaseModal,
+    OrderDetailsModal,
 };
