@@ -1,0 +1,115 @@
+en:
+  app:
+    name: "Restaurants"
+  nav:
+    dashboard: "Dashboard"
+    restaurants: "Restaurants"
+    users: "Users"
+    sign_out: "Sign out"
+  locales:
+    bs: "Bosanski"
+    en: "English"
+  helpers:
+    cancel: "Cancel"
+    edit: "Edit"
+    delete: "Delete"
+    save: "Save"
+    "yes": "Yes"
+    "no": "No"
+  errors:
+    rate_limited: "Too many attempts. Please wait a few minutes and try again."
+    forbidden:
+      title: "Access denied"
+      message: "You are not allowed to do that."
+      back: "Back to home"
+  commands:
+    admin:
+      suspend_restaurant:
+        already_suspended: "The restaurant is already suspended."
+      activate_restaurant:
+        already_active: "The restaurant is already active."
+      add_member:
+        user_not_found: "No user with that email exists. Create them under Users first."
+  home:
+    show:
+      title: "My restaurants"
+      no_access: "You have not been added to any restaurant yet. Contact your manager or an administrator."
+  admin:
+    dashboard:
+      show:
+        title: "Administration"
+        restaurants: "Restaurants"
+        active: "Active"
+        suspended: "Suspended"
+        users: "Users"
+    restaurants:
+      index:
+        title: "Restaurants"
+        new: "New restaurant"
+        empty: "No restaurants yet."
+      form:
+        slug_hint: "Generated from the name"
+      new:
+        title: "New restaurant"
+      edit:
+        title: "Edit restaurant"
+      show:
+        open_workspace: "Open restaurant"
+        suspend: "Suspend"
+        suspend_confirm: "Suspend this restaurant? Staff cannot work until you activate it again."
+        activate: "Activate"
+        destroy_confirm: "Permanently delete this restaurant and all its data? This cannot be undone."
+        staff: "Staff"
+        remove: "Remove"
+        remove_confirm: "Remove this person from the restaurant?"
+        add_member: "Add"
+      create:
+        success: "Restaurant created."
+      update:
+        success: "Restaurant updated."
+      suspend:
+        success: "Restaurant suspended."
+      activate:
+        success: "Restaurant activated."
+      destroy:
+        success: "Restaurant deleted."
+    memberships:
+      create:
+        success: "Person added to the restaurant."
+      update:
+        success: "Role updated."
+      destroy:
+        success: "Person removed from the restaurant."
+    users:
+      index:
+        title: "Users"
+        new: "New user"
+        destroy_confirm: "Permanently delete this user?"
+      form:
+        no_platform_role: "No platform role"
+      new:
+        title: "New user"
+      edit:
+        title: "Edit user"
+      create:
+        success: "User created."
+      update:
+        success: "User updated."
+      destroy:
+        success: "User deleted."
+  workspace:
+    dashboard:
+      show:
+        support_view: "Support view"
+        intro: "Tools for your restaurant will live here."
+        coming_soon: "Coming soon"
+        sections:
+          menu: "Menu"
+          tables: "Tables"
+          reservations: "Reservations"
+          orders: "Orders"
+          kitchen: "Kitchen"
+          staff: "Staff"
+    suspended:
+      title: "Restaurant suspended"
+      message: "Access is temporarily disabled. Contact an administrator."

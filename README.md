@@ -1,158 +1,78 @@
-# Restaurant Management System
+# Restaurants
 
-Full-stack restaurant management application with user authentication, menu management, table reservations, and order tracking. Built with modern architecture following SOLID principles and Command Pattern.
+Multi-tenant platform for restaurants: menus, tables, reservations, waiter ordering on tablets, kitchen display,
+and table-side waiter calls with smartwatch notifications. UI in Bosnian and English.
 
-## Tech Stack
+> **Status:** Phase 0 (foundation) is done: authentication, roles, restaurant workspaces, admin panel, bs/en.
+> **Next:** the Rails app becomes a JSON API (`/api/v1`, devise-jwt) and the UI moves to a Next.js + TypeScript app in `frontend/`.
+> The previous Next.js + MongoDB version lives on `main` until this branch is merged.
 
--   **Frontend:** Next.js 14, React 18, Tailwind CSS
--   **Backend:** Next.js API Routes, NextAuth.js
--   **Database:** MongoDB with Mongoose
--   **Authentication:** NextAuth.js (JWT)
--   **Architecture:** Command Pattern, Custom Hooks, Modular Components
+## Tech stack
 
-## Features
+- **Ruby on Rails 8.1** (Ruby 3.3.5), Hotwire (Turbo + Stimulus), Tailwind CSS 4, importmap (no Node needed)
+- **PostgreSQL** for data, background jobs (Solid Queue), realtime (Solid Cable) and cache (Solid Cache). No Redis.
+- **Devise** (auth), **Pundit** (authorization), **acts_as_tenant** (restaurant isolation)
+- **RSpec**, FactoryBot, Shoulda Matchers, RuboCop, Brakeman, bundler-audit, i18n-tasks
 
--   User authentication with admin/user roles
--   Restaurant CRUD operations with validation
--   Menu management with full CRUD
--   Table management and capacity tracking
--   Order tracking and management
--   Reservation system with status management
--   Dark mode support
--   Comprehensive input validation (frontend & backend)
--   Centralized error handling
--   Modular and reusable components
+## Requirements
 
-## Architecture Highlights
+- Ruby 3.3.5 (see `.ruby-version` / `.tool-versions`)
+- PostgreSQL 15+ running locally (Postgres.app or Homebrew)
 
-### Custom Hooks
-
--   `useAuth` - Authentication management
--   `useRestaurants` - Restaurant data fetching
--   `useModal` - Modal state management
--   `useTheme` - Theme management
-
-### Commands Pattern
-
--   Single Responsibility operations
--   Consistent validation
--   Testable business logic
--   Commands for all entities (User, Restaurant, Menu, Table, Order, Reservation)
-
-### Validators
-
--   Comprehensive input validation
--   Reusable validation logic
--   Frontend and backend validation
--   Clear error messages
-
-For detailed architecture information, see [REFACTORING_GUIDE.md](./REFACTORING_GUIDE.md)
-
-## Installation
-
-### 1. Install MongoDB
-
-**macOS:**
+## Setup
 
 ```bash
-brew install mongodb-community
-brew services start mongodb-community
+bin/setup --skip-server     # install gems, prepare the database
+bin/rails db:seed           # demo data
+bin/dev                     # http://localhost:3000
 ```
 
-**Linux:**
+Demo login accounts are listed in the local `docs/DEMO_ACCOUNTS.md` (not in git).
+
+## Roles
+
+| Role | Scope | Can |
+|------|-------|-----|
+| Super admin | Platform | Everything, including deleting restaurants and managing moderators |
+| Moderator | Platform | Onboard restaurants and staff, suspend restaurants, read-only support view. No permanent deletes, cannot manage platform staff |
+| Owner / Manager | One restaurant | Menu, prices, tables, staff, settings |
+| Host | One restaurant | Reservations, floor, walk-ins (optional per restaurant) |
+| Waiter | One restaurant | Orders on tablet, table calls |
+| Kitchen | One restaurant | Kitchen display |
+
+A person can work in several restaurants with a different role in each.
+
+## Security
+
+- Every restaurant's data is isolated with acts_as_tenant, and a query without a tenant raises an error.
+- Pundit denies everything by default, and every action is checked for authorization.
+- Other restaurants' resources return 404 (existence is not revealed).
+- Accounts lock after 10 failed sign-ins, sign-in is rate limited per IP, and password reset does not reveal whether an email exists.
+- Strict Content Security Policy with per-request nonces.
+- UUIDv7 primary keys. Database constraints back every model validation.
+
+## Development
 
 ```bash
-sudo apt-get install mongodb
-sudo systemctl start mongod
+bundle exec rspec                 # tests
+bundle exec rubocop               # lint
+bundle exec i18n-tasks missing    # bs/en translation parity
+bin/brakeman --no-pager           # security scan
+bin/ci                            # everything CI runs
 ```
 
-**Windows:**  
-Download from [mongodb.com](https://www.mongodb.com/try/download/community)
+Coding conventions are in [CLAUDE.md](./CLAUDE.md).
 
-### 2. Install Dependencies
+## Environment variables
 
-```bash
-npm install
-```
+Development needs none. See [`.env.example`](./.env.example) for production settings (`SUPER_ADMIN_*`, `APP_HOST`, `MAILER_FROM`,
+`DATABASE_URL`, `RAILS_MASTER_KEY`). Copy it to `.env` (gitignored).
 
-### 3. Setup Environment
+## Production seed
 
-Create `.env.local` file:
+In production `db:seed` only creates a super admin, from `SUPER_ADMIN_EMAIL`, `SUPER_ADMIN_PASSWORD` (and optional
+`SUPER_ADMIN_NAME`). It never creates default passwords.
 
-```env
-MONGODB_URI=mongodb://localhost:27017/restaurants
-NEXTAUTH_SECRET=your-secret-key-here
-NEXTAUTH_URL=http://localhost:3000
-```
+## Deployment
 
-Generate secret key:
-
-```bash
-openssl rand -base64 32
-```
-
-### 4. Create Admin User
-
-```bash
-# Default admin (admin@example.com / admin123)
-npm run create-admin
-
-# Custom admin
-npm run create-admin your@email.com password123 "Your Name"
-```
-
-## Run Application
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
-
-## Available Scripts
-
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm start            # Start production server
-npm run create-admin # Create admin user
-```
-
-## Project Structure
-
-```
-restaurants/
-├── hooks/                  # Custom React hooks
-├── commands/               # Command Pattern implementation
-├── lib/
-│   ├── validators/        # Input validation
-│   ├── error-handler.js   # Error handling
-│   └── constants.js       # Application constants
-├── components/
-│   ├── common/            # Reusable components
-│   ├── layout/            # Layout components
-│   ├── dashboard/         # Dashboard sections & cards
-│   └── modals/            # Modal components & forms
-├── app/api/               # API routes with Commands
-├── models/                # Mongoose models
-└── services/              # API services
-```
-
-## Database Structure
-
--   **users** - User accounts (email, password, full_name, is_admin)
--   **restaurants** - Restaurant information
--   **menus** - Menu items with ingredients and prices
--   **tables** - Restaurant tables with capacity
--   **orders** - Customer orders
--   **reservations** - Table reservations
-
-All models include validation and are managed through Commands for consistency.
-
-## Production Deployment
-
-### MongoDB Atlas
-
-1. Create free cluster at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
-2. Get connection string
-3. Update `MONGODB_URI` in environment variables
+Kamal 2 config is in `config/deploy.yml` (not configured yet).

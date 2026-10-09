@@ -1,0 +1,36 @@
+<%= form_with model: [:admin, user], class: 'card space-y-5' do |f| %>
+  <%= render 'shared/form_errors', record: user %>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <%= f.label :full_name, class: 'label' %>
+      <%= f.text_field :full_name, class: 'input', required: true, autofocus: true %>
+    </div>
+    <div>
+      <%= f.label :email, class: 'label' %>
+      <%= f.email_field :email, class: 'input', required: true, autocomplete: 'off' %>
+    </div>
+    <% if user.new_record? %>
+      <div>
+        <%= f.label :password, class: 'label' %>
+        <%= f.password_field :password, class: 'input', required: true, autocomplete: 'new-password' %>
+        <p class="mt-1 text-xs text-neutral-500"><%= t('devise.shared.minimum_password_length', count: User.password_length.min) %></p>
+      </div>
+    <% end %>
+    <div>
+      <%= f.label :locale, class: 'label' %>
+      <%= f.select :locale, I18n.available_locales.map { |l| [t("locales.#{l}"), l] }, { include_blank: true }, class: 'input' %>
+    </div>
+    <% if policy([:admin, user]).permitted_attributes.include?(:platform_role) %>
+      <div>
+        <%= f.label :platform_role, class: 'label' %>
+        <%= f.select :platform_role, enum_options(User, :platform_role), { include_blank: t('.no_platform_role') }, class: 'input' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flex gap-3">
+    <%= f.submit class: 'btn btn-primary' %>
+    <%= link_to t('helpers.cancel'), admin_users_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>

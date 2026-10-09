@@ -1,0 +1,29 @@
+# Keeps bs and en in sync. Run: bundle exec i18n-tasks missing && bundle exec i18n-tasks unused
+base_locale: bs
+locales: [bs, en]
+
+data:
+  read:
+    - config/locales/%{locale}.yml
+    - config/locales/*.%{locale}.yml
+
+search:
+  paths:
+    - app/
+  exclude:
+    - app/assets
+
+# Keys resolved dynamically (enum_label, Devise, Rails form helpers) or provided by gems.
+ignore_unused:
+  - 'activerecord.*'
+  - 'errors.messages.*'
+  - 'devise.*'
+  - 'workspace.dashboard.show.sections.*'
+  - 'locales.*'
+
+ignore_missing:
+  - 'devise.*'
+  - 'helpers.submit.*'
+  - 'errors.messages.*'
+  - 'activerecord.errors.*'
+  - 'activerecord.models.*'

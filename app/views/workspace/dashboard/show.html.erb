@@ -1,0 +1,21 @@
+<% content_for :title, Current.restaurant.name %>
+
+<div class="mb-6 flex flex-wrap items-center gap-3">
+  <h1 class="page-title"><%= Current.restaurant.name %></h1>
+  <% if Current.membership %>
+    <span class="badge badge-gray"><%= enum_label(Membership, :role, Current.membership.role) %></span>
+  <% else %>
+    <span class="badge badge-red"><%= t('.support_view') %></span>
+  <% end %>
+</div>
+
+<p class="mb-6 text-neutral-600"><%= t('.intro') %></p>
+
+<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <% %w[menu tables reservations orders kitchen staff].each do |section| %>
+    <div class="card">
+      <h2 class="font-semibold"><%= t(".sections.#{section}") %></h2>
+      <p class="mt-1 text-sm text-neutral-500"><%= t('.coming_soon') %></p>
+    </div>
+  <% end %>
+</div>

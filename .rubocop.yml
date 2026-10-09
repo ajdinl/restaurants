@@ -1,0 +1,94 @@
+plugins:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'db/schema.rb'
+    - 'db/*_schema.rb'
+
+# --- Style ---
+
+Style/Documentation:
+  Enabled: false
+
+Style/FormatStringToken:
+  EnforcedStyle: unannotated
+
+# --- Layout ---
+
+Layout/LineLength:
+  Max: 160
+
+# --- Metrics ---
+
+Metrics/MethodLength:
+  Max: 30
+  Exclude:
+    - 'db/seeds.rb'
+    - 'db/migrate/**/*'
+
+Metrics/AbcSize:
+  Max: 35
+  Exclude:
+    - 'db/seeds.rb'
+    - 'db/migrate/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'config/**/*'
+    - 'db/seeds.rb'
+    - 'db/migrate/**/*'
+    - 'spec/**/*'
+    - 'lib/tasks/**/*'
+
+# --- Naming ---
+
+Naming/PredicatePrefix:
+  Enabled: false
+
+# --- Rails ---
+
+Rails/InverseOf:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
+# --- RSpec ---
+
+RSpec/MultipleExpectations:
+  Max: 25
+
+RSpec/ExampleLength:
+  Max: 40
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 10
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/requests/**/*'
+    - 'spec/commands/**/*'
+    - 'spec/i18n_spec.rb'
+
+# Pundit's `permissions` DSL creates a separate group per block; the cop cannot see that.
+RSpec/RepeatedExample:
+  Exclude:
+    - 'spec/policies/**/*'
+
+Rails/Output:
+  Exclude:
+    - 'db/seeds.rb'

@@ -1,0 +1,22 @@
+<% content_for :title, t('.title') %>
+
+<h1 class="page-title mb-6"><%= t('.title') %></h1>
+
+<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="card">
+    <p class="text-sm text-neutral-500"><%= t('.restaurants') %></p>
+    <p class="mt-1 text-3xl font-semibold"><%= @restaurant_counts.values.sum %></p>
+  </div>
+  <div class="card">
+    <p class="text-sm text-neutral-500"><%= t('.active') %></p>
+    <p class="mt-1 text-3xl font-semibold"><%= @restaurant_counts.fetch('active', 0) %></p>
+  </div>
+  <div class="card">
+    <p class="text-sm text-neutral-500"><%= t('.suspended') %></p>
+    <p class="mt-1 text-3xl font-semibold"><%= @restaurant_counts.fetch('suspended', 0) %></p>
+  </div>
+  <div class="card">
+    <p class="text-sm text-neutral-500"><%= t('.users') %></p>
+    <p class="mt-1 text-3xl font-semibold"><%= @user_count %></p>
+  </div>
+</div>

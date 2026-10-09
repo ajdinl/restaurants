@@ -1,0 +1,91 @@
+<% content_for :title, @restaurant.name %>
+<% restaurant_policy = policy([:admin, @restaurant]) %>
+
+<div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+  <div class="flex items-center gap-3">
+    <h1 class="page-title"><%= @restaurant.name %></h1>
+    <%= status_badge(@restaurant) %>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <%= link_to t('.open_workspace'), workspace_root_path(@restaurant), class: 'btn btn-secondary' %>
+    <% if restaurant_policy.update? %>
+      <%= link_to t('helpers.edit'), edit_admin_restaurant_path(@restaurant), class: 'btn btn-secondary' %>
+    <% end %>
+    <% if restaurant_policy.suspend? %>
+      <%= button_to t('.suspend'), suspend_admin_restaurant_path(@restaurant), method: :patch, class: 'btn btn-secondary',
+            form: { data: { turbo_confirm: t('.suspend_confirm') } } %>
+    <% end %>
+    <% if restaurant_policy.activate? %>
+      <%= button_to t('.activate'), activate_admin_restaurant_path(@restaurant), method: :patch, class: 'btn btn-primary' %>
+    <% end %>
+    <% if restaurant_policy.destroy? %>
+      <%= button_to t('helpers.delete'), admin_restaurant_path(@restaurant), method: :delete, class: 'btn btn-danger',
+            form: { data: { turbo_confirm: t('.destroy_confirm') } } %>
+    <% end %>
+  </div>
+</div>
+
+<div class="grid gap-6 lg:grid-cols-3">
+  <div class="card space-y-3 text-sm lg:col-span-1">
+    <% %i[slug address city phone email time_zone].each do |attribute| %>
+      <div>
+        <p class="text-neutral-500"><%= Restaurant.human_attribute_name(attribute) %></p>
+        <p class="font-medium"><%= @restaurant.public_send(attribute).presence || '—' %></p>
+      </div>
+    <% end %>
+    <div>
+      <p class="text-neutral-500"><%= Restaurant.human_attribute_name(:has_host) %></p>
+      <p class="font-medium"><%= @restaurant.has_host? ? t('helpers.yes') : t('helpers.no') %></p>
+    </div>
+  </div>
+
+  <div class="card lg:col-span-2">
+    <h2 class="mb-4 text-lg font-semibold"><%= t('.staff') %></h2>
+
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= User.human_attribute_name(:full_name) %></th>
+            <th><%= Membership.human_attribute_name(:role) %></th>
+            <th><%= Membership.human_attribute_name(:active) %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-neutral-100">
+          <% @memberships.each do |membership| %>
+            <tr>
+              <td>
+                <p class="font-medium"><%= membership.user.full_name %></p>
+                <p class="text-xs text-neutral-500"><%= membership.user.email %></p>
+              </td>
+              <td colspan="2">
+                <%= form_with model: membership, url: admin_restaurant_membership_path(@restaurant, membership), class: 'flex items-center gap-3' do |f| %>
+                  <%= f.select :role, enum_options(Membership, :role), {}, class: 'input w-40' %>
+                  <%= f.check_box :active, class: 'checkbox' %>
+                  <%= f.submit t('helpers.save'), class: 'btn-link' %>
+                <% end %>
+              </td>
+              <td class="text-right">
+                <%= button_to t('.remove'), admin_restaurant_membership_path(@restaurant, membership), method: :delete, class: 'btn-link text-red-700',
+                      form: { data: { turbo_confirm: t('.remove_confirm') } } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <%= form_with scope: :membership, url: admin_restaurant_memberships_path(@restaurant), class: 'mt-6 flex flex-wrap items-end gap-3 border-t border-neutral-100 pt-6' do |f| %>
+      <div class="grow">
+        <%= f.label :email, User.human_attribute_name(:email), class: 'label' %>
+        <%= f.email_field :email, class: 'input', required: true %>
+      </div>
+      <div>
+        <%= f.label :role, class: 'label' %>
+        <%= f.select :role, enum_options(Membership, :role), {}, class: 'input' %>
+      </div>
+      <%= f.submit t('.add_member'), class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>
