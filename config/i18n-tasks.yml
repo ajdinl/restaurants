@@ -10,8 +10,6 @@ data:
 search:
   paths:
     - app/
-  exclude:
-    - app/assets
 
 # Keys resolved dynamically (enum_label, Devise, Rails form helpers) or provided by gems.
 ignore_unused:

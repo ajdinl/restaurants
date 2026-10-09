@@ -8,6 +8,10 @@ module Admin
       platform_staff?
     end
 
+    def show?
+      platform_staff?
+    end
+
     def create?
       platform_staff?
     end

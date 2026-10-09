@@ -21,24 +21,5 @@ bs:
         instruction: "Kliknite na link ispod da otključate račun:"
         message: "Vaš račun je zaključan zbog previše neuspješnih pokušaja prijave."
     passwords:
-      edit:
-        change_my_password: "Promijeni lozinku"
-        change_your_password: "Promjena lozinke"
-        confirm_new_password: "Potvrdite novu lozinku"
-        new_password: "Nova lozinka"
-      new:
-        forgot_your_password: "Zaboravili ste lozinku?"
-        send_me_reset_password_instructions: "Pošalji upute za promjenu lozinke"
-    sessions:
-      already_signed_out: "Uspješno ste se odjavili."
-      new:
-        sign_in: "Prijava"
-    shared:
-      links:
-        back: "Nazad"
-        forgot_your_password: "Zaboravili ste lozinku?"
-        sign_in: "Prijava"
-      minimum_password_length:
-        one: "(najmanje %{count} znak)"
-        few: "(najmanje %{count} znaka)"
-        other: "(najmanje %{count} znakova)"
+      send_paranoid_instructions: "Ako se vaš email nalazi u našoj bazi, za nekoliko minuta ćete dobiti link za promjenu lozinke."
+      updated_not_active: "Lozinka je uspješno promijenjena."

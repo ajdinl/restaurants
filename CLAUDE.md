@@ -1,13 +1,16 @@
 # Restaurants
 
 Multi-tenant SaaS for restaurants: menus, tables, reservations, waiter ordering, kitchen display, waiter calls.
-Rails 8.1 full-stack (Hotwire + Tailwind), Ruby 3.3.5, PostgreSQL. Solid Queue / Solid Cable / Solid Cache (no Redis).
+
+- **Backend (repo root):** Rails 8.1 JSON API (`config.api_only`), Ruby 3.3.5, PostgreSQL, Devise + devise-jwt,
+  Solid Queue / Solid Cable / Solid Cache (no Redis).
+- **Frontend (`frontend/`):** Next.js + TypeScript (App Router), Tailwind, next-intl. See `frontend/README.md`.
 
 ## Commands
 
 ```bash
-bin/dev                              # Server + Tailwind watcher (http://localhost:3000)
-bin/rails db:prepare db:seed         # Create, migrate, seed demo data (password: password123)
+bin/dev                              # API :3001 + Solid Queue worker + Next.js :3000
+bin/rails db:prepare db:seed         # Create, migrate, seed demo data (DEMO_PASSWORD, default password123)
 bundle exec rspec                    # Tests
 bundle exec rubocop                  # Lint
 bundle exec i18n-tasks missing       # bs/en translation parity (also: unused)
@@ -19,11 +22,20 @@ bin/ci                               # Everything CI runs, locally
 
 | Area | Routes | Controllers | Who |
 |------|--------|-------------|-----|
-| Admin | `/admin/...` | `Admin::` (inherit `Admin::BaseController`) | Super admin, moderator |
-| Workspace | `/r/:restaurant_slug/...` | `Workspace::` (inherit `Workspace::BaseController`) | Restaurant staff (+ platform staff for support) |
-| Auth | `/users/...` | Devise (`Users::SessionsController`) | Everyone |
+| Auth | `/api/v1/auth/sign_in`, `sign_out`, `password` | `Api::V1::Auth::` (Devise) | Everyone |
+| Me | `/api/v1/me` | `Api::V1::MeController` | Signed-in user |
+| Admin | `/api/v1/admin/...` | `Api::V1::Admin::` (inherit `Api::V1::Admin::BaseController`) | Super admin, moderator |
+| Workspace | `/api/v1/restaurants/:restaurant_slug/...` | `Api::V1::Workspace::` (inherit `Api::V1::Workspace::BaseController`) | Restaurant staff (+ platform staff for support) |
 
-The app module is `RestaurantsApp`. Never create a `Restaurants::` namespace.
+Commands and policies live in top-level `Admin::` / `Workspace::` modules, so call commands as `::Admin::CreateRestaurant`
+from inside `Api::V1::Admin`. The app module is `RestaurantsApp`. Never create a `Restaurants::` namespace.
+
+### Auth (JWT, BFF)
+- Sign-in returns the JWT in the `Authorization` response header (12 h). Sign-out revokes it (JTIMatcher). Changing the
+  password rotates `jti`, signing the user out everywhere.
+- The Next.js server keeps the token in an httpOnly cookie and calls the API server-to-server, forwarding
+  `Accept-Language` and `X-Forwarded-For`. Browser JavaScript never sees the token.
+- Devise failures (401) go through `JsonFailureApp`. `Api::V1::BaseController` skips `:trackable` on token requests.
 
 ## Roles
 
@@ -45,13 +57,19 @@ All business logic lives in `app/commands/{area}/`, inheriting `ApplicationComma
 ```ruby
 def update
   authorize [:admin, @restaurant]
-  result = Admin::UpdateRestaurant.call(user: current_user, record: @restaurant, params: restaurant_params)
-  return render(:edit, status: :unprocessable_content) if result.failure?
-
-  redirect_to admin_restaurant_path(@restaurant), notice: t('.success')
+  result = ::Admin::UpdateRestaurant.call(user: current_user, record: @restaurant, params: restaurant_params)
+  render_command_result(result, serializer: RestaurantSerializer)
 end
 ```
 Max ~5 lines per action. No business logic, no queries beyond loading the record.
+
+### Responses
+- Success: `{ data: ... }` (+ `meta: { page, per_page, total, total_pages }` from `render_paginated`).
+- Errors: `{ errors: [{ field, message }] }` via `render_errors` / `ErrorHandler` (404 not found, 403 forbidden,
+  400 missing params, 401 Devise, 422 validation, 429 throttled). Messages are localized and never name models.
+- Serializers: `jsonapi-serializer`, inheriting `ApplicationSerializer`, rendered flat (`{ id, ...attributes }`) with
+  `XSerializer.render(record_or_collection)`. Serializers are dumb: preload in the controller, no queries.
+- Never serialize secrets (`encrypted_password`, `jti`, tokens). Whitelist attributes explicitly.
 
 ### Authorization (Pundit)
 - `ApplicationPolicy` **denies everything by default**. Each policy allows actions explicitly.
@@ -72,8 +90,11 @@ Max ~5 lines per action. No business logic, no queries beyond loading the record
 - Load child records through their parent (`@restaurant.memberships.find(id)`), never `Model.find(id)` on tenant-crossing data.
 - Separate create/update params when create needs fields update must not allow (e.g. `password`).
 - Never hardcode secrets or ENV fallbacks for production. Seeds create no default passwords in production.
-- Strict CSP with per-request nonces (`config/initializers/content_security_policy.rb`). No inline scripts or styles. Use Stimulus.
-- Devise: lockable (10 attempts, 15 min), paranoid mode, min 10-char passwords. Sign-in is rate limited per IP.
+- API CSP is `default-src 'none'; frame-ancestors 'none'`. CORS allows only `FRONTEND_URL`.
+- Devise: lockable (10 attempts, 15 min), paranoid mode, min 10-char passwords. Sign-in and password reset are rate
+  limited per IP (`rate_limit`) and per email (Rack::Attack, `config/initializers/rack_attack.rb`).
+- Production must run Next.js behind a proxy that appends `X-Forwarded-For`; per-IP rate limits depend on it.
+- Treat blank ENV values as unset (`ENV['X'].presence`), raising in production when a required one is missing.
 - Brakeman and bundler-audit must be clean.
 
 ### Models
@@ -90,19 +111,15 @@ Max ~5 lines per action. No business logic, no queries beyond loading the record
 - `strong_migrations` is on. Put indexes and check constraints inside `create_table` for new tables.
 - Use `type: :uuid` on references.
 
-### Views
-- Tailwind component classes in `app/assets/tailwind/application.css`: `btn btn-primary|btn-secondary|btn-danger`, `btn-link`, `card`, `input`, `label`, `checkbox`, `badge badge-green|red|gray`, `table`, `page-title`.
-- Enum labels: `enum_label(Model, :attr, value)`, select options: `enum_options(Model, :attr)`.
-- Destructive buttons use `button_to ... form: { data: { turbo_confirm: t('...') } }`.
-- Layout must work on tablets (waiters, kitchen) and phones.
-
 ## i18n: Mandatory bs + en
 
-- Default locale `bs`, also `en`. Every user-facing string goes in **both** `config/locales/*.bs.yml` and `*.en.yml`. Never hardcode text.
-- Lazy lookups in views and controllers (`t('.title')`). Model and attribute names live in `activerecord.*`, enum values in `activerecord.attributes.<model>.<plural_attr>.<value>`.
-- Missing translations raise in dev and test. `spec/i18n_spec.rb` fails on missing or unused keys.
+- Default locale `bs`, also `en`. API messages go in **both** `config/locales/*.bs.yml` and `*.en.yml`; UI text lives in
+  `frontend/messages/{bs,en}.json`. Never hardcode text.
+- Model and attribute names live in `activerecord.*` (used in validation messages).
+- Missing translations raise in dev and test. `spec/i18n_spec.rb` fails on missing or unused keys; `npm run i18n:check`
+  does the same for the frontend.
 - Avoid dynamic keys (`t(cond ? 'a' : 'b')`). Write `cond ? t('a') : t('b')` so i18n-tasks can see them.
-- Locale resolution: session choice > `user.locale` > Accept-Language (hr/sr map to bs) > `bs`.
+- API locale: `Accept-Language` (sent by the frontend; hr/sr map to bs) > `user.locale` > `bs` (`LocaleResolver`).
 
 ## Testing (RSpec + FactoryBot + Shoulda)
 
@@ -110,12 +127,15 @@ Max ~5 lines per action. No business logic, no queries beyond loading the record
 - Every policy: an allow/deny matrix per role. Every new route: request specs for an outsider (404), a wrong role (403), and the happy path.
 - Every association and validation has a spec. Use manual specs for scoped uniqueness.
 - Tenant models: `ActsAsTenant.current_tenant = restaurant` in `before`. It is reset after each example.
-- Request specs sign in with `sign_in user` (Devise helpers). Policy specs build contexts with `context_for(user, restaurant:)`.
+- Request specs authenticate with `headers: auth_headers_for(user, locale:)` and read `json` / `error_messages`.
+  Policy specs build contexts with `context_for(user, restaurant:)`.
 - Bullet raises on N+1 in tests. Fix with `includes`.
 
 ## New Resource Checklist
 
-Migration (constraints!) → model (+ `MultiTenant`) → factory → commands → policy (`Workspace::BasePolicy`) → controller → views → routes → locale keys (bs + en) → model/command/policy/request specs → `bundle exec rubocop` and `bin/ci`.
+Migration (constraints!) → model (+ `MultiTenant`) → factory → commands → policy (`Workspace::BasePolicy`) → serializer →
+API controller → routes → locale keys (bs + en) → model/command/policy/request specs → frontend types, API calls, pages and
+messages (bs + en) → `bundle exec rubocop` and `bin/ci`.
 
 ## RuboCop
 

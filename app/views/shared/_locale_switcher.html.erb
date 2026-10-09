@@ -1,7 +1,0 @@
-<div class="flex items-center gap-1 text-xs">
-  <% I18n.available_locales.each do |locale| %>
-    <%= button_to locale.to_s.upcase, locale_path(locale:), method: :patch,
-          class: "rounded px-2 py-1 font-medium #{locale == I18n.locale ? 'bg-neutral-900 text-white' : 'text-neutral-600 hover:bg-neutral-100'}",
-          form_class: 'inline' %>
-  <% end %>
-</div>

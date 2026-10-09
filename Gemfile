@@ -6,24 +6,27 @@ ruby '3.3.5'
 
 gem 'bootsnap', require: false
 gem 'pg', '~> 1.1'
-gem 'propshaft'
 gem 'puma', '>= 5.0'
 gem 'rails', '~> 8.1.2'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
-# Frontend (Hotwire + Tailwind)
-gem 'importmap-rails'
-gem 'stimulus-rails'
-gem 'tailwindcss-rails'
-gem 'turbo-rails'
-
 # Authentication & Authorization
 gem 'devise', '~> 5.0'
 gem 'devise-i18n', '~> 1.16'
+gem 'devise-jwt', '~> 0.13'
 gem 'pundit', '~> 2.5'
 
 # Multi-tenancy
 gem 'acts_as_tenant', '~> 2.2'
+
+# API
+gem 'jsonapi-serializer', '~> 2.2'
+gem 'rack-attack', '~> 6.8'
+gem 'rack-cors', '~> 3.0'
+
+# Error Monitoring (enabled only when SENTRY_DSN is set)
+gem 'sentry-rails', '~> 7.1'
+gem 'sentry-ruby', '~> 7.1'
 
 # i18n (bs + en)
 gem 'rails-i18n', '~> 8.1'
@@ -58,10 +61,6 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
-end
-
-group :development do
-  gem 'web-console'
 end
 
 group :test do

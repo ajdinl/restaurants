@@ -1,0 +1,171 @@
+{
+    "metadata": {
+        "title": "Restaurant Pro",
+        "description": "Upravljanje restoranima: meni, stolovi, rezervacije i narudžbe."
+    },
+    "common": {
+        "save": "Sačuvaj",
+        "saving": "Čuvanje…",
+        "cancel": "Odustani",
+        "edit": "Uredi",
+        "delete": "Obriši",
+        "yes": "Da",
+        "no": "Ne",
+        "comingSoon": "Uskoro",
+        "notSet": "—"
+    },
+    "nav": {
+        "dashboard": "Pregled",
+        "restaurants": "Restorani",
+        "users": "Korisnici",
+        "signOut": "Odjava"
+    },
+    "locale": {
+        "label": "Jezik",
+        "bs": "BS",
+        "en": "EN",
+        "names": {
+            "bs": "Bosanski",
+            "en": "English"
+        }
+    },
+    "theme": {
+        "toggle": "Promijeni temu"
+    },
+    "auth": {
+        "minPasswordLength": "Najmanje {count} znakova",
+        "login": {
+            "title": "Prijava",
+            "email": "Email",
+            "password": "Lozinka",
+            "submit": "Prijavi se",
+            "forgot": "Zaboravili ste lozinku?"
+        },
+        "forgot": {
+            "title": "Zaboravljena lozinka",
+            "intro": "Upišite email i poslaćemo vam link za promjenu lozinke.",
+            "submit": "Pošalji link",
+            "backToLogin": "Nazad na prijavu"
+        },
+        "reset": {
+            "title": "Nova lozinka",
+            "password": "Nova lozinka",
+            "passwordConfirmation": "Potvrdite novu lozinku",
+            "submit": "Promijeni lozinku",
+            "missingToken": "Link za promjenu lozinke nije ispravan. Zatražite novi.",
+            "backToLogin": "Nazad na prijavu"
+        }
+    },
+    "home": {
+        "title": "Moji restorani",
+        "noAccess": "Još niste dodani ni u jedan restoran. Obratite se menadžeru ili administratoru."
+    },
+    "admin": {
+        "dashboard": {
+            "title": "Administracija",
+            "restaurants": "Restorani",
+            "active": "Aktivni",
+            "suspended": "Suspendovani",
+            "users": "Korisnici"
+        },
+        "restaurants": {
+            "title": "Restorani",
+            "new": "Novi restoran",
+            "newTitle": "Novi restoran",
+            "editTitle": "Uredi restoran",
+            "empty": "Još nema restorana.",
+            "slugHint": "Prazno = automatski iz naziva",
+            "openWorkspace": "Otvori restoran",
+            "suspend": "Suspenduj",
+            "suspendConfirm": "Suspendovati restoran? Osoblje neće moći raditi dok ga ne aktivirate.",
+            "activate": "Aktiviraj",
+            "deleteConfirm": "Trajno obrisati restoran i sve njegove podatke? Ovo se ne može poništiti.",
+            "fields": {
+                "name": "Naziv",
+                "slug": "Adresa u aplikaciji (slug)",
+                "status": "Status",
+                "address": "Adresa",
+                "city": "Grad",
+                "phone": "Telefon",
+                "email": "Email",
+                "latitude": "Geografska širina",
+                "longitude": "Geografska dužina",
+                "timeZone": "Vremenska zona",
+                "hasHost": "Ima ulaznog menadžera"
+            }
+        },
+        "memberships": {
+            "title": "Osoblje",
+            "empty": "Restoran još nema osoblja.",
+            "person": "Osoba",
+            "email": "Email korisnika",
+            "role": "Uloga",
+            "active": "Aktivan",
+            "add": "Dodaj",
+            "remove": "Ukloni",
+            "removeConfirm": "Ukloniti ovu osobu iz restorana?"
+        },
+        "users": {
+            "title": "Korisnici",
+            "new": "Novi korisnik",
+            "newTitle": "Novi korisnik",
+            "editTitle": "Uredi korisnika",
+            "empty": "Još nema korisnika.",
+            "locked": "Zaključan",
+            "deleteConfirm": "Trajno obrisati korisnika?",
+            "noPlatformRole": "Bez platformske uloge",
+            "defaultLocale": "Kao u browseru",
+            "fields": {
+                "fullName": "Ime i prezime",
+                "email": "Email",
+                "password": "Lozinka",
+                "locale": "Jezik",
+                "platformRole": "Platformska uloga"
+            }
+        }
+    },
+    "workspace": {
+        "supportView": "Pregled podrške",
+        "intro": "Ovdje će se nalaziti alati za vaš restoran.",
+        "suspended": "Restoran je suspendovan. Obratite se administratoru.",
+        "sections": {
+            "menu": "Meni",
+            "tables": "Stolovi",
+            "reservations": "Rezervacije",
+            "orders": "Narudžbe",
+            "kitchen": "Kuhinja",
+            "staff": "Osoblje"
+        }
+    },
+    "enums": {
+        "roles": {
+            "owner": "Vlasnik",
+            "manager": "Menadžer",
+            "host": "Ulazni menadžer",
+            "waiter": "Konobar",
+            "kitchen": "Kuhinja"
+        },
+        "platformRoles": {
+            "super_admin": "Super admin",
+            "moderator": "Moderator"
+        },
+        "statuses": {
+            "active": "Aktivan",
+            "suspended": "Suspendovan"
+        }
+    },
+    "pagination": {
+        "previous": "Prethodna",
+        "next": "Sljedeća",
+        "page": "Stranica {page} od {total}"
+    },
+    "errors": {
+        "apiUnavailable": "Server trenutno nije dostupan. Pokušajte ponovo za koji trenutak.",
+        "unexpected": "Nešto nije u redu. Pokušajte ponovo.",
+        "notFoundTitle": "Stranica ne postoji",
+        "notFoundText": "Stranica koju tražite ne postoji ili nemate pristup.",
+        "genericTitle": "Došlo je do greške",
+        "tryAgain": "Pokušaj ponovo",
+        "backHome": "Nazad na početnu"
+    }
+}

@@ -41,6 +41,6 @@ class ApplicationCommand
 
   # On failure the Result still carries the record, so forms can re-render with its errors.
   def save_record(model)
-    model.save ? success(model) : failure(model.errors.full_messages, value: model)
+    model.save ? success(model) : failure(model.errors.errors.dup, value: model)
   end
 end

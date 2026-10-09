@@ -1,27 +1,10 @@
 bs:
-  app:
-    name: "Restaurants"
-  nav:
-    dashboard: "Pregled"
-    restaurants: "Restorani"
-    users: "Korisnici"
-    sign_out: "Odjava"
-  locales:
-    bs: "Bosanski"
-    en: "English"
-  helpers:
-    cancel: "Odustani"
-    edit: "Uredi"
-    delete: "Obriši"
-    save: "Sačuvaj"
-    "yes": "Da"
-    "no": "Ne"
   errors:
+    not_found: "Traženi podatak ne postoji."
+    forbidden: "Nemate dozvolu za ovu radnju."
+    bad_request: "Zahtjev nije ispravan."
     rate_limited: "Previše pokušaja. Sačekajte nekoliko minuta pa pokušajte ponovo."
-    forbidden:
-      title: "Nemate pristup"
-      message: "Nemate dozvolu za ovu radnju."
-      back: "Nazad na početnu"
+    restaurant_suspended: "Restoran je suspendovan. Obratite se administratoru."
   commands:
     admin:
       suspend_restaurant:
@@ -30,86 +13,3 @@ bs:
         already_active: "Restoran je već aktivan."
       add_member:
         user_not_found: "Korisnik s tim emailom ne postoji. Prvo ga kreirajte u Korisnicima."
-  home:
-    show:
-      title: "Moji restorani"
-      no_access: "Još niste dodani ni u jedan restoran. Obratite se menadžeru ili administratoru."
-  admin:
-    dashboard:
-      show:
-        title: "Administracija"
-        restaurants: "Restorani"
-        active: "Aktivni"
-        suspended: "Suspendovani"
-        users: "Korisnici"
-    restaurants:
-      index:
-        title: "Restorani"
-        new: "Novi restoran"
-        empty: "Još nema restorana."
-      form:
-        slug_hint: "Automatski iz naziva"
-      new:
-        title: "Novi restoran"
-      edit:
-        title: "Uredi restoran"
-      show:
-        open_workspace: "Otvori restoran"
-        suspend: "Suspenduj"
-        suspend_confirm: "Suspendovati restoran? Osoblje neće moći raditi dok ga ne aktivirate."
-        activate: "Aktiviraj"
-        destroy_confirm: "Trajno obrisati restoran i sve njegove podatke? Ovo se ne može poništiti."
-        staff: "Osoblje"
-        remove: "Ukloni"
-        remove_confirm: "Ukloniti ovu osobu iz restorana?"
-        add_member: "Dodaj"
-      create:
-        success: "Restoran je kreiran."
-      update:
-        success: "Restoran je ažuriran."
-      suspend:
-        success: "Restoran je suspendovan."
-      activate:
-        success: "Restoran je aktiviran."
-      destroy:
-        success: "Restoran je obrisan."
-    memberships:
-      create:
-        success: "Osoba je dodana u restoran."
-      update:
-        success: "Uloga je ažurirana."
-      destroy:
-        success: "Osoba je uklonjena iz restorana."
-    users:
-      index:
-        title: "Korisnici"
-        new: "Novi korisnik"
-        destroy_confirm: "Trajno obrisati korisnika?"
-      form:
-        no_platform_role: "Bez platformske uloge"
-      new:
-        title: "Novi korisnik"
-      edit:
-        title: "Uredi korisnika"
-      create:
-        success: "Korisnik je kreiran."
-      update:
-        success: "Korisnik je ažuriran."
-      destroy:
-        success: "Korisnik je obrisan."
-  workspace:
-    dashboard:
-      show:
-        support_view: "Pregled podrške"
-        intro: "Ovdje će se nalaziti alati za vaš restoran."
-        coming_soon: "Uskoro"
-        sections:
-          menu: "Meni"
-          tables: "Stolovi"
-          reservations: "Rezervacije"
-          orders: "Narudžbe"
-          kitchen: "Kuhinja"
-          staff: "Osoblje"
-    suspended:
-      title: "Restoran je suspendovan"
-      message: "Pristup je privremeno onemogućen. Obratite se administratoru."

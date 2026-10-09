@@ -34,6 +34,16 @@ RSpec.describe User do
     end
   end
 
+  it 'rotates the JWT id when the password changes, revoking issued tokens' do
+    user = create(:user)
+    expect { user.update!(password: 'another-password') }.to(change(user, :jti))
+  end
+
+  it 'keeps the JWT id on other updates' do
+    user = create(:user)
+    expect { user.update!(full_name: 'Novo Ime') }.not_to(change(user, :jti))
+  end
+
   it 'gets a time-ordered UUIDv7 primary key' do
     user = create(:user)
     expect(user.id).to match(/\A\h{8}-\h{4}-7\h{3}-[89ab]\h{3}-\h{12}\z/)

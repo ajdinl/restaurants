@@ -2,8 +2,8 @@
 
 require 'simplecov'
 SimpleCov.start 'rails' do
-  add_group 'Commands', 'app/commands'
-  add_group 'Policies', 'app/policies'
+  group 'Commands', 'app/commands'
+  group 'Policies', 'app/policies'
 end
 
 require 'spec_helper'
@@ -29,7 +29,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
 
   config.include FactoryBot::Syntax::Methods
-  config.include Devise::Test::IntegrationHelpers, type: :request
+  config.include ApiHelpers, type: :request
 
   config.after { ActsAsTenant.current_tenant = nil }
 end

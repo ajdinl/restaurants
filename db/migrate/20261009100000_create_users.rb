@@ -11,8 +11,8 @@ class CreateUsers < ActiveRecord::Migration[8.1]
       t.string :reset_password_token
       t.datetime :reset_password_sent_at
 
-      ## Rememberable
-      t.datetime :remember_created_at
+      ## JWT revocation (devise-jwt JTIMatcher)
+      t.string :jti, null: false
 
       ## Trackable
       t.integer :sign_in_count, null: false, default: 0
@@ -35,6 +35,7 @@ class CreateUsers < ActiveRecord::Migration[8.1]
       t.index :email, unique: true
       t.index :reset_password_token, unique: true
       t.index :unlock_token, unique: true
+      t.index :jti, unique: true
       t.check_constraint "platform_role IN ('super_admin', 'moderator')", name: 'users_platform_role_check'
       t.check_constraint "locale IN ('bs', 'en')", name: 'users_locale_check'
     end

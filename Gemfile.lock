@@ -84,7 +84,6 @@ GEM
     bcrypt_pbkdf (1.1.2-arm64-darwin)
     bcrypt_pbkdf (1.1.2-x86_64-darwin)
     bigdecimal (4.1.3)
-    bindex (0.8.1)
     bootsnap (1.26.0)
       msgpack (~> 1.5)
     brakeman (8.1.0)
@@ -112,12 +111,25 @@ GEM
     devise-i18n (1.16.1)
       devise (>= 5.0.0)
       rails-i18n
+    devise-jwt (0.13.0)
+      devise (>= 4.0.0, < 6.0.0)
+      warden-jwt_auth (~> 0.10)
     diff-lcs (1.6.2)
     dotenv (3.2.0)
     dotenv-rails (3.2.0)
       dotenv (= 3.2.0)
       railties (>= 6.1)
     drb (2.2.3)
+    dry-auto_inject (1.2.1)
+      dry-core (~> 1.1)
+      zeitwerk (~> 2.6)
+    dry-configurable (1.4.0)
+      dry-core (~> 1.0)
+      zeitwerk (~> 2.6)
+    dry-core (1.2.0)
+      concurrent-ruby (~> 1.0)
+      logger
+      zeitwerk (~> 2.6)
     ed25519 (1.4.0)
     erb (6.0.7)
     erubi (1.13.1)
@@ -162,10 +174,6 @@ GEM
     image_processing (1.14.0)
       mini_magick (>= 4.9.5, < 6)
       ruby-vips (>= 2.0.17, < 3)
-    importmap-rails (2.2.3)
-      actionpack (>= 6.0.0)
-      activesupport (>= 6.0.0)
-      railties (>= 6.0.0)
     io-console (0.9.4)
     irb (1.18.0)
       pp (>= 0.6.0)
@@ -173,6 +181,10 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (3.0.2)
+    jsonapi-serializer (2.2.0)
+      activesupport (>= 4.2)
+    jwt (3.3.0)
+      base64
     kamal (2.12.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -252,10 +264,6 @@ GEM
       prettyprint
     prettyprint (0.2.1)
     prism (1.9.0)
-    propshaft (1.3.2)
-      actionpack (>= 7.0.0)
-      activesupport (>= 7.0.0)
-      rack
     puma (8.0.2)
       nio4r (~> 2.0)
     pundit (2.5.2)
@@ -263,6 +271,11 @@ GEM
     raabro (1.5.0)
     racc (1.8.1)
     rack (3.2.7)
+    rack-attack (6.8.0)
+      rack (>= 1.0, < 4)
+    rack-cors (3.0.0)
+      logger
+      rack (>= 3.0.14)
     rack-session (2.1.2)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -366,6 +379,13 @@ GEM
       ffi (~> 1.12)
       logger
     securerandom (0.4.1)
+    sentry-rails (7.1.0)
+      railties (>= 5.2.0)
+      sentry-ruby (~> 7.1.0)
+    sentry-ruby (7.1.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      logger
     shoulda-matchers (8.0.1)
       activesupport (>= 7.2)
     simplecov (1.3.2)
@@ -392,20 +412,8 @@ GEM
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
       ostruct
-    stimulus-rails (1.3.4)
-      railties (>= 6.0.0)
     strong_migrations (2.8.0)
       activerecord (>= 7.2)
-    tailwindcss-rails (4.6.0)
-      railties (>= 7.0.0)
-      tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.3.3)
-    tailwindcss-ruby (4.3.3-aarch64-linux-gnu)
-    tailwindcss-ruby (4.3.3-aarch64-linux-musl)
-    tailwindcss-ruby (4.3.3-arm64-darwin)
-    tailwindcss-ruby (4.3.3-x86_64-darwin)
-    tailwindcss-ruby (4.3.3-x86_64-linux-gnu)
-    tailwindcss-ruby (4.3.3-x86_64-linux-musl)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     thor (1.5.0)
@@ -416,9 +424,6 @@ GEM
     thruster (0.1.27-x86_64-linux)
     timeout (0.6.1)
     tsort (0.2.0)
-    turbo-rails (2.0.23)
-      actionpack (>= 7.1.0)
-      railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.3.0)
@@ -429,10 +434,11 @@ GEM
     useragent (0.16.11)
     warden (1.2.9)
       rack (>= 2.0.9)
-    web-console (4.3.0)
-      actionview (>= 8.0.0)
-      bindex (>= 0.4.0)
-      railties (>= 8.0.0)
+    warden-jwt_auth (0.12.0)
+      dry-auto_inject (>= 0.8, < 2)
+      dry-configurable (>= 0.13, < 2)
+      jwt (>= 2.1, < 4)
+      warden (~> 1.2)
     websocket-driver (0.8.2)
       base64
       websocket-extensions (>= 0.1.0)
@@ -460,35 +466,35 @@ DEPENDENCIES
   debug
   devise (~> 5.0)
   devise-i18n (~> 1.16)
+  devise-jwt (~> 0.13)
   dotenv-rails (~> 3.1)
   factory_bot_rails (~> 6.5)
   faker (~> 3.8)
   i18n-tasks (~> 1.0)
   image_processing (~> 1.2)
-  importmap-rails
+  jsonapi-serializer (~> 2.2)
   kamal
   pg (~> 1.1)
-  propshaft
   puma (>= 5.0)
   pundit (~> 2.5)
+  rack-attack (~> 6.8)
+  rack-cors (~> 3.0)
   rails (~> 8.1.2)
   rails-i18n (~> 8.1)
   rspec-rails (~> 8.0)
   rubocop
   rubocop-rails
   rubocop-rspec
+  sentry-rails (~> 7.1)
+  sentry-ruby (~> 7.1)
   shoulda-matchers (~> 8.0)
   simplecov
   solid_cable
   solid_cache
   solid_queue
-  stimulus-rails
   strong_migrations (~> 2.8)
-  tailwindcss-rails
   thruster
-  turbo-rails
   tzinfo-data
-  web-console
 
 RUBY VERSION
    ruby 3.3.5p100

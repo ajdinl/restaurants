@@ -1,9 +1,0 @@
-<div class="mt-4 space-y-2 text-center">
-  <%- if controller_name != 'sessions' %>
-    <p><%= link_to t('.sign_in'), new_session_path(resource_name), class: 'btn-link' %></p>
-  <% end %>
-
-  <%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
-    <p><%= link_to t('.forgot_your_password'), new_password_path(resource_name), class: 'btn-link' %></p>
-  <% end %>
-</div>

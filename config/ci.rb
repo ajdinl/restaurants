@@ -9,8 +9,13 @@ CI.run do
   step 'I18n: bs/en in sync', 'bundle exec i18n-tasks missing && bundle exec i18n-tasks unused'
   step 'Tests: RSpec', 'bundle exec rspec'
 
+  step 'Frontend: lint', 'npm --prefix frontend run lint'
+  step 'Frontend: types', 'npm --prefix frontend run typecheck'
+  step 'Frontend: format', 'npm --prefix frontend run format:check'
+  step 'Frontend: bs/en messages in sync', 'npm --prefix frontend run i18n:check'
+  step 'Frontend: build', 'npm --prefix frontend run build'
+
   step 'Security: Gem audit', 'bin/bundler-audit'
-  step 'Security: Importmap vulnerability audit', 'bin/importmap audit'
   step 'Security: Brakeman code analysis', 'bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error'
 
   # Optional: set a green GitHub commit status to unblock PR merge.

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Production: only bootstraps a super admin from ENV. Never ships default passwords.
-# Development/test: demo data with password "password123" for every account.
+# Development: demo accounts share DEMO_PASSWORD (default "password123"). Test: nothing; specs build their own data.
 
 if Rails.env.production?
   email = ENV.fetch('SUPER_ADMIN_EMAIL', nil)
@@ -16,7 +16,9 @@ if Rails.env.production?
   return
 end
 
-DEMO_PASSWORD = 'password123'
+return unless Rails.env.development?
+
+DEMO_PASSWORD = ENV.fetch('DEMO_PASSWORD', 'password123')
 
 def demo_user(email, full_name, platform_role: nil)
   User.find_or_create_by!(email:) do |user|

@@ -36,11 +36,22 @@ module RestaurantsApp
     config.i18n.available_locales = %i[bs en]
     config.i18n.default_locale = :bs
 
+    # JSON API only; the UI is the Next.js app in frontend/.
+    config.api_only = true
+
+    # Where the Next.js app runs (CORS origin, links in emails).
+    config.x.frontend_url = ENV['FRONTEND_URL'].presence || begin
+      raise 'FRONTEND_URL is not set' unless Rails.env.local?
+
+      'http://localhost:3000'
+    end
+
+    config.middleware.use Rack::Attack
+
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
       g.test_framework :rspec, fixture: false, view_specs: false, helper_specs: false, routing_specs: false
       g.factory_bot dir: 'spec/factories'
-      g.helper false
       g.system_tests nil
     end
   end
