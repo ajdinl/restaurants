@@ -1,0 +1,64 @@
+bs:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            current_password:
+              invalid: "nije ispravna"
+            avatar:
+              invalid_type: "mora biti PNG, JPG ili WebP slika"
+              too_big: "može imati najviše %{count} MB"
+    models:
+      user:
+        one: "Korisnik"
+        few: "Korisnika"
+        other: "Korisnika"
+      restaurant:
+        one: "Restoran"
+        few: "Restorana"
+        other: "Restorana"
+      membership:
+        one: "Član osoblja"
+        few: "Člana osoblja"
+        other: "Članova osoblja"
+    attributes:
+      user:
+        email: "Email"
+        password: "Lozinka"
+        current_password: "Trenutna lozinka"
+        avatar: "Slika"
+        password_confirmation: "Potvrda lozinke"
+        remember_me: "Zapamti me"
+        full_name: "Ime i prezime"
+        platform_role: "Platformska uloga"
+        locale: "Jezik"
+        platform_roles:
+          super_admin: "Super admin"
+          moderator: "Moderator"
+      restaurant:
+        name: "Naziv"
+        slug: "Adresa u aplikaciji (slug)"
+        status: "Status"
+        address: "Adresa"
+        city: "Grad"
+        phone: "Telefon"
+        email: "Email"
+        latitude: "Geografska širina"
+        longitude: "Geografska dužina"
+        time_zone: "Vremenska zona"
+        has_host: "Ima ulaznog menadžera"
+        statuses:
+          active: "Aktivan"
+          suspended: "Suspendovan"
+      membership:
+        user: "Korisnik"
+        restaurant: "Restoran"
+        role: "Uloga"
+        active: "Aktivan"
+        roles:
+          owner: "Vlasnik"
+          manager: "Menadžer"
+          host: "Ulazni menadžer"
+          waiter: "Konobar"
+          kitchen: "Kuhinja"

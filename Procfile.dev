@@ -1,0 +1,3 @@
+api: bin/rails server -p 3001
+jobs: bin/jobs
+web: npm --prefix frontend run dev

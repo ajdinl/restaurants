@@ -1,0 +1,109 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * "The pass": the steel counter between kitchen and floor where order tickets hang.
+ * Steel page, white slips, ink rail, pass-blue actions, signal-sky for focus and "you are here".
+ */
+@theme {
+    --color-steel: #e9eef3;
+    --color-slip: #ffffff;
+    --color-ink: #13202e;
+    --color-ink-soft: #1d2d3e;
+    --color-pass: #0b6fa4;
+    --color-pass-strong: #08557f;
+    --color-signal: #38bdf8;
+    --color-mute: #5e6f80;
+    --color-line: #cbd5df;
+    --color-line-soft: #dde4eb;
+    --color-go: #1f8a5b;
+    --color-hold: #b45309;
+    --color-stop: #b42318;
+    /* The rail stays dark in both themes: it is the steel pass, not a surface. */
+    --color-rail: #13202e;
+    --color-rail-line: #2a3d51;
+    --color-rail-text: #b9c7d4;
+
+    --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+    --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+
+    --radius-control: 0.5rem;
+    --radius-slip: 0.75rem;
+
+    --animate-hang: hang 420ms cubic-bezier(0.2, 0.8, 0.3, 1.1) both;
+}
+
+@keyframes hang {
+    from {
+        transform: translateY(-14px) rotate(-1.5deg);
+        opacity: 0;
+    }
+    to {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+/* Dark mode keeps the same roles; only the values move. */
+.dark {
+    --color-steel: #0e1823;
+    --color-slip: #15222f;
+    --color-ink: #e3ebf2;
+    --color-ink-soft: #c9d5e0;
+    --color-pass: #38bdf8;
+    --color-pass-strong: #7dd3fc;
+    --color-mute: #8fa1b3;
+    --color-line: #2b3b4d;
+    --color-line-soft: #223142;
+    --color-go: #4ade80;
+    --color-hold: #fbbf24;
+    --color-stop: #f87171;
+    --color-rail: #08111a;
+    --color-rail-line: #1c2a39;
+}
+
+@layer base {
+    html {
+        font-feature-settings: 'ss01', 'cv11';
+    }
+
+    body {
+        @apply bg-steel font-sans text-[0.9375rem] leading-relaxed text-ink antialiased;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply font-display text-balance;
+        font-variation-settings: 'wdth' 88;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-signal;
+    }
+
+    ::selection {
+        @apply bg-signal/30;
+    }
+}
+
+@layer components {
+    /* An order slip: white paper with a perforated bottom edge. */
+    .slip-perforated {
+        --tear: radial-gradient(circle at 6px 100%, transparent 4px, #000 4.5px);
+        mask:
+            linear-gradient(#000, #000) top / 100% calc(100% - 6px) no-repeat,
+            var(--tear) bottom / 12px 6px repeat-x;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

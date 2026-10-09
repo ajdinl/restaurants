@@ -1,0 +1,15 @@
+en:
+  errors:
+    not_found: "The requested record does not exist."
+    forbidden: "You are not allowed to do that."
+    bad_request: "The request is invalid."
+    rate_limited: "Too many attempts. Please wait a few minutes and try again."
+    restaurant_suspended: "This restaurant is suspended. Contact an administrator."
+  commands:
+    admin:
+      suspend_restaurant:
+        already_suspended: "The restaurant is already suspended."
+      activate_restaurant:
+        already_active: "The restaurant is already active."
+      add_member:
+        user_not_found: "No user with that email exists. Create them under Users first."

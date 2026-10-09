@@ -1,0 +1,15 @@
+bs:
+  errors:
+    not_found: "Traženi podatak ne postoji."
+    forbidden: "Nemate dozvolu za ovu radnju."
+    bad_request: "Zahtjev nije ispravan."
+    rate_limited: "Previše pokušaja. Sačekajte nekoliko minuta pa pokušajte ponovo."
+    restaurant_suspended: "Restoran je suspendovan. Obratite se administratoru."
+  commands:
+    admin:
+      suspend_restaurant:
+        already_suspended: "Restoran je već suspendovan."
+      activate_restaurant:
+        already_active: "Restoran je već aktivan."
+      add_member:
+        user_not_found: "Korisnik s tim emailom ne postoji. Prvo ga kreirajte u Korisnicima."

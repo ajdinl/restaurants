@@ -1,0 +1,226 @@
+{
+    "metadata": {
+        "title": "Restaurant Pro",
+        "description": "Restaurant management: menus, tables, reservations and orders."
+    },
+    "common": {
+        "save": "Save",
+        "saving": "Saving…",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "yes": "Yes",
+        "no": "No",
+        "comingSoon": "Coming soon",
+        "notSet": "—"
+    },
+    "nav": {
+        "label": "Main navigation",
+        "dashboard": "Dashboard",
+        "restaurants": "Restaurants",
+        "users": "Users",
+        "signOut": "Sign out",
+        "profile": "Profile"
+    },
+    "locale": {
+        "label": "Language",
+        "bs": "BS",
+        "en": "EN",
+        "names": {
+            "bs": "Bosanski",
+            "en": "English"
+        }
+    },
+    "theme": {
+        "toggle": "Toggle theme"
+    },
+    "auth": {
+        "minPasswordLength": "At least {count} characters",
+        "login": {
+            "title": "Sign in",
+            "email": "Email",
+            "password": "Password",
+            "submit": "Sign in",
+            "forgot": "Forgot your password?"
+        },
+        "forgot": {
+            "title": "Forgot password",
+            "intro": "Enter your email and we will send you a link to reset your password.",
+            "submit": "Send link",
+            "backToLogin": "Back to sign in"
+        },
+        "reset": {
+            "title": "New password",
+            "password": "New password",
+            "passwordConfirmation": "Confirm new password",
+            "submit": "Change password",
+            "missingToken": "This password reset link is not valid. Please request a new one.",
+            "backToLogin": "Back to sign in"
+        },
+        "panel": {
+            "headline": "Floor, kitchen and bar, each on its own screen.",
+            "table": "Table {table}",
+            "call": "Calling a waiter",
+            "bill": "Wants the bill",
+            "ready": "Order is ready",
+            "footer": "Sign-in for restaurant staff and administrators."
+        }
+    },
+    "home": {
+        "title": "My restaurants",
+        "noAccess": "You have not been added to any restaurant yet. Contact your manager or an administrator.",
+        "pick": "You work in more than one restaurant. Pick where you are today."
+    },
+    "admin": {
+        "dashboard": {
+            "title": "Administration",
+            "restaurants": "Restaurants",
+            "active": "Active",
+            "suspended": "Suspended",
+            "users": "Users",
+            "newRestaurant": "New restaurant",
+            "newUser": "New user"
+        },
+        "restaurants": {
+            "title": "Restaurants",
+            "new": "New restaurant",
+            "newTitle": "New restaurant",
+            "editTitle": "Edit restaurant",
+            "empty": "No restaurants yet.",
+            "slugHint": "Leave empty to generate from the name",
+            "openWorkspace": "Open restaurant",
+            "suspend": "Suspend",
+            "suspendConfirm": "Suspend this restaurant? Staff cannot work until you activate it again.",
+            "activate": "Activate",
+            "deleteConfirm": "Permanently delete this restaurant and all its data? This cannot be undone.",
+            "fields": {
+                "name": "Name",
+                "slug": "App address (slug)",
+                "status": "Status",
+                "address": "Address",
+                "city": "City",
+                "phone": "Phone",
+                "email": "Email",
+                "latitude": "Latitude",
+                "longitude": "Longitude",
+                "timeZone": "Time zone",
+                "hasHost": "Has a host"
+            }
+        },
+        "memberships": {
+            "title": "Staff",
+            "empty": "This restaurant has no staff yet.",
+            "person": "Person",
+            "email": "User email",
+            "role": "Role",
+            "active": "Active",
+            "add": "Add",
+            "remove": "Remove",
+            "removeConfirm": "Remove this person from the restaurant?"
+        },
+        "users": {
+            "title": "Users",
+            "new": "New user",
+            "newTitle": "New user",
+            "editTitle": "Edit user",
+            "empty": "No users yet.",
+            "locked": "Locked",
+            "deleteConfirm": "Permanently delete this user?",
+            "noPlatformRole": "No platform role",
+            "defaultLocale": "Browser default",
+            "fields": {
+                "fullName": "Full name",
+                "email": "Email",
+                "password": "Password",
+                "locale": "Language",
+                "platformRole": "Platform role"
+            }
+        }
+    },
+    "workspace": {
+        "supportView": "Support view",
+        "intro": "Open your restaurant tools from here. Menu and tables come first.",
+        "suspended": "This restaurant is suspended. Contact an administrator.",
+        "sections": {
+            "menu": "Menu",
+            "tables": "Tables",
+            "reservations": "Reservations",
+            "orders": "Orders",
+            "kitchen": "Kitchen",
+            "staff": "Staff"
+        },
+        "sectionsLabel": "Restaurant sections",
+        "descriptions": {
+            "menu": "Dishes, drinks, options and prices.",
+            "tables": "Floor, tables and layout.",
+            "reservations": "Arrivals by day and time.",
+            "orders": "Orders by table.",
+            "kitchen": "What to prepare next.",
+            "staff": "Who works here, in which role."
+        }
+    },
+    "enums": {
+        "roles": {
+            "owner": "Owner",
+            "manager": "Manager",
+            "host": "Host",
+            "waiter": "Waiter",
+            "kitchen": "Kitchen"
+        },
+        "platformRoles": {
+            "super_admin": "Super admin",
+            "moderator": "Moderator"
+        },
+        "statuses": {
+            "active": "Active",
+            "suspended": "Suspended"
+        }
+    },
+    "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {page} of {total}"
+    },
+    "errors": {
+        "apiUnavailable": "The server is not reachable right now. Please try again in a moment.",
+        "unexpected": "Something went wrong. Please try again.",
+        "notFoundTitle": "Page not found",
+        "notFoundText": "The page you are looking for does not exist or you do not have access.",
+        "genericTitle": "Something went wrong",
+        "tryAgain": "Try again",
+        "backHome": "Back to home"
+    },
+    "profile": {
+        "title": "Profile",
+        "description": "Your details, photo and password.",
+        "details": {
+            "title": "Details",
+            "fullName": "Full name",
+            "email": "Email",
+            "emailHint": "An administrator changes the email.",
+            "language": "Language",
+            "languageDefault": "Same as the browser",
+            "saved": "Details saved."
+        },
+        "avatar": {
+            "title": "Photo",
+            "hint": "PNG, JPG or WebP, up to 2 MB.",
+            "choose": "Choose a photo",
+            "upload": "Upload photo",
+            "remove": "Remove photo",
+            "missing": "Choose a photo first.",
+            "tooBig": "The photo is larger than 2 MB.",
+            "wrongType": "The photo must be a PNG, JPG or WebP.",
+            "uploaded": "Photo uploaded."
+        },
+        "password": {
+            "title": "Password",
+            "intro": "After the change you will be signed out on all other devices.",
+            "current": "Current password",
+            "new": "New password",
+            "confirm": "Confirm new password",
+            "submit": "Change password",
+            "changed": "Password changed. Other devices are signed out."
+        }
+    }
+}

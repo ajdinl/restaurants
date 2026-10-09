@@ -1,0 +1,14 @@
+# Validation messages missing from rails-i18n's bs.yml.
+bs:
+  errors:
+    messages:
+      required: "mora postojati"
+      in: "mora biti u rasponu %{count}"
+      model_invalid: "Validacija nije uspjela: %{errors}"
+      password_too_long: "je predugačka"
+  activerecord:
+    errors:
+      messages:
+        acts_as_tenant:
+          tenant_mismatch: "mora pripadati trenutnom restoranu"
+          association_invalid: "pripada drugom restoranu"

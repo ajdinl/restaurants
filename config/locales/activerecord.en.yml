@@ -1,0 +1,61 @@
+en:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            current_password:
+              invalid: "is incorrect"
+            avatar:
+              invalid_type: "must be a PNG, JPG or WebP image"
+              too_big: "must be at most %{count} MB"
+    models:
+      user:
+        one: "User"
+        other: "Users"
+      restaurant:
+        one: "Restaurant"
+        other: "Restaurants"
+      membership:
+        one: "Staff member"
+        other: "Staff members"
+    attributes:
+      user:
+        email: "Email"
+        password: "Password"
+        current_password: "Current password"
+        avatar: "Photo"
+        password_confirmation: "Password confirmation"
+        remember_me: "Remember me"
+        full_name: "Full name"
+        platform_role: "Platform role"
+        locale: "Language"
+        platform_roles:
+          super_admin: "Super admin"
+          moderator: "Moderator"
+      restaurant:
+        name: "Name"
+        slug: "App address (slug)"
+        status: "Status"
+        address: "Address"
+        city: "City"
+        phone: "Phone"
+        email: "Email"
+        latitude: "Latitude"
+        longitude: "Longitude"
+        time_zone: "Time zone"
+        has_host: "Has a host"
+        statuses:
+          active: "Active"
+          suspended: "Suspended"
+      membership:
+        user: "User"
+        restaurant: "Restaurant"
+        role: "Role"
+        active: "Active"
+        roles:
+          owner: "Owner"
+          manager: "Manager"
+          host: "Host"
+          waiter: "Waiter"
+          kitchen: "Kitchen"
