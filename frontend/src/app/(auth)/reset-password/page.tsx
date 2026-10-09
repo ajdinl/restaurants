@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm';
-import { Card } from '@/components/ui/Card';
 import { FormErrors } from '@/components/ui/FormErrors';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,19 +15,14 @@ export default async function ResetPasswordPage({ searchParams }: { searchParams
 
     return (
         <>
-            <h1 className="mb-6 text-center text-2xl font-semibold">{t('title')}</h1>
-            <Card>
-                {token ? (
-                    <ResetPasswordForm token={token} />
-                ) : (
-                    <FormErrors errors={[{ field: null, message: t('missingToken') }]} />
-                )}
-            </Card>
-            <p className="mt-4 text-center">
-                <Link
-                    href="/login"
-                    className="text-sm font-medium text-primary-700 hover:underline dark:text-primary-400"
-                >
+            <h1 className="mb-8 text-[2.5rem] leading-none font-bold tracking-[-0.02em]">{t('title')}</h1>
+            {token ? (
+                <ResetPasswordForm token={token} />
+            ) : (
+                <FormErrors errors={[{ field: null, message: t('missingToken') }]} />
+            )}
+            <p className="mt-6">
+                <Link href="/login" className="text-sm font-semibold text-pass hover:underline">
                     {t('backToLogin')}
                 </Link>
             </p>

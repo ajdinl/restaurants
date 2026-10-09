@@ -13,7 +13,7 @@ export function ForgotPasswordForm() {
 
     return (
         <form action={formAction} className="space-y-5">
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('forgot.intro')}</p>
+            <p className="text-sm text-mute">{t('forgot.intro')}</p>
             <FormErrors errors={state.errors} />
             <FormMessage message={state.message} />
             <Field label={t('login.email')} htmlFor="email">

@@ -2,6 +2,8 @@
 
 # The signed-in user with the restaurants they can open. Expects memberships: :restaurant preloaded.
 class CurrentUserSerializer < ApplicationSerializer
+  include AvatarUrl
+
   attributes :email, :full_name, :platform_role, :locale
 
   attribute :memberships do |user|

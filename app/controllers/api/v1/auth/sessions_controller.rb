@@ -17,7 +17,7 @@ module Api
 
         def create
           user = warden.authenticate!(auth_options.merge(store: false))
-          render_success(CurrentUserSerializer.render(User.includes(memberships: :restaurant).find(user.id)))
+          render_success(CurrentUserSerializer.render(User.includes(memberships: :restaurant, avatar_attachment: :blob).find(user.id)))
         end
 
         def destroy

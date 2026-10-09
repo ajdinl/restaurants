@@ -2,8 +2,9 @@
 
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
+import { cn } from '@/lib/cn';
 
-export function ThemeToggle() {
+export function ThemeToggle({ onRail = false }: { onRail?: boolean }) {
     const t = useTranslations('theme');
     const { resolvedTheme, setTheme } = useTheme();
 
@@ -11,7 +12,12 @@ export function ThemeToggle() {
         <button
             type="button"
             onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-            className="rounded-lg p-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
+            className={cn(
+                'inline-flex size-11 items-center justify-center rounded-control transition-colors',
+                onRail
+                    ? 'text-rail-text hover:bg-white/8 hover:text-white'
+                    : 'text-mute hover:bg-line-soft hover:text-ink'
+            )}
             aria-label={t('toggle')}
             title={t('toggle')}
         >

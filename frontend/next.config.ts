@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
     // the classic dynamic model keeps pages simple (cookies() just makes a route dynamic).
     cacheComponents: false,
     poweredByHeader: false,
+    experimental: {
+        // Profile photos are up to 2 MB; the default 1 MB limit would cut them off before the API sees them.
+        serverActions: { bodySizeLimit: '3mb' },
+    },
     turbopack: {
         // Pin the workspace root; a stray lockfile higher up would otherwise be picked up.
         root: process.cwd(),

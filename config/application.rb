@@ -46,6 +46,13 @@ module RestaurantsApp
       'http://localhost:3000'
     end
 
+    # Public base URL of this API, used for file (avatar) links in JSON responses.
+    config.x.api_url = ENV['API_URL'].presence || begin
+      raise 'API_URL is not set' unless Rails.env.local?
+
+      'http://localhost:3001'
+    end
+
     config.middleware.use Rack::Attack
 
     config.generators do |g|

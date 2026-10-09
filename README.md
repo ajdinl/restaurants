@@ -62,7 +62,7 @@ Versioned under `/api/v1`, JSON only.
 - `POST /api/v1/auth/sign_in` returns the JWT in the `Authorization` header. `DELETE /api/v1/auth/sign_out` revokes it.
 - Success responses: `{ "data": ..., "meta": ... }`. Errors: `{ "errors": [{ "field": ..., "message": ... }] }`,
   localized from `Accept-Language` (bs or en).
-- Endpoints: `/me`, `/admin/dashboard`, `/admin/restaurants` (+ `memberships`), `/admin/users`,
+- Endpoints: `/me` (+ `/me/password`, `/me/avatar`), `/admin/dashboard`, `/admin/restaurants` (+ `memberships`), `/admin/users`,
   `/restaurants/:slug/dashboard`. See `config/routes.rb`.
 
 ## Security
@@ -70,7 +70,9 @@ Versioned under `/api/v1`, JSON only.
 - Every restaurant's data is isolated with acts_as_tenant, and a query without a tenant raises an error.
 - Pundit denies everything by default, and every action is checked for authorization.
 - Other restaurants' resources return 404 (existence is not revealed).
-- JWTs expire after 12 hours, are revoked on sign-out, and a password change signs the user out everywhere.
+- JWTs expire after 12 hours, are revoked on sign-out, and a password change signs the user out everywhere
+  except the device that made the change. Changing a password requires the current one.
+- Profile photos: PNG, JPG or WebP up to 2 MB, type checked from the file content (SVG is rejected).
 - Accounts lock after 10 failed sign-ins. Sign-in and password reset are rate limited per IP and per email.
   Password reset does not reveal whether an email exists.
 - UUIDv7 primary keys. Database constraints back every model validation.
@@ -90,7 +92,8 @@ Frontend scripts are in [frontend/README.md](./frontend/README.md). Coding conve
 ## Environment variables
 
 Development needs none. See [`.env.example`](./.env.example) and [`frontend/.env.example`](./frontend/.env.example).
-Production requires `DEVISE_JWT_SECRET_KEY`, `FRONTEND_URL`, `APP_HOST` and the `SUPER_ADMIN_*` variables for the first seed.
+Production requires `DEVISE_JWT_SECRET_KEY`, `FRONTEND_URL`, `API_URL`, `APP_HOST` and the `SUPER_ADMIN_*` variables for the
+first seed. File uploads use local disk until a cloud storage service (S3 / Cloudflare R2) is configured.
 
 ## Production seed
 

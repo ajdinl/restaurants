@@ -1,14 +1,7 @@
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/cn';
 
+// A plain white slip on the steel page. No shadow: hierarchy comes from spacing and type.
 export function Card({ className, ...props }: ComponentProps<'div'>) {
-    return (
-        <div
-            className={cn(
-                'rounded-xl border border-neutral-200 bg-white p-6 shadow-soft dark:border-neutral-800 dark:bg-neutral-900',
-                className
-            )}
-            {...props}
-        />
-    );
+    return <div className={cn('rounded-slip border border-line-soft bg-slip p-6', className)} {...props} />;
 }

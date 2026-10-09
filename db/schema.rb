@@ -10,9 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_09_100200) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_09_111550) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.uuid "record_id", null: false
+    t.uuid "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
@@ -23,7 +51,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_09_100200) do
     t.datetime "updated_at", null: false
     t.index ["restaurant_id", "user_id"], name: "index_memberships_on_restaurant_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_memberships_on_user_id"
-    t.check_constraint "role::text = ANY (ARRAY['owner'::character varying, 'manager'::character varying, 'host'::character varying, 'waiter'::character varying, 'kitchen'::character varying]::text[])", name: "memberships_role_check"
+    t.check_constraint "role::text = ANY (ARRAY['owner'::character varying::text, 'manager'::character varying::text, 'host'::character varying::text, 'waiter'::character varying::text, 'kitchen'::character varying::text])", name: "memberships_role_check"
   end
 
   create_table "restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -44,7 +72,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_09_100200) do
     t.index ["status"], name: "index_restaurants_on_status"
     t.check_constraint "latitude >= '-90'::integer::numeric AND latitude <= 90::numeric", name: "restaurants_latitude_check"
     t.check_constraint "longitude >= '-180'::integer::numeric AND longitude <= 180::numeric", name: "restaurants_longitude_check"
-    t.check_constraint "status::text = ANY (ARRAY['active'::character varying, 'suspended'::character varying]::text[])", name: "restaurants_status_check"
+    t.check_constraint "status::text = ANY (ARRAY['active'::character varying::text, 'suspended'::character varying::text])", name: "restaurants_status_check"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -70,10 +98,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_09_100200) do
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
-    t.check_constraint "locale::text = ANY (ARRAY['bs'::character varying, 'en'::character varying]::text[])", name: "users_locale_check"
-    t.check_constraint "platform_role::text = ANY (ARRAY['super_admin'::character varying, 'moderator'::character varying]::text[])", name: "users_platform_role_check"
+    t.check_constraint "locale::text = ANY (ARRAY['bs'::character varying::text, 'en'::character varying::text])", name: "users_locale_check"
+    t.check_constraint "platform_role::text = ANY (ARRAY['super_admin'::character varying::text, 'moderator'::character varying::text])", name: "users_platform_role_check"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "memberships", "restaurants"
   add_foreign_key "memberships", "users"
 end

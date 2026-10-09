@@ -7,7 +7,7 @@ export function Pagination({ meta, basePath }: { meta?: PageMeta; basePath: stri
     if (!meta || meta.total_pages <= 1) return null;
 
     return (
-        <nav className="mt-4 flex items-center justify-between gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+        <nav className="mt-4 flex items-center justify-between gap-4 text-sm text-mute">
             <span>{t('page', { page: meta.page, total: meta.total_pages })}</span>
             <div className="flex gap-2">
                 {meta.page > 1 && (

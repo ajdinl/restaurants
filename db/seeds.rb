@@ -55,4 +55,4 @@ two_jobs = demo_user('dva.posla@example.com', 'Dva Posla')
 add_member(demo, two_jobs, :waiter)
 add_member(bistro, two_jobs, :manager)
 
-puts "Seeded #{User.count} users and #{Restaurant.count} restaurants. Password for all demo accounts: #{DEMO_PASSWORD}"
+puts "Seeded #{User.count} users and #{Restaurant.count} restaurants. Demo accounts use DEMO_PASSWORD (see docs/DEMO_ACCOUNTS.md)."

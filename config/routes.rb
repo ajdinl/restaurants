@@ -8,7 +8,10 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resource :me, only: %i[show update], controller: :me
+      resource :me, only: %i[show update], controller: :me do
+        resource :password, only: :update, controller: 'me/passwords'
+        resource :avatar, only: %i[update destroy], controller: 'me/avatars'
+      end
 
       namespace :admin do
         resource :dashboard, only: :show, controller: :dashboard

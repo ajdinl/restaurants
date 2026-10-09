@@ -42,6 +42,19 @@ From the repo root, `bin/dev` starts the API, the job worker and this app togeth
 | `API_URL`                               | Rails API base URL (default `http://localhost:3001`) |
 | `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` | Error monitoring (server / browser). Off when empty  |
 
+## Design
+
+The look is built on "the pass", the steel counter where order tickets hang between kitchen and floor.
+
+- Tokens live in `src/app/globals.css` (`@theme`): `steel` page, `slip` surfaces, `ink` text, `pass` actions,
+  `signal` focus and "you are here", `mute`/`line` for secondary text and borders, `go`/`hold`/`stop` for status.
+  Dark mode swaps the values, not the names. The navigation `rail` stays dark in both themes.
+- Type: Bricolage Grotesque (headings, numbers) and Instrument Sans (everything else), both with Bosnian diacritics.
+- The ticket rail (`src/components/ui/Ticket.tsx`) is the one signature element: restaurant sections and the
+  restaurant picker hang as tickets. Keep other screens quiet: slips with hairline borders, no shadows, no gradients.
+- Touch targets are at least 44px (`min-h-11`), since staff use tablets during service.
+- Use `cn()` for class names; it runs tailwind-merge, so a `className` prop overrides component defaults.
+
 ## Conventions
 
 - Every UI string lives in `messages/*.json` (both languages). Translation keys are type-checked.

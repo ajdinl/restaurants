@@ -6,7 +6,6 @@ import { AddMemberForm } from '@/components/admin/AddMemberForm';
 import { MembershipRow } from '@/components/admin/MembershipRow';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { ButtonLink } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
 import { StatusBadge } from '@/components/ui/EnumBadges';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Table, Tbody, Th } from '@/components/ui/Table';
@@ -87,44 +86,50 @@ export default async function RestaurantPage({ params }: Props) {
                 }
             />
 
-            <div className="grid gap-6 lg:grid-cols-3">
-                <Card className="space-y-3 text-sm">
-                    {details.map((detail) => (
-                        <div key={detail.label}>
-                            <p className="text-neutral-500 dark:text-neutral-400">{detail.label}</p>
-                            <p className="font-medium">{detail.value || tc('notSet')}</p>
-                        </div>
-                    ))}
-                </Card>
+            {/* Facts first, as one strip, so the staff table below gets the full width. */}
+            <dl className="mb-10 grid grid-cols-2 gap-x-8 gap-y-5 rounded-slip border border-line-soft bg-slip p-6 sm:grid-cols-3 lg:grid-cols-4">
+                {details.map((detail) => (
+                    <div key={detail.label} className="min-w-0">
+                        <dt className="text-xs font-semibold text-mute">{detail.label}</dt>
+                        <dd className="mt-1 truncate">{detail.value || tc('notSet')}</dd>
+                    </div>
+                ))}
+            </dl>
 
-                <Card className="lg:col-span-2">
-                    <h2 className="mb-4 text-lg font-semibold">{tm('title')}</h2>
-                    {memberships.length === 0 ? (
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400">{tm('empty')}</p>
-                    ) : (
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <Th>{tm('person')}</Th>
-                                    <Th>{tm('role')}</Th>
-                                    <Th />
-                                </tr>
-                            </thead>
-                            <Tbody>
-                                {memberships.map((membership) => (
-                                    <MembershipRow
-                                        key={membership.id}
-                                        membership={membership}
-                                        updateAction={updateMember.bind(null, restaurant.slug, membership.id)}
-                                        removeAction={removeMember.bind(null, restaurant.slug, membership.id)}
-                                    />
-                                ))}
-                            </Tbody>
-                        </Table>
-                    )}
-                    <AddMemberForm action={addMember.bind(null, restaurant.slug)} />
-                </Card>
-            </div>
+            <section aria-labelledby="staff-title">
+                <div className="mb-4 flex items-baseline gap-3">
+                    <h2 id="staff-title" className="text-2xl font-bold tracking-[-0.01em]">
+                        {tm('title')}
+                    </h2>
+                    <span className="text-sm text-mute">{memberships.length}</span>
+                </div>
+                {memberships.length === 0 ? (
+                    <p className="rounded-slip border border-dashed border-line px-6 py-8 text-mute">{tm('empty')}</p>
+                ) : (
+                    <Table>
+                        <thead>
+                            <tr>
+                                <Th>{tm('person')}</Th>
+                                <Th>{tm('role')}</Th>
+                                <Th>
+                                    <span className="sr-only">{tm('remove')}</span>
+                                </Th>
+                            </tr>
+                        </thead>
+                        <Tbody>
+                            {memberships.map((membership) => (
+                                <MembershipRow
+                                    key={membership.id}
+                                    membership={membership}
+                                    updateAction={updateMember.bind(null, restaurant.slug, membership.id)}
+                                    removeAction={removeMember.bind(null, restaurant.slug, membership.id)}
+                                />
+                            ))}
+                        </Tbody>
+                    </Table>
+                )}
+                <AddMemberForm action={addMember.bind(null, restaurant.slug)} />
+            </section>
         </>
     );
 }

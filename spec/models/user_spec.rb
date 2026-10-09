@@ -8,6 +8,7 @@ RSpec.describe User do
   describe 'associations' do
     it { is_expected.to have_many(:memberships).dependent(:destroy) }
     it { is_expected.to have_many(:restaurants).through(:memberships) }
+    it { is_expected.to have_one_attached(:avatar) }
   end
 
   describe 'validations' do

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { LoginForm } from '@/components/auth/LoginForm';
-import { Card } from '@/components/ui/Card';
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations('auth.login');
@@ -13,10 +12,8 @@ export default async function LoginPage() {
 
     return (
         <>
-            <h1 className="mb-6 text-center text-2xl font-semibold">{t('title')}</h1>
-            <Card>
-                <LoginForm />
-            </Card>
+            <h1 className="mb-8 text-[2.5rem] leading-none font-bold tracking-[-0.02em]">{t('title')}</h1>
+            <LoginForm />
         </>
     );
 }

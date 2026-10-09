@@ -25,12 +25,12 @@ export function MembershipRow({ membership, updateAction, removeAction }: Member
     return (
         <tr>
             <Td>
-                <p className="font-medium">{membership.user.full_name}</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">{membership.user.email}</p>
+                <p className="font-semibold">{membership.user.full_name}</p>
+                <p className="text-xs text-mute">{membership.user.email}</p>
             </Td>
             <Td>
-                <form action={formAction} className="flex flex-wrap items-center gap-3">
-                    <Select name="role" defaultValue={membership.role} aria-label={t('role')} className="w-44">
+                <form action={formAction} className="flex flex-wrap items-center gap-x-4 gap-y-2 md:flex-nowrap">
+                    <Select name="role" defaultValue={membership.role} aria-label={t('role')} className="w-48 shrink-0">
                         {MEMBERSHIP_ROLES.map((role) => (
                             <option key={role} value={role}>
                                 {tRoles(role)}
@@ -38,12 +38,18 @@ export function MembershipRow({ membership, updateAction, removeAction }: Member
                         ))}
                     </Select>
                     <Checkbox name="active" label={t('active')} defaultChecked={membership.active} />
-                    <SubmitButton variant="ghost">{tc('save')}</SubmitButton>
+                    <SubmitButton variant="secondary">{tc('save')}</SubmitButton>
                 </form>
                 <FormErrors errors={state.errors} />
             </Td>
             <Td className="text-right">
-                <ActionButton action={removeAction} label={t('remove')} confirm={t('removeConfirm')} variant="ghost" />
+                <ActionButton
+                    action={removeAction}
+                    label={t('remove')}
+                    confirm={t('removeConfirm')}
+                    variant="ghost"
+                    className="inline-block"
+                />
             </Td>
         </tr>
     );

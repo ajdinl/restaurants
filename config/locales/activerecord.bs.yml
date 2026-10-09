@@ -1,5 +1,14 @@
 bs:
   activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            current_password:
+              invalid: "nije ispravna"
+            avatar:
+              invalid_type: "mora biti PNG, JPG ili WebP slika"
+              too_big: "može imati najviše %{count} MB"
     models:
       user:
         one: "Korisnik"
@@ -17,6 +26,8 @@ bs:
       user:
         email: "Email"
         password: "Lozinka"
+        current_password: "Trenutna lozinka"
+        avatar: "Slika"
         password_confirmation: "Potvrda lozinke"
         remember_me: "Zapamti me"
         full_name: "Ime i prezime"

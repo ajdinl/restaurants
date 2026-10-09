@@ -7,7 +7,7 @@ module Api
         before_action :set_user, only: %i[show update destroy]
 
         def index
-          render_paginated(UserSerializer, policy_scope([:admin, User]).order(:full_name))
+          render_paginated(UserSerializer, policy_scope([:admin, User]).includes(avatar_attachment: :blob).order(:full_name))
         end
 
         def show

@@ -3,12 +3,19 @@ import { setLocale } from '@/actions/locale';
 import { locales } from '@/i18n/config';
 import { cn } from '@/lib/cn';
 
-export function LocaleSwitcher() {
+export function LocaleSwitcher({ onRail = false }: { onRail?: boolean }) {
     const t = useTranslations('locale');
     const current = useLocale();
 
     return (
-        <div className="flex items-center gap-1 text-xs" role="group" aria-label={t('label')}>
+        <div
+            className={cn(
+                'flex items-center rounded-control border p-0.5 text-xs',
+                onRail ? 'border-rail-line' : 'border-line'
+            )}
+            role="group"
+            aria-label={t('label')}
+        >
             {locales.map((locale) => (
                 <form key={locale} action={setLocale.bind(null, locale)}>
                     <button
@@ -16,10 +23,14 @@ export function LocaleSwitcher() {
                         title={t(`names.${locale}`)}
                         aria-pressed={locale === current}
                         className={cn(
-                            'rounded px-2 py-1 font-medium',
+                            'min-h-9 min-w-10 rounded-[0.375rem] px-2 font-semibold transition-colors',
                             locale === current
-                                ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
-                                : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800'
+                                ? onRail
+                                    ? 'bg-white/12 text-white'
+                                    : 'bg-ink text-steel'
+                                : onRail
+                                  ? 'text-rail-text hover:text-white'
+                                  : 'text-mute hover:text-ink'
                         )}
                     >
                         {t(locale)}

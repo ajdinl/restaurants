@@ -2,9 +2,8 @@ import type { ComponentProps, ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
 const control =
-    'block w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm ' +
-    'focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 ' +
-    'dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100';
+    'block min-h-11 w-full rounded-control border border-line bg-slip px-3 text-[0.9375rem] text-ink ' +
+    'placeholder:text-mute/70 hover:border-mute focus:border-pass focus:outline-none focus:ring-3 focus:ring-signal/25';
 
 export function Field({
     label,
@@ -19,11 +18,11 @@ export function Field({
 }) {
     return (
         <div>
-            <label htmlFor={htmlFor} className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-semibold text-ink">
                 {label}
             </label>
             {children}
-            {hint && <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{hint}</p>}
+            {hint && <p className="mt-1.5 text-xs text-mute">{hint}</p>}
         </div>
     );
 }
@@ -33,19 +32,13 @@ export function Input({ className, ...props }: ComponentProps<'input'>) {
 }
 
 export function Select({ className, ...props }: ComponentProps<'select'>) {
-    return <select className={cn(control, className)} {...props} />;
+    return <select className={cn(control, 'pr-8', className)} {...props} />;
 }
 
 export function Checkbox({ label, className, ...props }: ComponentProps<'input'> & { label: string }) {
     return (
-        <label
-            className={cn('inline-flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300', className)}
-        >
-            <input
-                type="checkbox"
-                className="size-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500 dark:border-neutral-600"
-                {...props}
-            />
+        <label className={cn('inline-flex min-h-11 cursor-pointer items-center gap-2.5 text-sm text-ink', className)}>
+            <input type="checkbox" className="size-5 rounded accent-pass" {...props} />
             {label}
         </label>
     );

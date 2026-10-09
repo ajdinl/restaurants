@@ -30,11 +30,8 @@ export function LoginForm() {
                 <Input id="password" name="password" type="password" required autoComplete="current-password" />
             </Field>
             <SubmitButton className="w-full">{t('submit')}</SubmitButton>
-            <p className="text-center">
-                <Link
-                    href="/forgot-password"
-                    className="text-sm font-medium text-primary-700 hover:underline dark:text-primary-400"
-                >
+            <p>
+                <Link href="/forgot-password" className="text-sm font-semibold text-pass hover:underline">
                     {t('forgot')}
                 </Link>
             </p>

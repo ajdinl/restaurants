@@ -3,7 +3,6 @@ import { deleteUser } from '@/actions/users';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { Badge } from '@/components/ui/Badge';
 import { ButtonLink } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
 import { PlatformRoleBadge } from '@/components/ui/EnumBadges';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Pagination } from '@/components/ui/Pagination';
@@ -27,50 +26,48 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
     return (
         <>
             <PageHeader title={t('title')} actions={<ButtonLink href="/admin/users/new">{t('new')}</ButtonLink>} />
-            <Card className="p-0">
-                <Table>
-                    <thead>
-                        <tr>
-                            <Th>{t('fields.fullName')}</Th>
-                            <Th>{t('fields.email')}</Th>
-                            <Th>{t('fields.platformRole')}</Th>
-                            <Th />
+            <Table>
+                <thead>
+                    <tr>
+                        <Th>{t('fields.fullName')}</Th>
+                        <Th>{t('fields.email')}</Th>
+                        <Th>{t('fields.platformRole')}</Th>
+                        <Th />
+                    </tr>
+                </thead>
+                <Tbody>
+                    {users.map((user) => (
+                        <tr key={user.id}>
+                            <Td className="font-medium">
+                                <span className="mr-2">{user.full_name}</span>
+                                {user.locked && <Badge tone="red">{t('locked')}</Badge>}
+                            </Td>
+                            <Td>{user.email}</Td>
+                            <Td>{user.platform_role && <PlatformRoleBadge role={user.platform_role} />}</Td>
+                            <Td>
+                                <div className="flex items-center justify-end gap-2">
+                                    {canEditUser(currentUser, user) && (
+                                        <ButtonLink variant="ghost" href={`/admin/users/${user.id}/edit`}>
+                                            {tc('edit')}
+                                        </ButtonLink>
+                                    )}
+                                    {canDeleteUser(currentUser, user) && (
+                                        <ActionButton
+                                            action={deleteUser.bind(null, user.id)}
+                                            label={tc('delete')}
+                                            confirm={t('deleteConfirm')}
+                                            variant="ghost"
+                                        />
+                                    )}
+                                </div>
+                            </Td>
                         </tr>
-                    </thead>
-                    <Tbody>
-                        {users.map((user) => (
-                            <tr key={user.id}>
-                                <Td className="font-medium">
-                                    <span className="mr-2">{user.full_name}</span>
-                                    {user.locked && <Badge tone="red">{t('locked')}</Badge>}
-                                </Td>
-                                <Td>{user.email}</Td>
-                                <Td>{user.platform_role && <PlatformRoleBadge role={user.platform_role} />}</Td>
-                                <Td>
-                                    <div className="flex items-center justify-end gap-2">
-                                        {canEditUser(currentUser, user) && (
-                                            <ButtonLink variant="ghost" href={`/admin/users/${user.id}/edit`}>
-                                                {tc('edit')}
-                                            </ButtonLink>
-                                        )}
-                                        {canDeleteUser(currentUser, user) && (
-                                            <ActionButton
-                                                action={deleteUser.bind(null, user.id)}
-                                                label={tc('delete')}
-                                                confirm={t('deleteConfirm')}
-                                                variant="ghost"
-                                            />
-                                        )}
-                                    </div>
-                                </Td>
-                            </tr>
-                        ))}
-                    </Tbody>
-                </Table>
-                {users.length === 0 && (
-                    <p className="px-4 py-6 text-sm text-neutral-500 dark:text-neutral-400">{t('empty')}</p>
-                )}
-            </Card>
+                    ))}
+                </Tbody>
+            </Table>
+            {users.length === 0 && (
+                <p className="mt-4 rounded-slip border border-dashed border-line px-6 py-8 text-mute">{t('empty')}</p>
+            )}
             <Pagination meta={meta} basePath="/admin/users" />
         </>
     );

@@ -14,7 +14,7 @@ export function AddMemberForm({ action }: { action: (state: FormState, formData:
     const [state, formAction] = useActionState(action, {});
 
     return (
-        <form action={formAction} className="mt-6 space-y-3 border-t border-neutral-100 pt-6 dark:border-neutral-800">
+        <form action={formAction} className="mt-4 space-y-3 rounded-slip border border-dashed border-line p-5">
             <FormErrors errors={state.errors} />
             <div className="flex flex-wrap items-end gap-3">
                 <div className="grow">

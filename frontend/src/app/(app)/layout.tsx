@@ -1,14 +1,16 @@
 import type { ReactNode } from 'react';
-import { Navbar } from '@/components/layout/Navbar';
+import { Rail } from '@/components/layout/Rail';
 import { getCurrentUser } from '@/lib/auth';
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
     const user = await getCurrentUser();
 
     return (
-        <>
-            <Navbar user={user} />
-            <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">{children}</main>
-        </>
+        <div className="min-h-screen lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
+            <Rail user={user} />
+            <main className="px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
+                <div className="mx-auto max-w-5xl lg:mx-0">{children}</div>
+            </main>
+        </div>
     );
 }

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { ButtonLink } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
 import { StatusBadge } from '@/components/ui/EnumBadges';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Pagination } from '@/components/ui/Pagination';
@@ -23,38 +22,36 @@ export default async function RestaurantsPage({ searchParams }: { searchParams: 
                 title={t('title')}
                 actions={<ButtonLink href="/admin/restaurants/new">{t('new')}</ButtonLink>}
             />
-            <Card className="p-0">
-                <Table>
-                    <thead>
-                        <tr>
-                            <Th>{t('fields.name')}</Th>
-                            <Th>{t('fields.city')}</Th>
-                            <Th>{t('fields.status')}</Th>
+            <Table>
+                <thead>
+                    <tr>
+                        <Th>{t('fields.name')}</Th>
+                        <Th>{t('fields.city')}</Th>
+                        <Th>{t('fields.status')}</Th>
+                    </tr>
+                </thead>
+                <Tbody>
+                    {restaurants.map((restaurant) => (
+                        <tr key={restaurant.id}>
+                            <Td>
+                                <Link
+                                    href={`/admin/restaurants/${restaurant.slug}`}
+                                    className="font-semibold text-ink underline-offset-4 hover:text-pass hover:underline"
+                                >
+                                    {restaurant.name}
+                                </Link>
+                            </Td>
+                            <Td>{restaurant.city}</Td>
+                            <Td>
+                                <StatusBadge status={restaurant.status} />
+                            </Td>
                         </tr>
-                    </thead>
-                    <Tbody>
-                        {restaurants.map((restaurant) => (
-                            <tr key={restaurant.id}>
-                                <Td>
-                                    <Link
-                                        href={`/admin/restaurants/${restaurant.slug}`}
-                                        className="font-medium text-primary-700 hover:underline dark:text-primary-400"
-                                    >
-                                        {restaurant.name}
-                                    </Link>
-                                </Td>
-                                <Td>{restaurant.city}</Td>
-                                <Td>
-                                    <StatusBadge status={restaurant.status} />
-                                </Td>
-                            </tr>
-                        ))}
-                    </Tbody>
-                </Table>
-                {restaurants.length === 0 && (
-                    <p className="px-4 py-6 text-sm text-neutral-500 dark:text-neutral-400">{t('empty')}</p>
-                )}
-            </Card>
+                    ))}
+                </Tbody>
+            </Table>
+            {restaurants.length === 0 && (
+                <p className="mt-4 rounded-slip border border-dashed border-line px-6 py-8 text-mute">{t('empty')}</p>
+            )}
             <Pagination meta={meta} basePath="/admin/restaurants" />
         </>
     );

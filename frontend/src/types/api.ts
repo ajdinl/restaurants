@@ -24,6 +24,7 @@ export interface CurrentUser {
     full_name: string;
     platform_role: PlatformRole | null;
     locale: Locale | null;
+    avatar_url: string | null;
     memberships: {
         id: string;
         role: MembershipRole;
@@ -62,6 +63,7 @@ export interface User {
     locale: Locale | null;
     created_at: string;
     locked: boolean;
+    avatar_url: string | null;
 }
 
 export interface AdminDashboard {

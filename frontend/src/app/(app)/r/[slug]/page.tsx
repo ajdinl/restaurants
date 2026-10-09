@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { Badge } from '@/components/ui/Badge';
-import { Card } from '@/components/ui/Card';
 import { RoleBadge } from '@/components/ui/EnumBadges';
 import { FormErrors } from '@/components/ui/FormErrors';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Ticket, TicketRail } from '@/components/ui/Ticket';
 import { apiRequest, unwrap } from '@/lib/api';
 import type { WorkspaceDashboard } from '@/types/api';
 
@@ -40,16 +40,15 @@ export default async function WorkspacePage({ params }: Props) {
             <PageHeader
                 title={restaurant.name}
                 badge={role ? <RoleBadge role={role} /> : <Badge tone="red">{t('supportView')}</Badge>}
+                description={t('intro')}
             />
-            <p className="mb-6 text-neutral-600 dark:text-neutral-400">{t('intro')}</p>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {SECTIONS.map((section) => (
-                    <Card key={section}>
-                        <h2 className="font-semibold">{t(`sections.${section}`)}</h2>
-                        <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{tc('comingSoon')}</p>
-                    </Card>
+            <TicketRail label={t('sectionsLabel')}>
+                {SECTIONS.map((section, index) => (
+                    <Ticket key={section} order={index} title={t(`sections.${section}`)} footer={tc('comingSoon')}>
+                        {t(`descriptions.${section}`)}
+                    </Ticket>
                 ))}
-            </div>
+            </TicketRail>
         </>
     );
 }

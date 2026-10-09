@@ -15,10 +15,12 @@
         "notSet": "—"
     },
     "nav": {
+        "label": "Main navigation",
         "dashboard": "Dashboard",
         "restaurants": "Restaurants",
         "users": "Users",
-        "signOut": "Sign out"
+        "signOut": "Sign out",
+        "profile": "Profile"
     },
     "locale": {
         "label": "Language",
@@ -54,11 +56,20 @@
             "submit": "Change password",
             "missingToken": "This password reset link is not valid. Please request a new one.",
             "backToLogin": "Back to sign in"
+        },
+        "panel": {
+            "headline": "Floor, kitchen and bar, each on its own screen.",
+            "table": "Table {table}",
+            "call": "Calling a waiter",
+            "bill": "Wants the bill",
+            "ready": "Order is ready",
+            "footer": "Sign-in for restaurant staff and administrators."
         }
     },
     "home": {
         "title": "My restaurants",
-        "noAccess": "You have not been added to any restaurant yet. Contact your manager or an administrator."
+        "noAccess": "You have not been added to any restaurant yet. Contact your manager or an administrator.",
+        "pick": "You work in more than one restaurant. Pick where you are today."
     },
     "admin": {
         "dashboard": {
@@ -66,7 +77,9 @@
             "restaurants": "Restaurants",
             "active": "Active",
             "suspended": "Suspended",
-            "users": "Users"
+            "users": "Users",
+            "newRestaurant": "New restaurant",
+            "newUser": "New user"
         },
         "restaurants": {
             "title": "Restaurants",
@@ -126,7 +139,7 @@
     },
     "workspace": {
         "supportView": "Support view",
-        "intro": "Tools for your restaurant will live here.",
+        "intro": "Open your restaurant tools from here. Menu and tables come first.",
         "suspended": "This restaurant is suspended. Contact an administrator.",
         "sections": {
             "menu": "Menu",
@@ -135,6 +148,15 @@
             "orders": "Orders",
             "kitchen": "Kitchen",
             "staff": "Staff"
+        },
+        "sectionsLabel": "Restaurant sections",
+        "descriptions": {
+            "menu": "Dishes, drinks, options and prices.",
+            "tables": "Floor, tables and layout.",
+            "reservations": "Arrivals by day and time.",
+            "orders": "Orders by table.",
+            "kitchen": "What to prepare next.",
+            "staff": "Who works here, in which role."
         }
     },
     "enums": {
@@ -167,5 +189,38 @@
         "genericTitle": "Something went wrong",
         "tryAgain": "Try again",
         "backHome": "Back to home"
+    },
+    "profile": {
+        "title": "Profile",
+        "description": "Your details, photo and password.",
+        "details": {
+            "title": "Details",
+            "fullName": "Full name",
+            "email": "Email",
+            "emailHint": "An administrator changes the email.",
+            "language": "Language",
+            "languageDefault": "Same as the browser",
+            "saved": "Details saved."
+        },
+        "avatar": {
+            "title": "Photo",
+            "hint": "PNG, JPG or WebP, up to 2 MB.",
+            "choose": "Choose a photo",
+            "upload": "Upload photo",
+            "remove": "Remove photo",
+            "missing": "Choose a photo first.",
+            "tooBig": "The photo is larger than 2 MB.",
+            "wrongType": "The photo must be a PNG, JPG or WebP.",
+            "uploaded": "Photo uploaded."
+        },
+        "password": {
+            "title": "Password",
+            "intro": "After the change you will be signed out on all other devices.",
+            "current": "Current password",
+            "new": "New password",
+            "confirm": "Confirm new password",
+            "submit": "Change password",
+            "changed": "Password changed. Other devices are signed out."
+        }
     }
 }

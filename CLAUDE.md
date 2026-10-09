@@ -4,7 +4,8 @@ Multi-tenant SaaS for restaurants: menus, tables, reservations, waiter ordering,
 
 - **Backend (repo root):** Rails 8.1 JSON API (`config.api_only`), Ruby 3.3.5, PostgreSQL, Devise + devise-jwt,
   Solid Queue / Solid Cable / Solid Cache (no Redis).
-- **Frontend (`frontend/`):** Next.js + TypeScript (App Router), Tailwind, next-intl. See `frontend/README.md`.
+- **Frontend (`frontend/`):** Next.js + TypeScript (App Router), Tailwind, next-intl. See `frontend/README.md`
+  (BFF auth, design tokens, the ticket-rail design language).
 
 ## Commands
 
@@ -70,6 +71,9 @@ Max ~5 lines per action. No business logic, no queries beyond loading the record
 - Serializers: `jsonapi-serializer`, inheriting `ApplicationSerializer`, rendered flat (`{ id, ...attributes }`) with
   `XSerializer.render(record_or_collection)`. Serializers are dumb: preload in the controller, no queries.
 - Never serialize secrets (`encrypted_password`, `jti`, tokens). Whitelist attributes explicitly.
+- File URLs: `rails_blob_url` with host from `API_URL` (`config/initializers/default_url_options.rb`). Preload with
+  `includes(avatar_attachment: :blob)` (not `with_attached_*`, which Bullet flags for unused variant preloads).
+- Uploads: validate content type (detected from bytes) and size in the model; never accept SVG for images.
 
 ### Authorization (Pundit)
 - `ApplicationPolicy` **denies everything by default**. Each policy allows actions explicitly.

@@ -1,9 +1,8 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { Card } from '@/components/ui/Card';
 import { RoleBadge, StatusBadge } from '@/components/ui/EnumBadges';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Ticket, TicketRail } from '@/components/ui/Ticket';
 import { getCurrentUser } from '@/lib/auth';
 import { isPlatformStaff } from '@/lib/permissions';
 
@@ -17,25 +16,25 @@ export default async function HomePage() {
 
     return (
         <>
-            <PageHeader title={t('title')} />
+            <PageHeader title={t('title')} description={user.memberships.length > 0 ? t('pick') : undefined} />
             {user.memberships.length === 0 ? (
-                <Card className="text-neutral-600 dark:text-neutral-400">{t('noAccess')}</Card>
+                <p className="max-w-prose rounded-slip border border-dashed border-line px-6 py-8 text-mute">
+                    {t('noAccess')}
+                </p>
             ) : (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {user.memberships.map(({ id, role, restaurant }) => (
-                        <Link key={id} href={`/r/${restaurant.slug}`} className="block">
-                            <Card className="h-full transition-shadow hover:shadow-medium">
-                                <div className="flex items-start justify-between gap-2">
-                                    <h2 className="font-semibold">{restaurant.name}</h2>
-                                    <StatusBadge status={restaurant.status} />
-                                </div>
-                                <div className="mt-3">
-                                    <RoleBadge role={role} />
-                                </div>
-                            </Card>
-                        </Link>
+                <TicketRail label={t('title')}>
+                    {user.memberships.map(({ id, role, restaurant }, index) => (
+                        <Ticket
+                            key={id}
+                            order={index}
+                            href={`/r/${restaurant.slug}`}
+                            title={restaurant.name}
+                            footer={<StatusBadge status={restaurant.status} />}
+                        >
+                            <RoleBadge role={role} />
+                        </Ticket>
                     ))}
-                </div>
+                </TicketRail>
             )}
         </>
     );

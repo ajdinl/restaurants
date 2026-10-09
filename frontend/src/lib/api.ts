@@ -11,6 +11,7 @@ type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 interface RequestOptions {
     method?: Method;
+    // FormData is sent as multipart (file uploads); anything else as JSON.
     body?: unknown;
     // Sign-in and password reset run without a session.
     authenticated?: boolean;
@@ -25,11 +26,13 @@ export async function apiRequest<T>(
     { method = 'GET', body, authenticated = true }: RequestOptions = {}
 ): Promise<ApiResult<T>> {
     const token = authenticated ? await getSessionToken() : null;
+    const isMultipart = body instanceof FormData;
     const requestHeaders: Record<string, string> = {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
         'Accept-Language': await getLocale(),
     };
+    // For FormData, fetch sets the multipart Content-Type with its boundary itself.
+    if (!isMultipart) requestHeaders['Content-Type'] = 'application/json';
     if (token) requestHeaders.Authorization = `Bearer ${token}`;
 
     // Rails rate-limits per client IP; without this every user would share the Next.js server's IP.
@@ -41,7 +44,7 @@ export async function apiRequest<T>(
         response = await fetch(`${API_URL}${path}`, {
             method,
             headers: requestHeaders,
-            body: body === undefined ? undefined : JSON.stringify(body),
+            body: body === undefined ? undefined : isMultipart ? body : JSON.stringify(body),
             cache: 'no-store',
         });
     } catch {
