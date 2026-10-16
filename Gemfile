@@ -51,7 +51,7 @@ gem 'thruster', require: false
 
 group :development, :test do
   gem 'brakeman', require: false
-  gem 'bullet', '~> 8.2'
+  gem 'bullet', '~> 8.3'
   gem 'bundler-audit', require: false
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
   gem 'factory_bot_rails', '~> 6.5'
