@@ -26,7 +26,7 @@ gem 'rack-cors', '~> 3.0'
 
 # Error Monitoring (enabled only when SENTRY_DSN is set)
 gem 'sentry-rails', '~> 7.1'
-gem 'sentry-ruby', '~> 7.1'
+gem 'sentry-ruby', '~> 7.2'
 
 # i18n (bs + en)
 gem 'rails-i18n', '~> 8.1'
