@@ -25,7 +25,7 @@ gem 'rack-attack', '~> 6.8'
 gem 'rack-cors', '~> 3.0'
 
 # Error Monitoring (enabled only when SENTRY_DSN is set)
-gem 'sentry-rails', '~> 7.1'
+gem 'sentry-rails', '~> 7.2'
 gem 'sentry-ruby', '~> 7.1'
 
 # i18n (bs + en)
