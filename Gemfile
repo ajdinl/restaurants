@@ -7,7 +7,7 @@ ruby '3.3.5'
 gem 'bootsnap', require: false
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
-gem 'rails', '~> 8.1.2'
+gem 'rails', '~> 8.1.4'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
 # Authentication & Authorization
