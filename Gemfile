@@ -56,7 +56,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
   gem 'factory_bot_rails', '~> 6.5'
   gem 'faker', '~> 3.8'
-  gem 'i18n-tasks', '~> 1.0', require: false
+  gem 'i18n-tasks', '~> 1.2', require: false
   gem 'rspec-rails', '~> 8.0'
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
