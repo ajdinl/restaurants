@@ -25,7 +25,7 @@ gem 'rack-attack', '~> 6.8'
 gem 'rack-cors', '~> 3.0'
 
 # Error Monitoring (enabled only when SENTRY_DSN is set)
-gem 'sentry-rails', '~> 7.1'
+gem 'sentry-rails', '~> 7.2'
 gem 'sentry-ruby', '~> 7.1'
 
 # i18n (bs + en)
@@ -51,13 +51,13 @@ gem 'thruster', require: false
 
 group :development, :test do
   gem 'brakeman', require: false
-  gem 'bullet', '~> 8.2'
+  gem 'bullet', '~> 8.3'
   gem 'bundler-audit', require: false
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
   gem 'factory_bot_rails', '~> 6.5'
   gem 'faker', '~> 3.8'
-  gem 'i18n-tasks', '~> 1.0', require: false
-  gem 'rspec-rails', '~> 8.0'
+  gem 'i18n-tasks', '~> 1.2', require: false
+  gem 'rspec-rails', '~> 8.1'
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
