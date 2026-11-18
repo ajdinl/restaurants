@@ -3,6 +3,8 @@
 module Admin
   # Adds an existing user to a restaurant (`record`) with a role.
   class AddMember < ApplicationCommand
+    publishes 'membership.created'
+
     def call
       member = User.find_by(email: params[:email].to_s.strip.downcase)
       membership = Membership.new(restaurant: record, user: member, role: params[:role])

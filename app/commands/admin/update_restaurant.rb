@@ -3,5 +3,7 @@
 module Admin
   class UpdateRestaurant < ApplicationCommand
     include SimpleUpdate
+
+    publishes 'restaurant.updated'
   end
 end

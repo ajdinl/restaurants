@@ -42,6 +42,12 @@ gem 'dotenv-rails', '~> 3.1', groups: %i[development test]
 # Database Safety
 gem 'strong_migrations', '~> 2.8'
 
+# Postgres functions in schema.rb (f_unaccent for search)
+gem 'fx', '~> 0.13'
+
+# Change history (prices, roles, settings)
+gem 'paper_trail', '~> 17.0'
+
 # Active Storage variants
 gem 'image_processing', '~> 1.2'
 

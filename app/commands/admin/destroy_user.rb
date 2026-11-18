@@ -2,8 +2,10 @@
 
 module Admin
   class DestroyUser < ApplicationCommand
+    publishes 'user.destroyed'
+
     def call
-      record.destroy ? success : failure(record.errors.full_messages)
+      destroy_record(record)
     end
   end
 end

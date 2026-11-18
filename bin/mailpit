@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+# Local mail catcher for bin/dev: SMTP on :1025, inbox at http://localhost:8025.
+if command -v mailpit >/dev/null 2>&1; then
+  exec mailpit --smtp 127.0.0.1:1025 --listen 127.0.0.1:8025
+fi
+echo "mailpit is not installed, so emails are not captured. Install it with: brew install mailpit"
+# Stay alive so foreman does not stop the other processes.
+exec tail -f /dev/null

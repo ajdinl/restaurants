@@ -1,1 +1,8 @@
+<%= Rails.configuration.x.app_name %>
+
 <%= yield %>
+
+<%= t('mailer.signature', app: Rails.configuration.x.app_name) %>
+
+--
+<%= t('mailer.footer', app: Rails.configuration.x.app_name) %>

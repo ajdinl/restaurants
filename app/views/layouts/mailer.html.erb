@@ -1,13 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <style>
-      /* Email styles need to be inline */
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
-
-  <body>
-    <%= yield %>
+  <body style="margin:0;padding:0;background:#f4f1ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#1c1917;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f1ea;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:8px;border-top:4px solid #1c1917;">
+            <tr>
+              <td style="padding:24px 32px 0;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#57534e;">
+                <%= Rails.configuration.x.app_name %>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 32px 32px;font-size:16px;line-height:1.6;">
+                <%= yield %>
+                <p style="margin:24px 0 0;"><%= t('mailer.signature', app: Rails.configuration.x.app_name) %></p>
+              </td>
+            </tr>
+          </table>
+          <p style="max-width:560px;margin:16px auto 0;font-size:12px;line-height:1.5;color:#78716c;">
+            <%= t('mailer.footer', app: Rails.configuration.x.app_name) %>
+          </p>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

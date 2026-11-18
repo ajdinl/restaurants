@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_09_111550) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_120300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_trgm"
+  enable_extension "unaccent"
 
+
+  create_function :f_unaccent, sql_definition: <<-'SQL'
+      CREATE OR REPLACE FUNCTION public.f_unaccent(text)
+       RETURNS text
+       LANGUAGE sql
+       IMMUTABLE PARALLEL SAFE STRICT
+      AS $function$
+        SELECT public.unaccent('public.unaccent'::regdictionary, $1)
+      $function$
+  SQL
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -42,6 +54,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_09_111550) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "domain_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "restaurant_id"
+    t.string "name", null: false
+    t.string "subject_type"
+    t.uuid "subject_id"
+    t.uuid "actor_id"
+    t.jsonb "payload", default: {}, null: false
+    t.datetime "occurred_at", null: false
+    t.datetime "dispatched_at"
+    t.index ["occurred_at"], name: "index_domain_events_undispatched", where: "(dispatched_at IS NULL)"
+    t.index ["restaurant_id", "occurred_at"], name: "index_domain_events_on_restaurant_id_and_occurred_at"
+    t.index ["subject_type", "subject_id"], name: "index_domain_events_on_subject_type_and_subject_id"
+    t.check_constraint "name::text ~ '^[a-z_]+(\\.[a-z_]+)+$'::text", name: "domain_events_name_check"
+  end
+
   create_table "memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "restaurant_id", null: false
@@ -51,7 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_09_111550) do
     t.datetime "updated_at", null: false
     t.index ["restaurant_id", "user_id"], name: "index_memberships_on_restaurant_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_memberships_on_user_id"
-    t.check_constraint "role::text = ANY (ARRAY['owner'::character varying::text, 'manager'::character varying::text, 'host'::character varying::text, 'waiter'::character varying::text, 'kitchen'::character varying::text])", name: "memberships_role_check"
+    t.check_constraint "role::text = ANY (ARRAY['owner'::character varying, 'manager'::character varying, 'host'::character varying, 'waiter'::character varying, 'kitchen'::character varying]::text[])", name: "memberships_role_check"
   end
 
   create_table "restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -68,11 +95,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_09_111550) do
     t.boolean "has_host", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "modules", default: [], null: false, array: true
+    t.string "content_locales", default: ["bs", "en"], null: false, array: true
     t.index ["slug"], name: "index_restaurants_on_slug", unique: true
     t.index ["status"], name: "index_restaurants_on_status"
+    t.check_constraint "content_locales <@ ARRAY['bs'::character varying, 'en'::character varying] AND cardinality(content_locales) >= 1", name: "restaurants_content_locales_check"
     t.check_constraint "latitude >= '-90'::integer::numeric AND latitude <= 90::numeric", name: "restaurants_latitude_check"
     t.check_constraint "longitude >= '-180'::integer::numeric AND longitude <= 180::numeric", name: "restaurants_longitude_check"
-    t.check_constraint "status::text = ANY (ARRAY['active'::character varying::text, 'suspended'::character varying::text])", name: "restaurants_status_check"
+    t.check_constraint "modules <@ ARRAY['qr_menu'::character varying, 'table_service'::character varying, 'ordering'::character varying, 'billing'::character varying, 'fiscal'::character varying, 'reservations'::character varying, 'public_page'::character varying, 'reviews'::character varying, 'recipes'::character varying, 'inventory'::character varying, 'purchasing'::character varying, 'scheduling'::character varying, 'haccp'::character varying, 'finance'::character varying, 'guests'::character varying, 'loyalty'::character varying, 'online_orders'::character varying]", name: "restaurants_modules_check"
+    t.check_constraint "status::text = ANY (ARRAY['active'::character varying, 'suspended'::character varying]::text[])", name: "restaurants_status_check"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -98,12 +129,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_09_111550) do
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
-    t.check_constraint "locale::text = ANY (ARRAY['bs'::character varying::text, 'en'::character varying::text])", name: "users_locale_check"
-    t.check_constraint "platform_role::text = ANY (ARRAY['super_admin'::character varying::text, 'moderator'::character varying::text])", name: "users_platform_role_check"
+    t.check_constraint "locale::text = ANY (ARRAY['bs'::character varying, 'en'::character varying]::text[])", name: "users_locale_check"
+    t.check_constraint "platform_role::text = ANY (ARRAY['super_admin'::character varying, 'moderator'::character varying]::text[])", name: "users_platform_role_check"
+  end
+
+  create_table "versions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "item_type", null: false
+    t.uuid "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.jsonb "object"
+    t.jsonb "object_changes"
+    t.uuid "restaurant_id"
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+    t.index ["restaurant_id", "created_at"], name: "index_versions_on_restaurant_id_and_created_at"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "domain_events", "restaurants", on_delete: :cascade
   add_foreign_key "memberships", "restaurants"
   add_foreign_key "memberships", "users"
 end

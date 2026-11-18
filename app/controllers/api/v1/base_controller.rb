@@ -25,6 +25,11 @@ module Api
       def set_current_user
         Current.user = current_user
       end
+
+      # Stored on every PaperTrail version written during the request (the author comes from the command).
+      def info_for_paper_trail
+        { metadata: { ip: request.remote_ip, request_id: request.request_id } }
+      end
     end
   end
 end

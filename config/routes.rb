@@ -27,6 +27,7 @@ Rails.application.routes.draw do
 
       scope 'restaurants/:restaurant_slug', module: :workspace, as: :workspace do
         resource :dashboard, only: :show, controller: :dashboard
+        resource :context, only: :show, controller: :context
       end
     end
   end

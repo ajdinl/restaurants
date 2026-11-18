@@ -1,4 +1,7 @@
 en:
+  mailer:
+    footer: "%{app} sent this message because you have an account or an invitation at a restaurant that uses it."
+    signature: "The %{app} team"
   errors:
     not_found: "The requested record does not exist."
     forbidden: "You are not allowed to do that."
