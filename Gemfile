@@ -43,7 +43,7 @@ gem 'dotenv-rails', '~> 3.1', groups: %i[development test]
 gem 'strong_migrations', '~> 2.8'
 
 # Active Storage variants
-gem 'image_processing', '~> 1.2'
+gem 'image_processing', '~> 2.2'
 
 # Deployment
 gem 'kamal', require: false
