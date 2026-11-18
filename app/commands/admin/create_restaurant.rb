@@ -5,5 +5,6 @@ module Admin
     include SimpleCreate
 
     creates Restaurant
+    publishes 'restaurant.created'
   end
 end

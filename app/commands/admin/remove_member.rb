@@ -2,8 +2,10 @@
 
 module Admin
   class RemoveMember < ApplicationCommand
+    publishes 'membership.removed'
+
     def call
-      record.destroy ? success : failure(record.errors.full_messages)
+      destroy_record(record)
     end
   end
 end

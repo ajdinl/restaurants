@@ -26,6 +26,9 @@ module RestaurantsApp
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
 
+    # Product name shown in emails (working name until the brand is decided, PLAN §8).
+    config.x.app_name = 'Restaurant Pro'
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

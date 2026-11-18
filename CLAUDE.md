@@ -53,6 +53,20 @@ All business logic lives in `app/commands/{area}/`, inheriting `ApplicationComma
 - `record:` is the already-authorized record. Commands never re-fetch it, so authorization always applies to exactly what gets modified.
 - Simple CRUD: `include SimpleCreate` + `creates Model`, or `include SimpleUpdate`.
 - Notifications, state transitions, broadcasts and audit side effects belong in commands, never in controllers.
+- Group commands by domain once a domain has more than a handful: `Workspace::Menu::CreateItem`,
+  `Workspace::Staff::Invite` (domains: `Settings`, `Staff`, `Menu`, `Floor`, ... see ARCHITECTURE §7).
+
+### Domain events (D36)
+- Every command that changes state publishes a dotted event (`restaurant.updated`, `membership.removed`):
+  `publishes 'menu_item.created'` + `save_record` / `destroy_record`, or `publish(subject:, payload:)` inside `transaction`.
+- Events go to the `domain_events` outbox in the same transaction; `DomainEvents::DispatchJob` delivers them after commit
+  to subscribers registered in `config/initializers/domain_events.rb` (`DomainEvents.subscribe(name, handler)`, `'*'` for all).
+- Payloads carry ids and changed attribute names only, never values or secrets (values live in PaperTrail).
+- Handlers run in a job with the event's restaurant as tenant, must be idempotent, and never run in the request.
+
+### History (PaperTrail)
+- `include Versioned` on configuration models (prices, roles, settings). Versions carry `restaurant_id`, the author
+  (`whodunnit`, set from the command's `user`) and `metadata` (`ip`, `request_id`). The activity log reads them.
 
 ### Thin Controllers
 ```ruby
@@ -82,12 +96,21 @@ Max ~5 lines per action. No business logic, no queries beyond loading the record
 - `verify_authorized` runs after every non-index action and `verify_policy_scoped` after every index. Opt out only with explicit `skip_after_action`.
 - Workspace policies inherit `Workspace::BasePolicy`: `read_access?` (member or platform staff), `staff_with?(*roles)` (super admin or role).
 - Role-dependent params: `permitted_attributes_for_create` / `_for_update` in the policy (e.g. only super admins may set `platform_role`).
+- **Abilities:** `GET /restaurants/:slug/context` returns `{ restaurant, membership, modules, abilities }`. `abilities` is a
+  flat map (`"menu.manage" => true`) built by `Workspace::Abilities` from policy queries. New permission → policy query +
+  a key in `Workspace::Abilities::MAP` + spec. The frontend renders from abilities and never re-implements role rules.
+
+### Modules
+- `Restaurant#modules` (checked against `Restaurant::MODULES` and a DB constraint) is the single source of truth for what a
+  restaurant has. Core (settings, staff, menu, floor, activity) is always on.
+- Module controllers declare `requires_module :inventory`; when it is off they return 404, never 403. New module key →
+  `Restaurant::MODULES` + a migration updating `restaurants_modules_check`.
 
 ### Multi-tenancy (acts_as_tenant)
 - Tenant = `Restaurant`. Every restaurant-owned model does `include MultiTenant`. Do NOT add `belongs_to :restaurant` yourself.
 - `require_tenant = true`: a tenant-scoped query without a tenant **raises**. `Workspace::BaseController` sets the tenant from the slug after checking membership. `Admin::BaseController` wraps actions in `ActsAsTenant.without_tenant`.
 - Jobs, seeds, console: `ActsAsTenant.with_tenant(restaurant) { ... }`.
-- `User`, `Restaurant`, `Membership` are not tenant-scoped (they span restaurants). Scope them explicitly (`@restaurant.memberships.find`).
+- `User`, `Restaurant`, `Membership`, `DomainEvent` are not tenant-scoped (they span restaurants). Scope them explicitly (`@restaurant.memberships.find`).
 
 ### Security Rules
 - Outsiders get **404, not 403**, for other restaurants' resources and for `/admin`, so record existence never leaks. Use 403 (`errors/forbidden`) only inside the user's own restaurant.
@@ -107,7 +130,8 @@ Max ~5 lines per action. No business logic, no queries beyond loading the record
 - Enums are string-backed: `enum :status, { active: 'active', ... }, validate: true`. Mirror them with a DB check constraint.
 - Every `has_many` has an explicit `dependent:` and an inverse `belongs_to`.
 - **Validate in the model and enforce in the DB**: NOT NULL, foreign keys, unique indexes, check constraints. Use exclusion constraints for overlaps (e.g. reservations).
-- Money: integer cents (money-rails when prices arrive). Never floats.
+- Money: integer cents in `*_cents` columns (gross prices), tax rates in basis points in `*_bp` (1700 = 17 %). No
+  money-rails, never floats. Formatting happens in the frontend.
 - No `default_scope` (soft delete uses explicit `.kept`).
 - Date pairs (start/end) validate end >= start. Numeric business fields validate `numericality`.
 
@@ -124,6 +148,12 @@ Max ~5 lines per action. No business logic, no queries beyond loading the record
   does the same for the frontend.
 - Avoid dynamic keys (`t(cond ? 'a' : 'b')`). Write `cond ? t('a') : t('b')` so i18n-tasks can see them.
 - API locale: `Accept-Language` (sent by the frontend; hr/sr map to bs) > `user.locale` > `bs` (`LocaleResolver`).
+- **Restaurant content** (menu names, descriptions) is data, not i18n: one jsonb column per attribute
+  (`{ "bs": "Ćevapi", "en": "Cevapi" }`), `include Translatable` + `translates :name, required: true`. Allowed languages are
+  `restaurant.content_locales` (first = primary, required for required attributes); `name_in(locale)` falls back to the
+  primary, then any translation. Management endpoints send the whole hash; guest endpoints the resolved string.
+- **Search:** `f_unaccent(lower(...))` in a stored generated `search_text` column with a `gin_trgm_ops` index, so "cevapi"
+  finds "Ćevapi". Postgres functions live in `db/functions` (fx gem) and are dumped at the top of `schema.rb`.
 
 ## Testing (RSpec + FactoryBot + Shoulda)
 

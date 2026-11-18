@@ -48,6 +48,8 @@ bs:
         longitude: "Geografska dužina"
         time_zone: "Vremenska zona"
         has_host: "Ima ulaznog menadžera"
+        modules: "Moduli"
+        content_locales: "Jezici sadržaja"
         statuses:
           active: "Aktivan"
           suspended: "Suspendovan"

@@ -45,6 +45,8 @@ en:
         longitude: "Longitude"
         time_zone: "Time zone"
         has_host: "Has a host"
+        modules: "Modules"
+        content_locales: "Content languages"
         statuses:
           active: "Active"
           suspended: "Suspended"

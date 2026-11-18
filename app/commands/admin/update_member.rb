@@ -3,5 +3,7 @@
 module Admin
   class UpdateMember < ApplicationCommand
     include SimpleUpdate
+
+    publishes 'membership.updated'
   end
 end

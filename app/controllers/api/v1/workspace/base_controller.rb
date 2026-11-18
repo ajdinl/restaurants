@@ -9,6 +9,14 @@ module Api
         before_action :set_restaurant
         around_action :use_restaurant_time_zone
 
+        # Hides a controller completely (404) unless the restaurant has the module switched on, so a disabled
+        # module never reveals that its data exists:  requires_module :inventory
+        def self.requires_module(key)
+          raise ArgumentError, "unknown module #{key}" unless Restaurant::MODULES.include?(key.to_s)
+
+          before_action { raise ActiveRecord::RecordNotFound unless Current.restaurant.module?(key) }
+        end
+
         private
 
         def set_restaurant

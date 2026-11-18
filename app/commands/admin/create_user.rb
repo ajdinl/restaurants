@@ -5,5 +5,6 @@ module Admin
     include SimpleCreate
 
     creates User
+    publishes 'user.created'
   end
 end

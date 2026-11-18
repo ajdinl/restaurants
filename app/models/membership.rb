@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Membership < ApplicationRecord
+  include Versioned
+
   MANAGEMENT_ROLES = %w[owner manager].freeze
 
   enum :role, { owner: 'owner', manager: 'manager', host: 'host', waiter: 'waiter', kitchen: 'kitchen' }, validate: true

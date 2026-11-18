@@ -23,6 +23,7 @@ server-to-server, so the token is never exposed to browser JavaScript.
 - Ruby 3.3.5 (see `.ruby-version` / `.tool-versions`)
 - Node.js 22+
 - PostgreSQL 15+ running locally (Postgres.app or Homebrew)
+- Mailpit to catch emails locally: `brew install mailpit` (optional; without it emails are simply not delivered)
 
 ## Setup
 
@@ -39,6 +40,7 @@ bin/dev                     # everything below, in one terminal
 | Rails API | http://localhost:3001 |
 | Solid Queue worker | — |
 | Next.js | http://localhost:3000 |
+| Mailpit (every email sent in development) | http://localhost:8025 |
 
 Demo login accounts are listed in the local `docs/DEMO_ACCOUNTS.md` (not in git).
 

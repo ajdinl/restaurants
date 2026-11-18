@@ -1,4 +1,7 @@
 bs:
+  mailer:
+    footer: "Ovu poruku je poslala aplikacija %{app} jer imate nalog ili pozivnicu u restoranu koji je koristi."
+    signature: "Vaš tim %{app}"
   errors:
     not_found: "Traženi podatak ne postoji."
     forbidden: "Nemate dozvolu za ovu radnju."

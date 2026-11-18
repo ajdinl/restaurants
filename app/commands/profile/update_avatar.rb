@@ -2,11 +2,11 @@
 
 module Profile
   class UpdateAvatar < ApplicationCommand
+    publishes 'user.avatar_updated'
+
     def call
       record.avatar = params[:avatar]
-      return success if record.save
-
-      failure(record.errors.errors.dup)
+      save_record(record)
     end
   end
 end

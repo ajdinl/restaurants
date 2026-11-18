@@ -3,5 +3,7 @@
 module Admin
   class UpdateUser < ApplicationCommand
     include SimpleUpdate
+
+    publishes 'user.updated'
   end
 end
