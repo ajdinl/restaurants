@@ -3,8 +3,8 @@
 Multi-tenant platform for restaurants: menus, tables, reservations, waiter ordering on tablets, kitchen display,
 and table-side waiter calls with smartwatch notifications. UI in Bosnian and English.
 
-> **Status:** foundation done: authentication, roles, restaurant workspaces, admin panel, bs/en.
-> The previous Next.js + MongoDB version lives on `main` until this branch is merged.
+> **Status:** in active development. Done so far: authentication, roles, restaurant workspaces, admin panel,
+> Bosnian/English UI, and the phase 1.1 foundations (domain events, history, abilities, modules).
 
 ## Architecture
 
