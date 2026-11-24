@@ -20,7 +20,7 @@ server-to-server, so the token is never exposed to browser JavaScript.
 
 ## Requirements
 
-- Ruby 3.3.5 (see `.ruby-version` / `.tool-versions`)
+- Ruby 3.3.14 (see `.ruby-version` / `.tool-versions`)
 - Node.js 22+
 - PostgreSQL 15+ running locally (Postgres.app or Homebrew)
 - Mailpit to catch emails locally: `brew install mailpit` (optional; without it emails are simply not delivered)

@@ -2,7 +2,7 @@
 
 Multi-tenant SaaS for restaurants: menus, tables, reservations, waiter ordering, kitchen display, waiter calls.
 
-- **Backend (repo root):** Rails 8.1 JSON API (`config.api_only`), Ruby 3.3.5, PostgreSQL, Devise + devise-jwt,
+- **Backend (repo root):** Rails 8.1 JSON API (`config.api_only`), Ruby 3.3.14, PostgreSQL, Devise + devise-jwt,
   Solid Queue / Solid Cable / Solid Cache (no Redis).
 - **Frontend (`frontend/`):** Next.js + TypeScript (App Router), Tailwind, next-intl. See `frontend/README.md`
   (BFF auth, design tokens, the ticket-rail design language).
